@@ -19,21 +19,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.anyremote.remote.R
 import com.anyremote.remote.data.RemoteDatabase
 import com.anyremote.remote.ir.IREncodingEngine
 import com.anyremote.remote.ir.IRTransmitter
 import com.anyremote.remote.service.FavoriteManager
-import androidx.compose.ui.res.stringResource
-import com.anyremote.remote.R
 import com.anyremote.remote.ui.theme.*
-import kotlinx.coroutines.delay
 
 private val AccentCyan = Color(0xFF00E5FF)
 private val AccentGlow = Color(0xFF00B0FF)
@@ -45,7 +43,7 @@ fun MatchIRScreen(
     brandId: Int,
     onMatchSuccess: () -> Unit,
     onSaveAndReturnToDashboard: () -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
 ) {
     val context = LocalContext.current
     RemoteDatabase.init(context)
@@ -53,12 +51,14 @@ fun MatchIRScreen(
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     // 1. Look up category & brand details from the database
-    val category = remember(deviceId, RemoteDatabase.deviceTypes) {
-        RemoteDatabase.deviceTypes.firstOrNull { it.id == deviceId }
-    }
-    val brand = remember(brandId, category) {
-        category?.brands?.firstOrNull { it.id == brandId }
-    }
+    val category =
+        remember(deviceId, RemoteDatabase.deviceTypes) {
+            RemoteDatabase.deviceTypes.firstOrNull { it.id == deviceId }
+        }
+    val brand =
+        remember(brandId, category) {
+            category?.brands?.firstOrNull { it.id == brandId }
+        }
 
     val totalCodesets = remember { 5 } // 5 distinct codesets to prune through
     var currentCodesetIndex by remember { mutableIntStateOf(1) }
@@ -74,46 +74,49 @@ fun MatchIRScreen(
     val buttonScale by infiniteTransition.animateFloat(
         initialValue = 1f,
         targetValue = 1.04f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(1200, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "Pulse"
+        animationSpec =
+            infiniteRepeatable(
+                animation = tween(1200, easing = FastOutSlowInEasing),
+                repeatMode = RepeatMode.Reverse,
+            ),
+        label = "Pulse",
     )
 
     // Formulate a logical testing button based on device type
-    val (testButtonLabel, testButtonIcon) = remember(deviceId) {
-        when (deviceId) {
-            1 -> "POWER" to Icons.Default.PowerSettingsNew
-            3 -> "POWER" to Icons.Default.PowerSettingsNew
-            6 -> "FAN SPEED" to Icons.Default.Air
-            8 -> "MUTE" to Icons.Default.VolumeMute
-            10 -> "POWER" to Icons.Default.PowerSettingsNew
-            else -> "POWER" to Icons.Default.PowerSettingsNew
+    val (testButtonLabel, testButtonIcon) =
+        remember(deviceId) {
+            when (deviceId) {
+                1 -> "POWER" to Icons.Default.PowerSettingsNew
+                3 -> "POWER" to Icons.Default.PowerSettingsNew
+                6 -> "FAN SPEED" to Icons.Default.Air
+                8 -> "MUTE" to Icons.Default.VolumeMute
+                10 -> "POWER" to Icons.Default.PowerSettingsNew
+                else -> "POWER" to Icons.Default.PowerSettingsNew
+            }
         }
-    }
 
     // Trigger IR Transmission pulse sequence
     fun transmitTestPulse() {
         haptic.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress)
-        
+
         // Compile and broadcast testing pulses
-        val pulses = if (deviceId == 3) {
-            // AC Gree frame: Power On, Cool Mode, Temp 24C, Auto Fan Speed, Manual Vertical Swing
-            IREncodingEngine.compileGreeAc(
-                power = true,
-                temp = 24,
-                mode = "MC",
-                fanSpeed = "SA",
-                swing = false
-            )
-        } else {
-            // General television/av-receiver NEC frame based on current codeset index
-            val address = 0x01
-            val command = currentCodesetIndex * 12
-            IREncodingEngine.compileGenericNec(address, command)
-        }
-        
+        val pulses =
+            if (deviceId == 3) {
+                // AC Gree frame: Power On, Cool Mode, Temp 24C, Auto Fan Speed, Manual Vertical Swing
+                IREncodingEngine.compileGreeAc(
+                    power = true,
+                    temp = 24,
+                    mode = "MC",
+                    fanSpeed = "SA",
+                    swing = false,
+                )
+            } else {
+                // General television/av-receiver NEC frame based on current codeset index
+                val address = 0x01
+                val command = currentCodesetIndex * 12
+                IREncodingEngine.compileGenericNec(address, command)
+            }
+
         IRTransmitter.transmit(context, pulses, frequencyHz = 38000)
     }
 
@@ -126,37 +129,44 @@ fun MatchIRScreen(
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface,
                         fontSize = 18.sp,
-                        letterSpacing = 1.sp
+                        letterSpacing = 1.sp,
                     )
                 },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = stringResource(R.string.back), tint = MaterialTheme.colorScheme.onSurface)
+                        Icon(
+                            Icons.Default.ArrowBack,
+                            contentDescription = stringResource(R.string.back),
+                            tint = MaterialTheme.colorScheme.onSurface,
+                        )
                     }
                 },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background
-                )
+                colors =
+                    TopAppBarDefaults.centerAlignedTopAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.background,
+                    ),
             )
         },
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = MaterialTheme.colorScheme.background,
     ) { innerPadding ->
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(24.dp)
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(24.dp),
             ) {
                 // Category & Brand info card
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(
                         text = "${brand?.nameEn ?: "GENERIC"} - ${category?.nameEn ?: "REMOTE"}",
@@ -164,42 +174,43 @@ fun MatchIRScreen(
                         fontSize = 22.sp,
                         fontWeight = FontWeight.ExtraBold,
                         letterSpacing = 1.sp,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
                     )
-                    
+
                     Spacer(modifier = Modifier.height(6.dp))
-                    
+
                     Text(
                         text = "Codeset configuration test wizard",
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
-                        letterSpacing = 0.5.sp
+                        letterSpacing = 0.5.sp,
                     )
-                
+
                     Spacer(modifier = Modifier.height(20.dp))
-                
+
                     // Codeset indicator badge
                     Box(
-                        modifier = Modifier
-                            .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(12.dp))
-                            .border(0.5.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(12.dp))
-                            .padding(horizontal = 14.dp, vertical = 6.dp)
+                        modifier =
+                            Modifier
+                                .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(12.dp))
+                                .border(0.5.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(12.dp))
+                                .padding(horizontal = 14.dp, vertical = 6.dp),
                     ) {
                         Text(
                             text = "CONFIG CODESET: $currentCodesetIndex / $totalCodesets",
                             color = ElectricBlue,
                             fontSize = 11.sp,
                             fontWeight = FontWeight.Bold,
-                            letterSpacing = 1.sp
+                            letterSpacing = 1.sp,
                         )
                     }
                 }
-            
+
                 // Interactive central testing button
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(
                         text = stringResource(R.string.point_blaster_instruction),
@@ -207,57 +218,59 @@ fun MatchIRScreen(
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(bottom = 20.dp)
+                        modifier = Modifier.padding(bottom = 20.dp),
                     )
 
                     // Big glowing neon circular test button
                     Box(
                         contentAlignment = Alignment.Center,
-                        modifier = Modifier
-                            .size(160.dp)
-                            .scale(if (isTestButtonPressed) 0.95f else buttonScale)
-                            .clip(CircleShape)
-                            .background(
-                                brush = Brush.radialGradient(
-                                    colors = listOf(
-                                        Color(0xFF1E283C),
-                                        Color(0xFF131A28)
-                                    )
-                                )
-                            )
-                            .border(
-                                width = 2.dp,
-                                brush = Brush.linearGradient(
-                                    colors = listOf(AccentCyan, AccentGlow)
-                                ),
-                                shape = CircleShape
-                            )
-                            .clickable {
-                                isTestButtonPressed = true
-                                transmitTestPulse()
-                                isTestButtonPressed = false
-                                showResponsePopup = true
-                            }
+                        modifier =
+                            Modifier
+                                .size(160.dp)
+                                .scale(if (isTestButtonPressed) 0.95f else buttonScale)
+                                .clip(CircleShape)
+                                .background(
+                                    brush =
+                                        Brush.radialGradient(
+                                            colors =
+                                                listOf(
+                                                    Color(0xFF1E283C),
+                                                    Color(0xFF131A28),
+                                                ),
+                                        ),
+                                ).border(
+                                    width = 2.dp,
+                                    brush =
+                                        Brush.linearGradient(
+                                            colors = listOf(AccentCyan, AccentGlow),
+                                        ),
+                                    shape = CircleShape,
+                                ).clickable {
+                                    isTestButtonPressed = true
+                                    transmitTestPulse()
+                                    isTestButtonPressed = false
+                                    showResponsePopup = true
+                                },
                     ) {
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center
+                            verticalArrangement = Arrangement.Center,
                         ) {
                             Icon(
                                 imageVector = testButtonIcon,
                                 contentDescription = "Test IR Signal",
                                 tint = AccentCyan,
-                                modifier = Modifier.size(54.dp)
+                                modifier = Modifier.size(54.dp),
                             )
-                            
+
                             Spacer(modifier = Modifier.height(8.dp))
-                            
+
                             Text(
                                 text = testButtonLabel,
                                 color = Color.White,
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight.Bold,
-                                letterSpacing = 1.sp
+                                letterSpacing = 1.sp,
                             )
                         }
                     }
@@ -268,7 +281,7 @@ fun MatchIRScreen(
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
                     ) {
                         IconButton(
                             onClick = {
@@ -278,9 +291,13 @@ fun MatchIRScreen(
                                 } else {
                                     currentCodesetIndex = totalCodesets
                                 }
-                            }
+                            },
                         ) {
-                            Icon(Icons.Default.ArrowBack, contentDescription = "Previous Code", tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+                            Icon(
+                                Icons.Default.ArrowBack,
+                                contentDescription = "Previous Code",
+                                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                            )
                         }
 
                         Text(
@@ -288,7 +305,7 @@ fun MatchIRScreen(
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(horizontal = 12.dp)
+                            modifier = Modifier.padding(horizontal = 12.dp),
                         )
 
                         IconButton(
@@ -299,9 +316,13 @@ fun MatchIRScreen(
                                 } else {
                                     currentCodesetIndex = 1
                                 }
-                            }
+                            },
                         ) {
-                            Icon(Icons.Default.ArrowForward, contentDescription = "Next Code", tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+                            Icon(
+                                Icons.Default.ArrowForward,
+                                contentDescription = "Next Code",
+                                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                            )
                         }
                     }
                 }
@@ -311,37 +332,39 @@ fun MatchIRScreen(
                     shape = RoundedCornerShape(16.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                     border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 8.dp)
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 8.dp),
                 ) {
                     Row(
                         modifier = Modifier.padding(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Box(
-                            modifier = Modifier
-                                .size(36.dp)
-                                .background(ElectricBlue.copy(alpha = 0.1f), CircleShape),
-                            contentAlignment = Alignment.Center
+                            modifier =
+                                Modifier
+                                    .size(36.dp)
+                                    .background(ElectricBlue.copy(alpha = 0.1f), CircleShape),
+                            contentAlignment = Alignment.Center,
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Info,
                                 contentDescription = null,
                                 tint = ElectricBlue,
-                                modifier = Modifier.size(20.dp)
+                                modifier = Modifier.size(20.dp),
                             )
                         }
-                        
+
                         Spacer(modifier = Modifier.width(12.dp))
-                        
+
                         Text(
                             text = stringResource(R.string.info_banner_text),
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold,
                             lineHeight = 16.sp,
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier.weight(1f),
                         )
                     }
                 }
@@ -355,32 +378,36 @@ fun MatchIRScreen(
                     containerColor = MaterialTheme.colorScheme.surface,
                     dragHandle = {
                         Box(
-                            modifier = Modifier
-                                .padding(top = 16.dp, bottom = 8.dp)
-                                .width(40.dp)
-                                .height(4.dp)
-                                .background(MaterialTheme.colorScheme.outline, RoundedCornerShape(2.dp))
+                            modifier =
+                                Modifier
+                                    .padding(top = 16.dp, bottom = 8.dp)
+                                    .width(40.dp)
+                                    .height(4.dp)
+                                    .background(MaterialTheme.colorScheme.outline, RoundedCornerShape(2.dp)),
                         )
-                    }
+                    },
                 ) {
                     Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 24.dp, vertical = 16.dp)
-                            .padding(bottom = 32.dp), // Extra padding for safe area
-                        horizontalAlignment = Alignment.CenterHorizontally
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 24.dp, vertical = 16.dp)
+                                .padding(bottom = 32.dp),
+                        // Extra padding for safe area
+                        horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         Box(
                             contentAlignment = Alignment.Center,
-                            modifier = Modifier
-                                .size(56.dp)
-                                .background(ElectricBlue.copy(alpha = 0.1f), CircleShape)
+                            modifier =
+                                Modifier
+                                    .size(56.dp)
+                                    .background(ElectricBlue.copy(alpha = 0.1f), CircleShape),
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Info,
                                 contentDescription = null,
                                 tint = ElectricBlue,
-                                modifier = Modifier.size(28.dp)
+                                modifier = Modifier.size(28.dp),
                             )
                         }
 
@@ -392,7 +419,7 @@ fun MatchIRScreen(
                             color = MaterialTheme.colorScheme.onSurface,
                             fontSize = 18.sp,
                             letterSpacing = 0.5.sp,
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
                         )
 
                         Spacer(modifier = Modifier.height(8.dp))
@@ -402,14 +429,14 @@ fun MatchIRScreen(
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontSize = 14.sp,
                             textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(horizontal = 16.dp)
+                            modifier = Modifier.padding(horizontal = 16.dp),
                         )
 
                         Spacer(modifier = Modifier.height(32.dp))
 
                         Row(
                             modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(16.dp)
+                            horizontalArrangement = Arrangement.spacedBy(16.dp),
                         ) {
                             // "No" button
                             val noBtnBg = if (isAppDarkTheme()) Color(0xFF451A1A) else Color(0xFFFFEBEE)
@@ -429,16 +456,17 @@ fun MatchIRScreen(
                                 },
                                 colors = ButtonDefaults.buttonColors(containerColor = noBtnBg),
                                 shape = RoundedCornerShape(12.dp),
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .height(56.dp)
-                                    .border(1.dp, noBtnBorder, RoundedCornerShape(12.dp))
+                                modifier =
+                                    Modifier
+                                        .weight(1f)
+                                        .height(56.dp)
+                                        .border(1.dp, noBtnBorder, RoundedCornerShape(12.dp)),
                             ) {
                                 Text(
                                     text = stringResource(R.string.no_try_next),
                                     color = noBtnText,
                                     fontWeight = FontWeight.Bold,
-                                    fontSize = 13.sp
+                                    fontSize = 13.sp,
                                 )
                             }
 
@@ -455,16 +483,17 @@ fun MatchIRScreen(
                                 },
                                 colors = ButtonDefaults.buttonColors(containerColor = yesBtnBg),
                                 shape = RoundedCornerShape(12.dp),
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .height(56.dp)
-                                    .border(1.dp, yesBtnBorder, RoundedCornerShape(12.dp))
+                                modifier =
+                                    Modifier
+                                        .weight(1f)
+                                        .height(56.dp)
+                                        .border(1.dp, yesBtnBorder, RoundedCornerShape(12.dp)),
                             ) {
                                 Text(
                                     text = stringResource(R.string.yes_it_works),
                                     color = yesBtnText,
                                     fontWeight = FontWeight.Bold,
-                                    fontSize = 13.sp
+                                    fontSize = 13.sp,
                                 )
                             }
                         }
@@ -476,19 +505,21 @@ fun MatchIRScreen(
             if (showMatchSuccessModal) {
                 Box(
                     contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color.Black.copy(alpha = 0.8f))
-                        .clickable(enabled = false) {}
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .background(Color.Black.copy(alpha = 0.8f))
+                            .clickable(enabled = false) {},
                 ) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center,
-                        modifier = Modifier
-                            .fillMaxWidth(0.85f)
-                            .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(24.dp))
-                            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(24.dp))
-                            .padding(28.dp)
+                        modifier =
+                            Modifier
+                                .fillMaxWidth(0.85f)
+                                .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(24.dp))
+                                .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(24.dp))
+                                .padding(28.dp),
                     ) {
                         // Success Glowing Checkmark Icon
                         val successIconBg = if (isAppDarkTheme()) Color(0xFF14301D) else Color(0xFFE8F5E9)
@@ -497,16 +528,17 @@ fun MatchIRScreen(
 
                         Box(
                             contentAlignment = Alignment.Center,
-                            modifier = Modifier
-                                .size(64.dp)
-                                .background(successIconBg, CircleShape)
-                                .border(2.dp, successIconBorder, CircleShape)
+                            modifier =
+                                Modifier
+                                    .size(64.dp)
+                                    .background(successIconBg, CircleShape)
+                                    .border(2.dp, successIconBorder, CircleShape),
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Check,
                                 contentDescription = "Test Success",
                                 tint = successIconTint,
-                                modifier = Modifier.size(32.dp)
+                                modifier = Modifier.size(32.dp),
                             )
                         }
 
@@ -518,7 +550,7 @@ fun MatchIRScreen(
                             fontSize = 18.sp,
                             fontWeight = FontWeight.ExtraBold,
                             letterSpacing = 1.sp,
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
                         )
 
                         Spacer(modifier = Modifier.height(4.dp))
@@ -529,7 +561,7 @@ fun MatchIRScreen(
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Bold,
                             letterSpacing = 1.sp,
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
                         )
 
                         Spacer(modifier = Modifier.height(12.dp))
@@ -541,7 +573,7 @@ fun MatchIRScreen(
                             fontWeight = FontWeight.Medium,
                             textAlign = TextAlign.Center,
                             lineHeight = 18.sp,
-                            modifier = Modifier.padding(horizontal = 8.dp)
+                            modifier = Modifier.padding(horizontal = 8.dp),
                         )
 
                         Spacer(modifier = Modifier.height(12.dp))
@@ -552,17 +584,18 @@ fun MatchIRScreen(
                             label = { Text(stringResource(R.string.device_name_label)) },
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
-                            colors = OutlinedTextFieldDefaults.colors(
-                                focusedBorderColor = ElectricBlue,
-                                unfocusedBorderColor = MaterialTheme.colorScheme.outline,
-                            )
+                            colors =
+                                OutlinedTextFieldDefaults.colors(
+                                    focusedBorderColor = ElectricBlue,
+                                    unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                                ),
                         )
 
                         Spacer(modifier = Modifier.height(24.dp))
 
                         Column(
                             modifier = Modifier.fillMaxWidth(),
-                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                            verticalArrangement = Arrangement.spacedBy(12.dp),
                         ) {
                             // Primary option: Save and Return to Main Page
                             Button(
@@ -578,15 +611,16 @@ fun MatchIRScreen(
                                 },
                                 colors = ButtonDefaults.buttonColors(containerColor = ElectricBlue),
                                 shape = RoundedCornerShape(12.dp),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(46.dp)
+                                modifier =
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .height(46.dp),
                             ) {
                                 Text(
                                     text = stringResource(R.string.yes_add_to_main_page),
                                     color = Color.White,
                                     fontWeight = FontWeight.Bold,
-                                    letterSpacing = 0.5.sp
+                                    letterSpacing = 0.5.sp,
                                 )
                             }
 
@@ -599,14 +633,15 @@ fun MatchIRScreen(
                                 shape = RoundedCornerShape(12.dp),
                                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
                                 colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.onSurface),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(46.dp)
+                                modifier =
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .height(46.dp),
                             ) {
                                 Text(
                                     text = stringResource(R.string.just_test_controller),
                                     fontWeight = FontWeight.Bold,
-                                    letterSpacing = 0.5.sp
+                                    letterSpacing = 0.5.sp,
                                 )
                             }
                         }

@@ -12,9 +12,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -27,36 +25,36 @@ import com.anyremote.remote.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(
-    onBackClick: () -> Unit
-) {
+fun SettingsScreen(onBackClick: () -> Unit) {
     val context = LocalContext.current
-    
+
     // Reactive States from FavoriteManager / LocaleManager
     val activeThemeMode by FavoriteManager.currentThemeState
     val isVibrationEnabled by FavoriteManager.currentVibrationState
     val activeLangCode by LocaleManager.currentLanguage
 
-    val languages = listOf(
-        "system" to "System Default",
-        "en" to "English",
-        "iw" to "עברית (Hebrew)",
-        "es" to "Español (Spanish)",
-        "fr" to "Français (French)",
-        "de" to "Deutsch (German)",
-        "it" to "Italiano (Italian)",
-        "ru" to "Русский (Russian)",
-        "ar" to "العربية (Arabic)",
-        "zh" to "中文 (Chinese)",
-        "ja" to "日本語 (Japanese)",
-        "pt" to "Português (Portuguese)"
-    )
+    val languages =
+        listOf(
+            "system" to "System Default",
+            "en" to "English",
+            "iw" to "עברית (Hebrew)",
+            "es" to "Español (Spanish)",
+            "fr" to "Français (French)",
+            "de" to "Deutsch (German)",
+            "it" to "Italiano (Italian)",
+            "ru" to "Русский (Russian)",
+            "ar" to "العربية (Arabic)",
+            "zh" to "中文 (Chinese)",
+            "ja" to "日本語 (Japanese)",
+            "pt" to "Português (Portuguese)",
+        )
 
-    val themeModes = listOf(
-        "light" to R.string.theme_light,
-        "dark" to R.string.theme_dark,
-        "system" to R.string.theme_system
-    )
+    val themeModes =
+        listOf(
+            "light" to R.string.theme_light,
+            "dark" to R.string.theme_dark,
+            "system" to R.string.theme_system,
+        )
 
     var showLanguageDropdown by remember { mutableStateOf(false) }
     var showThemeDropdown by remember { mutableStateOf(false) }
@@ -69,7 +67,7 @@ fun SettingsScreen(
                         text = stringResource(R.string.settings_title),
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
-                        color = MaterialTheme.colorScheme.onBackground
+                        color = MaterialTheme.colorScheme.onBackground,
                     )
                 },
                 navigationIcon = {
@@ -77,123 +75,128 @@ fun SettingsScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = stringResource(R.string.back),
-                            tint = MaterialTheme.colorScheme.onBackground
+                            tint = MaterialTheme.colorScheme.onBackground,
                         )
                     }
                 },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background
-                )
+                colors =
+                    TopAppBarDefaults.centerAlignedTopAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.background,
+                    ),
             )
         },
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = MaterialTheme.colorScheme.background,
     ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .verticalScroll(rememberScrollState())
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .verticalScroll(rememberScrollState())
+                    .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            
             // 1. Dark / Light Mode Setting Section
             Card(
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surface
-                ),
+                colors =
+                    CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surface,
+                    ),
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 Column(
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(16.dp),
                 ) {
                     Row(
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Box(
-                            modifier = Modifier
-                                .size(36.dp)
-                                .background(
-                                    ElectricBlue.copy(alpha = if (isAppDarkTheme()) 0.2f else 0.1f),
-                                    CircleShape
-                                ),
-                            contentAlignment = Alignment.Center
+                            modifier =
+                                Modifier
+                                    .size(36.dp)
+                                    .background(
+                                        ElectricBlue.copy(alpha = if (isAppDarkTheme()) 0.2f else 0.1f),
+                                        CircleShape,
+                                    ),
+                            contentAlignment = Alignment.Center,
                         ) {
                             Icon(
                                 imageVector = Icons.Default.DarkMode,
                                 contentDescription = null,
                                 tint = ElectricBlue,
-                                modifier = Modifier.size(20.dp)
+                                modifier = Modifier.size(20.dp),
                             )
                         }
-                        
+
                         Spacer(modifier = Modifier.width(12.dp))
-                        
+
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
                                 text = stringResource(R.string.dark_light_mode),
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 16.sp,
-                                color = MaterialTheme.colorScheme.onBackground
+                                color = MaterialTheme.colorScheme.onBackground,
                             )
                             Text(
                                 text = stringResource(R.string.theme_subtitle),
                                 fontSize = 12.sp,
-                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
+                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                             )
                         }
                     }
-                    
+
                     Spacer(modifier = Modifier.height(16.dp))
-                    
+
                     // Segmented Button or Dropdown selection for Theme
                     Box(modifier = Modifier.fillMaxWidth()) {
                         OutlinedButton(
                             onClick = { showThemeDropdown = true },
                             shape = RoundedCornerShape(12.dp),
                             border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-                            colors = ButtonDefaults.outlinedButtonColors(
-                                containerColor = getAppButtonBackground()
-                            ),
-                            modifier = Modifier.fillMaxWidth()
+                            colors =
+                                ButtonDefaults.outlinedButtonColors(
+                                    containerColor = getAppButtonBackground(),
+                                ),
+                            modifier = Modifier.fillMaxWidth(),
                         ) {
                             val activeThemeLabelKey = themeModes.firstOrNull { it.first == activeThemeMode }?.second ?: R.string.theme_light
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
+                                verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 Text(
                                     text = stringResource(activeThemeLabelKey),
                                     color = MaterialTheme.colorScheme.onBackground,
-                                    fontWeight = FontWeight.SemiBold
+                                    fontWeight = FontWeight.SemiBold,
                                 )
                                 Icon(
                                     imageVector = Icons.Default.ArrowDropDown,
                                     contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onBackground
+                                    tint = MaterialTheme.colorScheme.onBackground,
                                 )
                             }
                         }
-                        
+
                         DropdownMenu(
                             expanded = showThemeDropdown,
                             onDismissRequest = { showThemeDropdown = false },
-                            modifier = Modifier
-                                .fillMaxWidth(0.9f)
-                                .background(MaterialTheme.colorScheme.surface)
-                                .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth(0.9f)
+                                    .background(MaterialTheme.colorScheme.surface)
+                                    .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp)),
                         ) {
                             themeModes.forEach { (mode, labelKey) ->
                                 DropdownMenuItem(
-                                    text = { 
+                                    text = {
                                         Text(
                                             text = stringResource(labelKey),
                                             color = MaterialTheme.colorScheme.onBackground,
-                                            fontWeight = if (activeThemeMode == mode) FontWeight.Bold else FontWeight.Normal
-                                        ) 
+                                            fontWeight = if (activeThemeMode == mode) FontWeight.Bold else FontWeight.Normal,
+                                        )
                                     },
                                     onClick = {
                                         FavoriteManager.setThemeMode(context, mode)
@@ -203,7 +206,7 @@ fun SettingsScreen(
                                         if (activeThemeMode == mode) {
                                             Icon(Icons.Default.Check, contentDescription = null, tint = ElectricBlue)
                                         }
-                                    }
+                                    },
                                 )
                             }
                         }
@@ -214,100 +217,104 @@ fun SettingsScreen(
             // 2. Language Selection Setting Section
             Card(
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surface
-                ),
+                colors =
+                    CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surface,
+                    ),
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 Column(
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(16.dp),
                 ) {
                     Row(
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Box(
-                            modifier = Modifier
-                                .size(36.dp)
-                                .background(
-                                    AccentGreen.copy(alpha = if (isAppDarkTheme()) 0.2f else 0.1f),
-                                    CircleShape
-                                ),
-                            contentAlignment = Alignment.Center
+                            modifier =
+                                Modifier
+                                    .size(36.dp)
+                                    .background(
+                                        AccentGreen.copy(alpha = if (isAppDarkTheme()) 0.2f else 0.1f),
+                                        CircleShape,
+                                    ),
+                            contentAlignment = Alignment.Center,
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Language,
                                 contentDescription = null,
                                 tint = AccentGreen,
-                                modifier = Modifier.size(20.dp)
+                                modifier = Modifier.size(20.dp),
                             )
                         }
-                        
+
                         Spacer(modifier = Modifier.width(12.dp))
-                        
+
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
                                 text = stringResource(R.string.language_selection),
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 16.sp,
-                                color = MaterialTheme.colorScheme.onBackground
+                                color = MaterialTheme.colorScheme.onBackground,
                             )
                             Text(
                                 text = stringResource(R.string.language_subtitle),
                                 fontSize = 12.sp,
-                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
+                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                             )
                         }
                     }
-                    
+
                     Spacer(modifier = Modifier.height(16.dp))
-                    
+
                     Box(modifier = Modifier.fillMaxWidth()) {
                         OutlinedButton(
                             onClick = { showLanguageDropdown = true },
                             shape = RoundedCornerShape(12.dp),
                             border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-                            colors = ButtonDefaults.outlinedButtonColors(
-                                containerColor = getAppButtonBackground()
-                            ),
-                            modifier = Modifier.fillMaxWidth()
+                            colors =
+                                ButtonDefaults.outlinedButtonColors(
+                                    containerColor = getAppButtonBackground(),
+                                ),
+                            modifier = Modifier.fillMaxWidth(),
                         ) {
                             val activeLangLabel = languages.firstOrNull { it.first == activeLangCode }?.second ?: "System Default"
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
+                                verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 Text(
                                     text = activeLangLabel,
                                     color = MaterialTheme.colorScheme.onBackground,
-                                    fontWeight = FontWeight.SemiBold
+                                    fontWeight = FontWeight.SemiBold,
                                 )
                                 Icon(
                                     imageVector = Icons.Default.ArrowDropDown,
                                     contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onBackground
+                                    tint = MaterialTheme.colorScheme.onBackground,
                                 )
                             }
                         }
-                        
+
                         DropdownMenu(
                             expanded = showLanguageDropdown,
                             onDismissRequest = { showLanguageDropdown = false },
-                            modifier = Modifier
-                                .fillMaxWidth(0.9f)
-                                .background(MaterialTheme.colorScheme.surface)
-                                .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
-                                .heightIn(max = 280.dp)
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth(0.9f)
+                                    .background(MaterialTheme.colorScheme.surface)
+                                    .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
+                                    .heightIn(max = 280.dp),
                         ) {
                             languages.forEach { (code, label) ->
                                 DropdownMenuItem(
-                                    text = { 
+                                    text = {
                                         Text(
                                             text = label,
                                             color = MaterialTheme.colorScheme.onBackground,
-                                            fontWeight = if (activeLangCode == code) FontWeight.Bold else FontWeight.Normal
-                                        ) 
+                                            fontWeight = if (activeLangCode == code) FontWeight.Bold else FontWeight.Normal,
+                                        )
                                     },
                                     onClick = {
                                         LocaleManager.setLanguage(context, code)
@@ -317,7 +324,7 @@ fun SettingsScreen(
                                         if (activeLangCode == code) {
                                             Icon(Icons.Default.Check, contentDescription = null, tint = AccentGreen)
                                         }
-                                    }
+                                    },
                                 )
                             }
                         }
@@ -328,62 +335,66 @@ fun SettingsScreen(
             // 3. Vibration Haptics Section
             Card(
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surface
-                ),
+                colors =
+                    CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surface,
+                    ),
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Box(
-                        modifier = Modifier
-                            .size(36.dp)
-                            .background(
-                                WarmOrange.copy(alpha = if (isAppDarkTheme()) 0.2f else 0.1f),
-                                CircleShape
-                            ),
-                        contentAlignment = Alignment.Center
+                        modifier =
+                            Modifier
+                                .size(36.dp)
+                                .background(
+                                    WarmOrange.copy(alpha = if (isAppDarkTheme()) 0.2f else 0.1f),
+                                    CircleShape,
+                                ),
+                        contentAlignment = Alignment.Center,
                     ) {
                         Icon(
                             imageVector = Icons.Default.Vibration,
                             contentDescription = null,
                             tint = WarmOrange,
-                            modifier = Modifier.size(20.dp)
+                            modifier = Modifier.size(20.dp),
                         )
                     }
-                    
+
                     Spacer(modifier = Modifier.width(12.dp))
-                    
+
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
                             text = stringResource(R.string.vibration_toggle),
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp,
-                            color = MaterialTheme.colorScheme.onBackground
+                            color = MaterialTheme.colorScheme.onBackground,
                         )
                         Text(
                             text = stringResource(R.string.vibration_subtitle),
                             fontSize = 12.sp,
-                            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
+                            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                         )
                     }
-                    
+
                     Switch(
                         checked = isVibrationEnabled,
                         onCheckedChange = { enabled ->
                             FavoriteManager.setVibrationEnabled(context, enabled)
                         },
-                        colors = SwitchDefaults.colors(
-                            checkedThumbColor = Color.White,
-                            checkedTrackColor = WarmOrange,
-                            uncheckedThumbColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.4f),
-                            uncheckedTrackColor = getAppButtonBackground()
-                        )
+                        colors =
+                            SwitchDefaults.colors(
+                                checkedThumbColor = Color.White,
+                                checkedTrackColor = WarmOrange,
+                                uncheckedThumbColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.4f),
+                                uncheckedTrackColor = getAppButtonBackground(),
+                            ),
                     )
                 }
             }

@@ -12,7 +12,11 @@ import android.widget.Toast
 object IRTransmitter {
     private const val TAG = "IRTransmitter"
 
-    fun transmit(context: Context, pulses: IntArray, frequencyHz: Int = 38000) {
+    fun transmit(
+        context: Context,
+        pulses: IntArray,
+        frequencyHz: Int = 38000,
+    ) {
         if (pulses.isEmpty()) return
 
         try {

@@ -8,7 +8,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,20 +19,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.anyremote.remote.data.RemoteDatabase
-import com.anyremote.remote.data.RemoteDatabase.DeviceType
-import com.anyremote.remote.data.RemoteDatabase.Brand
-import com.anyremote.remote.service.FavoriteManager
-import androidx.compose.ui.res.stringResource
 import com.anyremote.remote.R
+import com.anyremote.remote.data.RemoteDatabase
+import com.anyremote.remote.data.RemoteDatabase.Brand
+import com.anyremote.remote.data.RemoteDatabase.DeviceType
+import com.anyremote.remote.service.FavoriteManager
 import com.anyremote.remote.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,13 +39,13 @@ import com.anyremote.remote.ui.theme.*
 fun DashboardScreen(
     onDeviceSelected: (deviceId: Int, brandId: Int) -> Unit,
     onFavoriteSelected: (deviceId: Int, brandId: Int) -> Unit,
-    onSettingsClick: () -> Unit
+    onSettingsClick: () -> Unit,
 ) {
     var selectedDevice by remember { mutableStateOf<DeviceType?>(null) }
     var forceShowCategories by remember { mutableStateOf(false) }
     val context = LocalContext.current
     RemoteDatabase.init(context)
-    
+
     // Dynamically retrieve favorite remotes on launch/resume
     var favoriteKeys by remember { mutableStateOf(emptySet<String>()) }
     LaunchedEffect(Unit) {
@@ -59,17 +57,18 @@ fun DashboardScreen(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = if (selectedDevice != null) {
-                            selectedDevice!!.nameEn.uppercase()
-                        } else if (forceShowCategories) {
-                            stringResource(R.string.select_device_type)
-                        } else {
-                            stringResource(R.string.app_name).uppercase()
-                        },
+                        text =
+                            if (selectedDevice != null) {
+                                selectedDevice!!.nameEn.uppercase()
+                            } else if (forceShowCategories) {
+                                stringResource(R.string.select_device_type)
+                            } else {
+                                stringResource(R.string.app_name).uppercase()
+                            },
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onBackground,
                         fontSize = 18.sp,
-                        letterSpacing = 1.sp
+                        letterSpacing = 1.sp,
                     )
                 },
                 navigationIcon = {
@@ -78,30 +77,32 @@ fun DashboardScreen(
                             Icon(
                                 imageVector = Icons.Default.ArrowBack,
                                 contentDescription = stringResource(R.string.back),
-                                tint = MaterialTheme.colorScheme.onBackground
+                                tint = MaterialTheme.colorScheme.onBackground,
                             )
                         }
                     } else if (forceShowCategories) {
-                         IconButton(onClick = { forceShowCategories = false }) {
-                             Icon(
-                                 imageVector = Icons.Default.ArrowBack,
-                                 contentDescription = stringResource(R.string.back),
-                                 tint = MaterialTheme.colorScheme.onBackground
-                             )
-                         }
+                        IconButton(onClick = { forceShowCategories = false }) {
+                            Icon(
+                                imageVector = Icons.Default.ArrowBack,
+                                contentDescription = stringResource(R.string.back),
+                                tint = MaterialTheme.colorScheme.onBackground,
+                            )
+                        }
                     }
                 },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background
-                )
+                colors =
+                    TopAppBarDefaults.centerAlignedTopAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.background,
+                    ),
             )
         },
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = MaterialTheme.colorScheme.background,
     ) { innerPadding ->
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
         ) {
             if (!forceShowCategories) {
                 // First Page/Main Page: Lists saved devices or remains beautifully blank with buttons
@@ -112,12 +113,12 @@ fun DashboardScreen(
                         favoriteKeys = FavoriteManager.getFavorites(context)
                     },
                     onAddNewClick = { forceShowCategories = true },
-                    onSettingsClick = onSettingsClick
+                    onSettingsClick = onSettingsClick,
                 )
             } else if (selectedDevice == null) {
                 // Stage 1 of adding device: Device Category Grid
                 CategorySelectionGrid(
-                    onCategoryClick = { selectedDevice = it }
+                    onCategoryClick = { selectedDevice = it },
                 )
             } else {
                 // Stage 2 of adding device: Brand Selection Panel with Letter filter & search
@@ -125,7 +126,7 @@ fun DashboardScreen(
                     device = selectedDevice!!,
                     onBrandClick = { brand ->
                         onDeviceSelected(selectedDevice!!.id, brand.id)
-                    }
+                    },
                 )
             }
         }
@@ -138,44 +139,47 @@ fun MainDashboardPage(
     onRemoteClick: (deviceId: Int, brandId: Int) -> Unit,
     onFavoritesChanged: () -> Unit,
     onAddNewClick: () -> Unit,
-    onSettingsClick: () -> Unit
+    onSettingsClick: () -> Unit,
 ) {
     val context = LocalContext.current
     var selectedItemForOptions by remember { mutableStateOf<Triple<DeviceType, Brand, String>?>(null) }
     var showRenameDialog by remember { mutableStateOf(false) }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         if (favoriteKeys.isEmpty()) {
             // Elegant Blank Page Layout
             Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth(),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .fillMaxWidth(),
+                contentAlignment = Alignment.Center,
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
-                    modifier = Modifier.padding(24.dp)
+                    modifier = Modifier.padding(24.dp),
                 ) {
                     Box(
-                        modifier = Modifier
-                            .size(108.dp)
-                            .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.surfaceVariant)
-                            .border(1.dp, MaterialTheme.colorScheme.outline, CircleShape),
-                        contentAlignment = Alignment.Center
+                        modifier =
+                            Modifier
+                                .size(108.dp)
+                                .clip(CircleShape)
+                                .background(MaterialTheme.colorScheme.surfaceVariant)
+                                .border(1.dp, MaterialTheme.colorScheme.outline, CircleShape),
+                        contentAlignment = Alignment.Center,
                     ) {
                         Icon(
                             imageVector = Icons.Default.SettingsRemote,
                             contentDescription = null,
                             tint = ElectricBlue.copy(alpha = 0.6f),
-                            modifier = Modifier.size(50.dp)
+                            modifier = Modifier.size(50.dp),
                         )
                     }
 
@@ -186,7 +190,7 @@ fun MainDashboardPage(
                         color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
@@ -197,7 +201,7 @@ fun MainDashboardPage(
                         fontSize = 13.sp,
                         textAlign = TextAlign.Center,
                         lineHeight = 18.sp,
-                        modifier = Modifier.padding(horizontal = 16.dp)
+                        modifier = Modifier.padding(horizontal = 16.dp),
                     )
                 }
             }
@@ -209,29 +213,34 @@ fun MainDashboardPage(
                 fontSize = 11.sp,
                 fontWeight = FontWeight.Bold,
                 letterSpacing = 1.5.sp,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 12.dp, top = 8.dp)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 12.dp, top = 8.dp),
             )
 
-            val favoritesList = remember(favoriteKeys) {
-                favoriteKeys.mapNotNull { key ->
-                    val parts = key.split("_")
-                    if (parts.size == 2) {
-                        val deviceId = parts[0].toIntOrNull() ?: return@mapNotNull null
-                        val brandId = parts[1].toIntOrNull() ?: return@mapNotNull null
-                        val device = RemoteDatabase.deviceTypes.firstOrNull { it.id == deviceId } ?: return@mapNotNull null
-                        val brand = device.brands.firstOrNull { it.id == brandId } ?: return@mapNotNull null
-                        Triple(device, brand, key)
-                    } else null
+            val favoritesList =
+                remember(favoriteKeys) {
+                    favoriteKeys.mapNotNull { key ->
+                        val parts = key.split("_")
+                        if (parts.size == 2) {
+                            val deviceId = parts[0].toIntOrNull() ?: return@mapNotNull null
+                            val brandId = parts[1].toIntOrNull() ?: return@mapNotNull null
+                            val device = RemoteDatabase.deviceTypes.firstOrNull { it.id == deviceId } ?: return@mapNotNull null
+                            val brand = device.brands.firstOrNull { it.id == brandId } ?: return@mapNotNull null
+                            Triple(device, brand, key)
+                        } else {
+                            null
+                        }
+                    }
                 }
-            }
 
             LazyColumn(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
                 items(favoritesList) { (device, brand, key) ->
                     FavoriteRemoteListItem(
@@ -240,7 +249,7 @@ fun MainDashboardPage(
                         onClick = { onRemoteClick(device.id, brand.id) },
                         onLongClick = {
                             selectedItemForOptions = Triple(device, brand, key)
-                        }
+                        },
                     )
                 }
             }
@@ -248,10 +257,11 @@ fun MainDashboardPage(
 
         // Bottom action buttons container visible at all times
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 12.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 12.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             // Settings Button
             OutlinedButton(
@@ -259,11 +269,16 @@ fun MainDashboardPage(
                 shape = RoundedCornerShape(12.dp),
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
                 colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.onSurface),
-                modifier = Modifier
-                    .weight(1f)
-                    .height(48.dp)
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .height(48.dp),
             ) {
-                Icon(Icons.Default.Settings, contentDescription = stringResource(R.string.settings), tint = MaterialTheme.colorScheme.onSurface)
+                Icon(
+                    Icons.Default.Settings,
+                    contentDescription = stringResource(R.string.settings),
+                    tint = MaterialTheme.colorScheme.onSurface,
+                )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(stringResource(R.string.settings), fontWeight = FontWeight.Bold, fontSize = 12.sp)
             }
@@ -273,9 +288,10 @@ fun MainDashboardPage(
                 onClick = onAddNewClick,
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = ElectricBlue),
-                modifier = Modifier
-                    .weight(1.2f)
-                    .height(48.dp)
+                modifier =
+                    Modifier
+                        .weight(1.2f)
+                        .height(48.dp),
             ) {
                 Icon(Icons.Default.Add, contentDescription = stringResource(R.string.add_new), tint = Color.White)
                 Spacer(modifier = Modifier.width(8.dp))
@@ -297,64 +313,89 @@ fun MainDashboardPage(
                     text = currentCustomName.uppercase(),
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface,
-                    fontSize = 16.sp
+                    fontSize = 16.sp,
                 )
             },
             text = {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
                     // Option 1: Rename Remote
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                showRenameDialog = true
-                            }
-                            .padding(vertical = 12.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    showRenameDialog = true
+                                }.padding(vertical = 12.dp),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Icon(Icons.Default.Edit, contentDescription = stringResource(R.string.rename_remote), tint = ElectricBlue, modifier = Modifier.size(20.dp))
+                        Icon(
+                            Icons.Default.Edit,
+                            contentDescription = stringResource(R.string.rename_remote),
+                            tint = ElectricBlue,
+                            modifier = Modifier.size(20.dp),
+                        )
                         Spacer(modifier = Modifier.width(16.dp))
-                        Text(stringResource(R.string.rename_remote), color = MaterialTheme.colorScheme.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                        Text(
+                            stringResource(R.string.rename_remote),
+                            color = MaterialTheme.colorScheme.onSurface,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                        )
                     }
 
                     // Option 2: Pin to Home Screen
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                selectedItemForOptions = null
-                                com.anyremote.remote.service.ShortcutHelper.pinRemoteShortcut(
-                                    context = context,
-                                    deviceId = device.id,
-                                    brandId = brand.id,
-                                    deviceName = device.nameEn,
-                                    brandName = brand.nameEn
-                                )
-                            }
-                            .padding(vertical = 12.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    selectedItemForOptions = null
+                                    com.anyremote.remote.service.ShortcutHelper.pinRemoteShortcut(
+                                        context = context,
+                                        deviceId = device.id,
+                                        brandId = brand.id,
+                                        deviceName = device.nameEn,
+                                        brandName = brand.nameEn,
+                                    )
+                                }.padding(vertical = 12.dp),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Icon(Icons.Default.PushPin, contentDescription = stringResource(R.string.pin_to_home), tint = ElectricBlue, modifier = Modifier.size(20.dp))
+                        Icon(
+                            Icons.Default.PushPin,
+                            contentDescription = stringResource(R.string.pin_to_home),
+                            tint = ElectricBlue,
+                            modifier = Modifier.size(20.dp),
+                        )
                         Spacer(modifier = Modifier.width(16.dp))
-                        Text(stringResource(R.string.pin_to_home), color = MaterialTheme.colorScheme.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                        Text(
+                            stringResource(R.string.pin_to_home),
+                            color = MaterialTheme.colorScheme.onSurface,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                        )
                     }
 
                     // Option 3: Unpin from Favorites
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                selectedItemForOptions = null
-                                FavoriteManager.toggleFavorite(context, device.id, brand.id)
-                                onFavoritesChanged()
-                            }
-                            .padding(vertical = 12.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    selectedItemForOptions = null
+                                    FavoriteManager.toggleFavorite(context, device.id, brand.id)
+                                    onFavoritesChanged()
+                                }.padding(vertical = 12.dp),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.remove_remote), tint = CrimsonRed, modifier = Modifier.size(20.dp))
+                        Icon(
+                            Icons.Default.Delete,
+                            contentDescription = stringResource(R.string.remove_remote),
+                            tint = CrimsonRed,
+                            modifier = Modifier.size(20.dp),
+                        )
                         Spacer(modifier = Modifier.width(16.dp))
                         Text(stringResource(R.string.remove_remote), color = CrimsonRed, fontSize = 14.sp, fontWeight = FontWeight.Bold)
                     }
@@ -366,7 +407,7 @@ fun MainDashboardPage(
                 }
             },
             containerColor = MaterialTheme.colorScheme.surface,
-            shape = RoundedCornerShape(16.dp)
+            shape = RoundedCornerShape(16.dp),
         )
     }
 
@@ -384,7 +425,7 @@ fun MainDashboardPage(
                     text = stringResource(R.string.rename_remote).uppercase(),
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface,
-                    fontSize = 16.sp
+                    fontSize = 16.sp,
                 )
             },
             text = {
@@ -393,13 +434,14 @@ fun MainDashboardPage(
                     onValueChange = { nameInput = it },
                     label = { Text(stringResource(R.string.remote_name_label), color = ElectricBlue) },
                     singleLine = true,
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = ElectricBlue,
-                        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
-                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                        unfocusedTextColor = MaterialTheme.colorScheme.onSurface
-                    ),
-                    modifier = Modifier.fillMaxWidth()
+                    colors =
+                        OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = ElectricBlue,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        ),
+                    modifier = Modifier.fillMaxWidth(),
                 )
             },
             confirmButton = {
@@ -411,7 +453,7 @@ fun MainDashboardPage(
                         }
                         showRenameDialog = false
                         selectedItemForOptions = null
-                    }
+                    },
                 ) {
                     Text(stringResource(R.string.save), color = ElectricBlue, fontWeight = FontWeight.Bold)
                 }
@@ -422,7 +464,7 @@ fun MainDashboardPage(
                 }
             },
             containerColor = MaterialTheme.colorScheme.surface,
-            shape = RoundedCornerShape(16.dp)
+            shape = RoundedCornerShape(16.dp),
         )
     }
 }
@@ -433,60 +475,62 @@ fun FavoriteRemoteListItem(
     device: DeviceType,
     brand: Brand,
     onClick: () -> Unit,
-    onLongClick: () -> Unit
+    onLongClick: () -> Unit,
 ) {
     val context = LocalContext.current
-    val displayName = remember(context, device, brand) {
-        FavoriteManager.getCustomName(context, device.id, brand.id, "${brand.nameEn} ${device.nameEn.substringBefore(" ")}")
-    }
-    
+    val displayName =
+        remember(context, device, brand) {
+            FavoriteManager.getCustomName(context, device.id, brand.id, "${brand.nameEn} ${device.nameEn.substringBefore(" ")}")
+        }
+
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(14.dp))
-            .background(MaterialTheme.colorScheme.surface)
-            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(14.dp))
-            .combinedClickable(
-                onClick = onClick,
-                onLongClick = onLongClick
-            )
-            .padding(14.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(14.dp))
+                .background(MaterialTheme.colorScheme.surface)
+                .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(14.dp))
+                .combinedClickable(
+                    onClick = onClick,
+                    onLongClick = onLongClick,
+                ).padding(14.dp),
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Box(
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
-                    .border(1.dp, MaterialTheme.colorScheme.outline, CircleShape),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .border(1.dp, MaterialTheme.colorScheme.outline, CircleShape),
+                contentAlignment = Alignment.Center,
             ) {
                 Text(
                     text = brand.nameEn.take(1).uppercase(),
                     color = ElectricBlue,
                     fontWeight = FontWeight.ExtraBold,
-                    fontSize = 16.sp
+                    fontSize = 16.sp,
                 )
             }
-            
+
             Spacer(modifier = Modifier.width(14.dp))
-            
+
             Column {
                 Text(
                     text = displayName.uppercase(),
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
                     fontSize = 13.sp,
-                    maxLines = 1
+                    maxLines = 1,
                 )
                 Text(
                     text = device.nameEn.uppercase(),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 10.sp,
-                    letterSpacing = 0.5.sp
+                    letterSpacing = 0.5.sp,
                 )
             }
         }
@@ -494,31 +538,29 @@ fun FavoriteRemoteListItem(
 }
 
 @Composable
-fun CategorySelectionGrid(
-    onCategoryClick: (DeviceType) -> Unit
-) {
+fun CategorySelectionGrid(onCategoryClick: (DeviceType) -> Unit) {
     val chunkedCategories = remember(RemoteDatabase.deviceTypes) { RemoteDatabase.deviceTypes.chunked(2) }
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         items(chunkedCategories) { pair ->
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 CategoryCard(
                     device = pair[0],
                     onClick = { onCategoryClick(pair[0]) },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
                 if (pair.size > 1) {
                     CategoryCard(
                         device = pair[1],
                         onClick = { onCategoryClick(pair[1]) },
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
                     )
                 } else {
                     Spacer(modifier = Modifier.weight(1f))
@@ -528,57 +570,59 @@ fun CategorySelectionGrid(
     }
 }
 
-
 @Composable
 fun CategoryCard(
     device: DeviceType,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
-    val icon = when (device.id) {
-        1 -> Icons.Default.Tv
-        2 -> Icons.Default.Router
-        3 -> Icons.Default.AcUnit
-        4 -> Icons.Default.Dvr
-        6 -> Icons.Default.WindPower
-        8 -> Icons.Default.Speaker
-        10 -> Icons.Default.SettingsInputHdmi
-        11 -> Icons.Default.SettingsInputAntenna
-        12 -> Icons.Default.Cast
-        13 -> Icons.Default.PhotoCamera
-        else -> Icons.Default.Power
-    }
+    val icon =
+        when (device.id) {
+            1 -> Icons.Default.Tv
+            2 -> Icons.Default.Router
+            3 -> Icons.Default.AcUnit
+            4 -> Icons.Default.Dvr
+            6 -> Icons.Default.WindPower
+            8 -> Icons.Default.Speaker
+            10 -> Icons.Default.SettingsInputHdmi
+            11 -> Icons.Default.SettingsInputAntenna
+            12 -> Icons.Default.Cast
+            13 -> Icons.Default.PhotoCamera
+            else -> Icons.Default.Power
+        }
 
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(110.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .background(MaterialTheme.colorScheme.surface)
-            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(16.dp))
-            .clickable(onClick = onClick)
-            .padding(16.dp),
-        contentAlignment = Alignment.Center
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .height(110.dp)
+                .clip(RoundedCornerShape(16.dp))
+                .background(MaterialTheme.colorScheme.surface)
+                .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(16.dp))
+                .clickable(onClick = onClick)
+                .padding(16.dp),
+        contentAlignment = Alignment.Center,
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = device.nameEn,
                 tint = ElectricBlue,
-                modifier = Modifier
-                    .size(32.dp)
-                    .padding(bottom = 8.dp)
+                modifier =
+                    Modifier
+                        .size(32.dp)
+                        .padding(bottom = 8.dp),
             )
-            
+
             Text(
                 text = device.nameEn,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold,
                 fontSize = 13.sp,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
         }
     }
@@ -587,63 +631,71 @@ fun CategoryCard(
 @Composable
 fun BrandSelectionPanel(
     device: DeviceType,
-    onBrandClick: (Brand) -> Unit
+    onBrandClick: (Brand) -> Unit,
 ) {
     var searchQuery by remember { mutableStateOf("") }
     var selectedLetter by remember { mutableStateOf<Char?>(null) }
 
-    val filteredBrands = remember(searchQuery, selectedLetter, device.brands) {
-        device.brands.filter { brand ->
-            val matchesSearch = if (searchQuery.isEmpty()) {
-                true
-            } else {
-                brand.nameEn.contains(searchQuery, ignoreCase = true)
-            }
-            
-            val matchesLetter = if (selectedLetter == null) {
-                true
-            } else {
-                brand.nameEn.startsWith(selectedLetter!!, ignoreCase = true)
-            }
-            
-            matchesSearch && matchesLetter
-        }.sortedBy { it.nameEn }
-    }
+    val filteredBrands =
+        remember(searchQuery, selectedLetter, device.brands) {
+            device.brands
+                .filter { brand ->
+                    val matchesSearch =
+                        if (searchQuery.isEmpty()) {
+                            true
+                        } else {
+                            brand.nameEn.contains(searchQuery, ignoreCase = true)
+                        }
 
-    val alphabet = remember(device.brands) {
-        ('A'..'Z').filter { ch ->
-            device.brands.any { it.nameEn.startsWith(ch, ignoreCase = true) }
+                    val matchesLetter =
+                        if (selectedLetter == null) {
+                            true
+                        } else {
+                            brand.nameEn.startsWith(selectedLetter!!, ignoreCase = true)
+                        }
+
+                    matchesSearch && matchesLetter
+                }.sortedBy { it.nameEn }
         }
-    }
+
+    val alphabet =
+        remember(device.brands) {
+            ('A'..'Z').filter { ch ->
+                device.brands.any { it.nameEn.startsWith(ch, ignoreCase = true) }
+            }
+        }
 
     val haptic = LocalHapticFeedback.current
     val context = LocalContext.current
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp),
     ) {
         // Sticky Search Field
         TextField(
             value = searchQuery,
             onValueChange = { searchQuery = it },
             placeholder = { Text(stringResource(R.string.search_placeholder), color = MaterialTheme.colorScheme.onSurfaceVariant) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 12.dp, bottom = 4.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(10.dp)),
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = MaterialTheme.colorScheme.surface,
-                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                unfocusedTextColor = MaterialTheme.colorScheme.onSurface
-            ),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 12.dp, bottom = 4.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(10.dp)),
+            colors =
+                TextFieldDefaults.colors(
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                ),
             singleLine = true,
-            leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search", tint = ElectricBlue) }
+            leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search", tint = ElectricBlue) },
         )
 
         // List Header
@@ -653,38 +705,42 @@ fun BrandSelectionPanel(
             fontSize = 10.sp,
             fontWeight = FontWeight.Bold,
             letterSpacing = 1.5.sp,
-            modifier = Modifier.padding(vertical = 8.dp)
+            modifier = Modifier.padding(vertical = 8.dp),
         )
 
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
         ) {
             // Group brands by first letter
-            val groupedBrands = remember(filteredBrands) {
-                filteredBrands.groupBy { it.nameEn.take(1).uppercase() }
-            }
+            val groupedBrands =
+                remember(filteredBrands) {
+                    filteredBrands.groupBy { it.nameEn.take(1).uppercase() }
+                }
 
             LazyColumn(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight(),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .fillMaxHeight(),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 if (filteredBrands.isEmpty()) {
                     item {
                         Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(40.dp),
-                            contentAlignment = Alignment.Center
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(40.dp),
+                            contentAlignment = Alignment.Center,
                         ) {
                             Text(
                                 text = "No brands found",
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 fontSize = 13.sp,
-                                fontWeight = FontWeight.Medium
+                                fontWeight = FontWeight.Medium,
                             )
                         }
                     }
@@ -693,15 +749,16 @@ fun BrandSelectionPanel(
                         // Styled Letter Section Header like in a Premium Contacts app
                         item(key = "header_$initial") {
                             Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 12.dp, bottom = 4.dp)
+                                modifier =
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .padding(top = 12.dp, bottom = 4.dp),
                             ) {
                                 Text(
                                     text = initial,
                                     color = ElectricBlue,
                                     fontWeight = FontWeight.ExtraBold,
-                                    fontSize = 15.sp
+                                    fontSize = 15.sp,
                                 )
                             }
                         }
@@ -709,12 +766,12 @@ fun BrandSelectionPanel(
                         items(brandsInGroup) { brand ->
                             BrandListItem(
                                 brand = brand,
-                                onClick = { onBrandClick(brand) }
+                                onClick = { onBrandClick(brand) },
                             )
                         }
                     }
                 }
-                
+
                 // Bottom spacing
                 item {
                     Spacer(modifier = Modifier.height(24.dp))
@@ -725,34 +782,36 @@ fun BrandSelectionPanel(
 
             // Sleek Contacts-style Vertical Alphabetical Fast Index Sidebar
             Column(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .width(30.dp)
-                    .background(getAppButtonBackground(), shape = RoundedCornerShape(15.dp))
-                    .padding(vertical = 12.dp),
+                modifier =
+                    Modifier
+                        .fillMaxHeight()
+                        .width(30.dp)
+                        .background(getAppButtonBackground(), shape = RoundedCornerShape(15.dp))
+                        .padding(vertical = 12.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+                verticalArrangement = Arrangement.spacedBy(4.dp),
             ) {
                 // "ALL" button at the top of the sidebar
                 val isAllSelected = selectedLetter == null
                 Box(
-                    modifier = Modifier
-                        .size(22.dp)
-                        .clip(CircleShape)
-                        .background(if (isAllSelected) ElectricBlue else Color.Transparent)
-                        .clickable {
-                            if (FavoriteManager.isVibrationEnabled(context)) {
-                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            }
-                            selectedLetter = null
-                        },
-                    contentAlignment = Alignment.Center
+                    modifier =
+                        Modifier
+                            .size(22.dp)
+                            .clip(CircleShape)
+                            .background(if (isAllSelected) ElectricBlue else Color.Transparent)
+                            .clickable {
+                                if (FavoriteManager.isVibrationEnabled(context)) {
+                                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                }
+                                selectedLetter = null
+                            },
+                    contentAlignment = Alignment.Center,
                 ) {
                     Text(
                         text = "•",
                         color = if (isAllSelected) Color.White else MaterialTheme.colorScheme.onSurfaceVariant,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 14.sp
+                        fontSize = 14.sp,
                     )
                 }
 
@@ -760,28 +819,29 @@ fun BrandSelectionPanel(
                 LazyColumn(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(4.dp),
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 ) {
                     items(alphabet) { ch ->
                         val isSelected = selectedLetter == ch
                         Box(
-                            modifier = Modifier
-                                .size(22.dp)
-                                .clip(CircleShape)
-                                .background(if (isSelected) ElectricBlue else Color.Transparent)
-                                .clickable {
-                                    if (FavoriteManager.isVibrationEnabled(context)) {
-                                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                    }
-                                    selectedLetter = ch
-                                },
-                            contentAlignment = Alignment.Center
+                            modifier =
+                                Modifier
+                                    .size(22.dp)
+                                    .clip(CircleShape)
+                                    .background(if (isSelected) ElectricBlue else Color.Transparent)
+                                    .clickable {
+                                        if (FavoriteManager.isVibrationEnabled(context)) {
+                                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                        }
+                                        selectedLetter = ch
+                                    },
+                            contentAlignment = Alignment.Center,
                         ) {
                             Text(
                                 text = ch.toString(),
                                 color = if (isSelected) Color.White else MaterialTheme.colorScheme.onSurfaceVariant,
                                 fontWeight = FontWeight.ExtraBold,
-                                fontSize = 10.sp
+                                fontSize = 10.sp,
                             )
                         }
                     }
@@ -794,43 +854,45 @@ fun BrandSelectionPanel(
 @Composable
 fun BrandListItem(
     brand: Brand,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(10.dp))
-            .background(MaterialTheme.colorScheme.surface)
-            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(10.dp))
-            .clickable(onClick = onClick)
-            .padding(12.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(10.dp))
+                .background(MaterialTheme.colorScheme.surface)
+                .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(10.dp))
+                .clickable(onClick = onClick)
+                .padding(12.dp),
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Box(
-                modifier = Modifier
-                    .size(36.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
-                    .border(1.dp, MaterialTheme.colorScheme.outline, CircleShape),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .size(36.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .border(1.dp, MaterialTheme.colorScheme.outline, CircleShape),
+                contentAlignment = Alignment.Center,
             ) {
                 Text(
                     text = brand.nameEn.take(1).uppercase(),
                     color = ElectricBlue,
                     fontWeight = FontWeight.ExtraBold,
-                    fontSize = 16.sp
+                    fontSize = 16.sp,
                 )
             }
-            
+
             Spacer(modifier = Modifier.width(16.dp))
-            
+
             Text(
                 text = brand.nameEn,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold,
-                fontSize = 14.sp
+                fontSize = 14.sp,
             )
         }
     }

@@ -16,13 +16,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.anyremote.remote.ui.DashboardScreen
-import com.anyremote.remote.ui.RemoteControllerScreen
-import com.anyremote.remote.ui.MatchIRScreen
-import com.anyremote.remote.ui.SettingsScreen
 import com.anyremote.remote.service.FavoriteManager
 import com.anyremote.remote.service.LocaleManager
-import com.anyremote.remote.ui.theme.DeepBackground
+import com.anyremote.remote.ui.DashboardScreen
+import com.anyremote.remote.ui.MatchIRScreen
+import com.anyremote.remote.ui.RemoteControllerScreen
+import com.anyremote.remote.ui.SettingsScreen
 import com.anyremote.remote.ui.theme.AnyRemoteTheme
 
 class MainActivity : ComponentActivity() {
@@ -36,23 +35,25 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        com.anyremote.remote.data.RemoteDatabase.init(applicationContext)
+        com.anyremote.remote.data.RemoteDatabase
+            .init(applicationContext)
         FavoriteManager.init(applicationContext)
-        
+
         val initDeviceId = intent?.getIntExtra("deviceId", -1) ?: -1
         val initBrandId = intent?.getIntExtra("brandId", -1) ?: -1
-        
+
         setContent {
             val currentThemeMode = FavoriteManager.currentThemeState.value
-            val darkTheme = when (currentThemeMode) {
-                "light" -> false
-                "dark" -> true
-                else -> androidx.compose.foundation.isSystemInDarkTheme()
-            }
+            val darkTheme =
+                when (currentThemeMode) {
+                    "light" -> false
+                    "dark" -> true
+                    else -> androidx.compose.foundation.isSystemInDarkTheme()
+                }
             AnyRemoteTheme(darkTheme = darkTheme) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    color = MaterialTheme.colorScheme.background,
                 ) {
                     val controller = rememberNavController()
                     navController = controller
@@ -80,17 +81,18 @@ class MainActivity : ComponentActivity() {
 fun AppNavigation(
     navController: NavHostController,
     initDeviceId: Int,
-    initBrandId: Int
+    initBrandId: Int,
 ) {
-    val startDest = if (initDeviceId != -1 && initBrandId != -1) {
-        "remote/$initDeviceId/$initBrandId"
-    } else {
-        "dashboard"
-    }
-    
+    val startDest =
+        if (initDeviceId != -1 && initBrandId != -1) {
+            "remote/$initDeviceId/$initBrandId"
+        } else {
+            "dashboard"
+        }
+
     NavHost(
         navController = navController,
-        startDestination = startDest
+        startDestination = startDest,
     ) {
         composable("dashboard") {
             DashboardScreen(
@@ -102,19 +104,20 @@ fun AppNavigation(
                 },
                 onSettingsClick = {
                     navController.navigate("settings")
-                }
+                },
             )
         }
         composable(
             route = "match_ir/{deviceId}/{brandId}",
-            arguments = listOf(
-                navArgument("deviceId") { type = NavType.IntType },
-                navArgument("brandId") { type = NavType.IntType }
-            )
+            arguments =
+                listOf(
+                    navArgument("deviceId") { type = NavType.IntType },
+                    navArgument("brandId") { type = NavType.IntType },
+                ),
         ) { backStackEntry ->
             val deviceId = backStackEntry.arguments?.getInt("deviceId") ?: 1
             val brandId = backStackEntry.arguments?.getInt("brandId") ?: 1
-            
+
             MatchIRScreen(
                 deviceId = deviceId,
                 brandId = brandId,
@@ -130,32 +133,33 @@ fun AppNavigation(
                 },
                 onBackClick = {
                     navController.popBackStack()
-                }
+                },
             )
         }
         composable(
             route = "remote/{deviceId}/{brandId}",
-            arguments = listOf(
-                navArgument("deviceId") { type = NavType.IntType },
-                navArgument("brandId") { type = NavType.IntType }
-            )
+            arguments =
+                listOf(
+                    navArgument("deviceId") { type = NavType.IntType },
+                    navArgument("brandId") { type = NavType.IntType },
+                ),
         ) { backStackEntry ->
             val deviceId = backStackEntry.arguments?.getInt("deviceId") ?: 1
             val brandId = backStackEntry.arguments?.getInt("brandId") ?: 1
-            
+
             RemoteControllerScreen(
                 deviceId = deviceId,
                 brandId = brandId,
                 onBackClick = {
                     navController.popBackStack()
-                }
+                },
             )
         }
         composable("settings") {
             SettingsScreen(
                 onBackClick = {
                     navController.popBackStack()
-                }
+                },
             )
         }
     }

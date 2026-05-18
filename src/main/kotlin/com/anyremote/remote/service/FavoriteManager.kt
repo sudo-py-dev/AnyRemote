@@ -25,16 +25,23 @@ object FavoriteManager {
         return prefs.getString(KEY_THEME, "light") ?: "light"
     }
 
-    fun setThemeMode(context: Context, mode: String) {
+    fun setThemeMode(
+        context: Context,
+        mode: String,
+    ) {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         prefs.edit().putString(KEY_THEME, mode).apply()
         currentThemeState.value = mode
     }
 
-    fun toggleFavorite(context: Context, deviceId: Int, brandId: Int): Boolean {
+    fun toggleFavorite(
+        context: Context,
+        deviceId: Int,
+        brandId: Int,
+    ): Boolean {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         val favorites = getFavorites(context).toMutableSet()
-        val item = "${deviceId}_${brandId}"
+        val item = "${deviceId}_$brandId"
         val isAdded: Boolean
         if (favorites.contains(item)) {
             favorites.remove(item)
@@ -47,32 +54,45 @@ object FavoriteManager {
         return isAdded
     }
 
-    fun isFavorite(context: Context, deviceId: Int, brandId: Int): Boolean {
-        return getFavorites(context).contains("${deviceId}_${brandId}")
-    }
+    fun isFavorite(
+        context: Context,
+        deviceId: Int,
+        brandId: Int,
+    ): Boolean = getFavorites(context).contains("${deviceId}_$brandId")
 
     fun getFavorites(context: Context): Set<String> {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         return prefs.getStringSet(KEY_FAVORITES, emptySet()) ?: emptySet()
     }
 
-    fun isVibrationEnabled(context: Context): Boolean {
-        return currentVibrationState.value
-    }
+    fun isVibrationEnabled(context: Context): Boolean = currentVibrationState.value
 
-    fun setVibrationEnabled(context: Context, enabled: Boolean) {
+    fun setVibrationEnabled(
+        context: Context,
+        enabled: Boolean,
+    ) {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         prefs.edit().putBoolean(KEY_VIBRATION, enabled).apply()
         currentVibrationState.value = enabled
     }
 
-    fun getCustomName(context: Context, deviceId: Int, brandId: Int, defaultName: String): String {
+    fun getCustomName(
+        context: Context,
+        deviceId: Int,
+        brandId: Int,
+        defaultName: String,
+    ): String {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        return prefs.getString("name_${deviceId}_${brandId}", defaultName) ?: defaultName
+        return prefs.getString("name_${deviceId}_$brandId", defaultName) ?: defaultName
     }
 
-    fun setCustomName(context: Context, deviceId: Int, brandId: Int, customName: String) {
+    fun setCustomName(
+        context: Context,
+        deviceId: Int,
+        brandId: Int,
+        customName: String,
+    ) {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        prefs.edit().putString("name_${deviceId}_${brandId}", customName).apply()
+        prefs.edit().putString("name_${deviceId}_$brandId", customName).apply()
     }
 }

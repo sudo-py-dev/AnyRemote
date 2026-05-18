@@ -17,11 +17,14 @@ object LocaleManager {
         currentLanguage.value = prefs.getString(KEY_LANG, "system") ?: "system"
     }
 
-    fun setLanguage(context: Context, lang: String) {
+    fun setLanguage(
+        context: Context,
+        lang: String,
+    ) {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         prefs.edit().putString(KEY_LANG, lang).apply()
         currentLanguage.value = lang
-        
+
         if (context is android.app.Activity) {
             context.recreate()
         }
@@ -32,15 +35,18 @@ object LocaleManager {
         return prefs.getString(KEY_LANG, "system") ?: "system"
     }
 
-    fun applyLocale(context: Context, lang: String): Context {
+    fun applyLocale(
+        context: Context,
+        lang: String,
+    ): Context {
         if (lang == "system") return context
-        
+
         val locale = if (lang == "iw") Locale("iw") else Locale(lang)
         Locale.setDefault(locale)
-        
+
         val config = Configuration(context.resources.configuration)
         config.setLocale(locale)
-        
+
         return context.createConfigurationContext(config)
     }
 }

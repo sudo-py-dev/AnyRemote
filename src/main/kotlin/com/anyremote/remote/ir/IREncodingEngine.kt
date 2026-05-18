@@ -12,39 +12,42 @@ object IREncodingEngine {
     fun compileGreeAc(
         power: Boolean,
         temp: Int,
-        mode: String,       // "MA", "MC", "MD", "MV", "MH"
-        fanSpeed: String,   // "SA", "SL", "SM", "SH"
-        swing: Boolean      // true (WA / Auto), false (WM / Manual)
+        mode: String, // "MA", "MC", "MD", "MV", "MH"
+        fanSpeed: String, // "SA", "SL", "SM", "SH"
+        swing: Boolean, // true (WA / Auto), false (WM / Manual)
     ): IntArray {
         val state = ByteArray(8)
 
         // 1. Byte 0: Mode (bits 0..2), Power (bit 3), Fan (bits 4..5), SwingAuto (bit 6), Sleep (bit 7)
-        val modeVal = when (mode) {
-            "MA" -> 0
-            "MC" -> 1
-            "MD" -> 2
-            "MV" -> 3
-            "MH" -> 4
-            else -> 1 // Default to Cool
-        }
+        val modeVal =
+            when (mode) {
+                "MA" -> 0
+                "MC" -> 1
+                "MD" -> 2
+                "MV" -> 3
+                "MH" -> 4
+                else -> 1 // Default to Cool
+            }
         val powerVal = if (power) 1 else 0
-        val fanVal = when (fanSpeed) {
-            "SA" -> 0
-            "SL" -> 1
-            "SM" -> 2
-            "SH" -> 3
-            else -> 0
-        }
+        val fanVal =
+            when (fanSpeed) {
+                "SA" -> 0
+                "SL" -> 1
+                "SM" -> 2
+                "SH" -> 3
+                else -> 0
+            }
         val swingAutoVal = if (swing) 1 else 0
         val sleepVal = 0
 
-        state[0] = (
-            (modeVal and 0x07) or
-            ((powerVal and 0x01) shl 3) or
-            ((fanVal and 0x03) shl 4) or
-            ((swingAutoVal and 0x01) shl 6) or
-            ((sleepVal and 0x01) shl 7)
-        ).toByte()
+        state[0] =
+            (
+                (modeVal and 0x07) or
+                    ((powerVal and 0x01) shl 3) or
+                    ((fanVal and 0x03) shl 4) or
+                    ((swingAutoVal and 0x01) shl 6) or
+                    ((sleepVal and 0x01) shl 7)
+            ).toByte()
 
         // 2. Byte 1: Temperature (bits 0..3: temp - 16)
         val tempC = temp.coerceIn(16, 30)
@@ -145,18 +148,22 @@ object IREncodingEngine {
      * Generates a pulse sequence for other device keys (TV power, vol, etc.).
      * These use standard NEC carrier encoding rules for verification.
      */
-    fun compileGenericNec(address: Int, command: Int): IntArray {
+    fun compileGenericNec(
+        address: Int,
+        command: Int,
+    ): IntArray {
         // Address and command translated to 32-bit NEC frame: [Addr, ~Addr, Cmd, ~Cmd]
         val pulses = mutableListOf<Int>()
-        
+
         // NEC Lead code: 9000us high, 4500us low
         pulses.add(9000)
         pulses.add(4500)
 
-        val data = (address and 0xFF) or 
-                   (((address.inv()) and 0xFF) shl 8) or 
-                   ((command and 0xFF) shl 16) or 
-                   (((command.inv()) and 0xFF) shl 24)
+        val data =
+            (address and 0xFF) or
+                (((address.inv()) and 0xFF) shl 8) or
+                ((command and 0xFF) shl 16) or
+                (((command.inv()) and 0xFF) shl 24)
 
         for (i in 0..31) {
             val bit = (data shr i) and 1
@@ -170,11 +177,11 @@ object IREncodingEngine {
                 pulses.add(560)
             }
         }
-        
+
         // End code
         pulses.add(560)
         pulses.add(20000)
-        
+
         return pulses.toIntArray()
     }
 }
