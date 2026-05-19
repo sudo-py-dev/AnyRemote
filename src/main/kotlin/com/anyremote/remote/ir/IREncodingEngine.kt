@@ -6,8 +6,8 @@ object IREncodingEngine {
     private const val TAG = "IREncodingEngine"
 
     /**
-     * Compiles Gree AC configuration into the exact 8-byte state byte array
-     * and converts it to a microsecond pulse sequence (alternating high/low).
+     * Compiles Gree AC configuration into the exact 8-byte state byte array and converts it to a
+     * microsecond pulse sequence (alternating high/low).
      */
     fun compileGreeAc(
         power: Boolean,
@@ -18,7 +18,8 @@ object IREncodingEngine {
     ): IntArray {
         val state = ByteArray(8)
 
-        // 1. Byte 0: Mode (bits 0..2), Power (bit 3), Fan (bits 4..5), SwingAuto (bit 6), Sleep (bit 7)
+        // 1. Byte 0: Mode (bits 0..2), Power (bit 3), Fan (bits 4..5), SwingAuto (bit 6), Sleep
+        // (bit 7)
         val modeVal =
             when (mode) {
                 "MA" -> 0
@@ -41,13 +42,12 @@ object IREncodingEngine {
         val sleepVal = 0
 
         state[0] =
-            (
-                (modeVal and 0x07) or
+            ((modeVal and 0x07) or
                     ((powerVal and 0x01) shl 3) or
                     ((fanVal and 0x03) shl 4) or
                     ((swingAutoVal and 0x01) shl 6) or
-                    ((sleepVal and 0x01) shl 7)
-            ).toByte()
+                    ((sleepVal and 0x01) shl 7))
+                .toByte()
 
         // 2. Byte 1: Temperature (bits 0..3: temp - 16)
         val tempC = temp.coerceIn(16, 30)
@@ -145,8 +145,8 @@ object IREncodingEngine {
     }
 
     /**
-     * Generates a pulse sequence for other device keys (TV power, vol, etc.).
-     * These use standard NEC carrier encoding rules for verification.
+     * Generates a pulse sequence for other device keys (TV power, vol, etc.). These use standard
+     * NEC carrier encoding rules for verification.
      */
     fun compileGenericNec(
         address: Int,

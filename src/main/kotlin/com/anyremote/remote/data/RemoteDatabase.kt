@@ -35,9 +35,7 @@ object RemoteDatabase {
         try {
             // Read from compiled protobuf binary file
             val bytes =
-                context.assets.open("remotes_database.pb").use { stream ->
-                    stream.readBytes()
-                }
+                context.assets.open("remotes_database.pb").use { stream -> stream.readBytes() }
             val container = ProtoBuf.decodeFromByteArray(DatabaseContainer.serializer(), bytes)
             deviceTypes = container.devices
         } catch (e: Exception) {

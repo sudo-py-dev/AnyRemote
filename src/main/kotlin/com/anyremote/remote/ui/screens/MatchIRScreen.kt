@@ -1,4 +1,4 @@
-package com.anyremote.remote.ui
+package com.anyremote.remote.ui.screens
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
@@ -10,6 +10,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.VolumeMute
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -20,7 +23,6 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -31,6 +33,9 @@ import com.anyremote.remote.data.RemoteDatabase
 import com.anyremote.remote.ir.IREncodingEngine
 import com.anyremote.remote.ir.IRTransmitter
 import com.anyremote.remote.service.FavoriteManager
+import com.anyremote.remote.ui.components.*
+import com.anyremote.remote.ui.helpers.*
+import com.anyremote.remote.ui.layouts.*
 import com.anyremote.remote.ui.theme.*
 
 private val AccentCyan = Color(0xFF00E5FF)
@@ -55,54 +60,56 @@ fun MatchIRScreen(
         remember(deviceId, RemoteDatabase.deviceTypes) {
             RemoteDatabase.deviceTypes.firstOrNull { it.id == deviceId }
         }
-    val brand =
-        remember(brandId, category) {
-            category?.brands?.firstOrNull { it.id == brandId }
-        }
+    val brand = remember(brandId, category) { category?.brands?.firstOrNull { it.id == brandId } }
 
     val totalCodesets = remember { 5 } // 5 distinct codesets to prune through
     var currentCodesetIndex by remember { mutableIntStateOf(1) }
-    var customDeviceName by remember(brand, category) {
-        androidx.compose.runtime.mutableStateOf("${brand?.nameEn ?: "Brand"} ${category?.nameEn ?: "Device"}")
-    }
+    var customDeviceName by
+        remember(brand, category) {
+            androidx.compose.runtime.mutableStateOf(
+                "${brand?.nameEn ?: "Brand"} ${category?.nameEn ?: "Device"}")
+        }
     var isTestButtonPressed by remember { mutableStateOf(false) }
     var showMatchSuccessModal by remember { mutableStateOf(false) }
     var showResponsePopup by remember { mutableStateOf(false) }
 
     // Pulsing animation for the main testing button
     val infiniteTransition = rememberInfiniteTransition(label = "ButtonPulse")
-    val buttonScale by infiniteTransition.animateFloat(
-        initialValue = 1f,
-        targetValue = 1.04f,
-        animationSpec =
-            infiniteRepeatable(
-                animation = tween(1200, easing = FastOutSlowInEasing),
-                repeatMode = RepeatMode.Reverse,
-            ),
-        label = "Pulse",
-    )
+    val buttonScale by
+        infiniteTransition.animateFloat(
+            initialValue = 1f,
+            targetValue = 1.04f,
+            animationSpec =
+                infiniteRepeatable(
+                    animation = tween(1200, easing = FastOutSlowInEasing),
+                    repeatMode = RepeatMode.Reverse,
+                ),
+            label = "Pulse",
+        )
 
     // Formulate a logical testing button based on device type
-    val (testButtonLabel, testButtonIcon) =
+    val (testButtonLabelRes, testButtonIcon) =
         remember(deviceId) {
             when (deviceId) {
-                1 -> "POWER" to Icons.Default.PowerSettingsNew
-                3 -> "POWER" to Icons.Default.PowerSettingsNew
-                6 -> "FAN SPEED" to Icons.Default.Air
-                8 -> "MUTE" to Icons.Default.VolumeMute
-                10 -> "POWER" to Icons.Default.PowerSettingsNew
-                else -> "POWER" to Icons.Default.PowerSettingsNew
+                1 -> R.string.button_power to Icons.Default.PowerSettingsNew
+                3 -> R.string.button_power to Icons.Default.PowerSettingsNew
+                6 -> R.string.button_fan_speed to Icons.Default.Air
+                8 -> R.string.button_mute to Icons.AutoMirrored.Filled.VolumeMute
+                10 -> R.string.button_power to Icons.Default.PowerSettingsNew
+                else -> R.string.button_power to Icons.Default.PowerSettingsNew
             }
         }
 
     // Trigger IR Transmission pulse sequence
     fun transmitTestPulse() {
-        haptic.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress)
+        haptic.performHapticFeedback(
+            androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress)
 
         // Compile and broadcast testing pulses
         val pulses =
             if (deviceId == 3) {
-                // AC Gree frame: Power On, Cool Mode, Temp 24C, Auto Fan Speed, Manual Vertical Swing
+                // AC Gree frame: Power On, Cool Mode, Temp 24C, Auto Fan Speed, Manual Vertical
+                // Swing
                 IREncodingEngine.compileGreeAc(
                     power = true,
                     temp = 24,
@@ -135,14 +142,14 @@ fun MatchIRScreen(
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(
-                            Icons.Default.ArrowBack,
+                            Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = stringResource(R.string.back),
                             tint = MaterialTheme.colorScheme.onSurface,
                         )
                     }
                 },
                 colors =
-                    TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.background,
                     ),
             )
@@ -150,18 +157,12 @@ fun MatchIRScreen(
         containerColor = MaterialTheme.colorScheme.background,
     ) { innerPadding ->
         Box(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
+            modifier = Modifier.fillMaxSize().padding(innerPadding),
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceBetween,
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(24.dp),
+                modifier = Modifier.fillMaxSize().padding(24.dp),
             ) {
                 // Category & Brand info card
                 Column(
@@ -180,7 +181,7 @@ fun MatchIRScreen(
                     Spacer(modifier = Modifier.height(6.dp))
 
                     Text(
-                        text = "Codeset configuration test wizard",
+                        text = stringResource(R.string.codeset_test_wizard),
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
@@ -192,13 +193,20 @@ fun MatchIRScreen(
                     // Codeset indicator badge
                     Box(
                         modifier =
-                            Modifier
-                                .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(12.dp))
-                                .border(0.5.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(12.dp))
+                            Modifier.background(
+                                    MaterialTheme.colorScheme.surface, RoundedCornerShape(12.dp))
+                                .border(
+                                    0.5.dp,
+                                    MaterialTheme.colorScheme.outline,
+                                    RoundedCornerShape(12.dp))
                                 .padding(horizontal = 14.dp, vertical = 6.dp),
                     ) {
                         Text(
-                            text = "CONFIG CODESET: $currentCodesetIndex / $totalCodesets",
+                            text =
+                                stringResource(
+                                    R.string.config_codeset_index,
+                                    currentCodesetIndex,
+                                    totalCodesets),
                             color = ElectricBlue,
                             fontSize = 11.sp,
                             fontWeight = FontWeight.Bold,
@@ -225,8 +233,7 @@ fun MatchIRScreen(
                     Box(
                         contentAlignment = Alignment.Center,
                         modifier =
-                            Modifier
-                                .size(160.dp)
+                            Modifier.size(160.dp)
                                 .scale(if (isTestButtonPressed) 0.95f else buttonScale)
                                 .clip(CircleShape)
                                 .background(
@@ -238,14 +245,16 @@ fun MatchIRScreen(
                                                     Color(0xFF131A28),
                                                 ),
                                         ),
-                                ).border(
+                                )
+                                .border(
                                     width = 2.dp,
                                     brush =
                                         Brush.linearGradient(
                                             colors = listOf(AccentCyan, AccentGlow),
                                         ),
                                     shape = CircleShape,
-                                ).clickable {
+                                )
+                                .clickable {
                                     isTestButtonPressed = true
                                     transmitTestPulse()
                                     isTestButtonPressed = false
@@ -266,7 +275,7 @@ fun MatchIRScreen(
                             Spacer(modifier = Modifier.height(8.dp))
 
                             Text(
-                                text = testButtonLabel,
+                                text = stringResource(testButtonLabelRes),
                                 color = Color.White,
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight.Bold,
@@ -285,7 +294,9 @@ fun MatchIRScreen(
                     ) {
                         IconButton(
                             onClick = {
-                                haptic.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress)
+                                haptic.performHapticFeedback(
+                                    androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress,
+                                )
                                 if (currentCodesetIndex > 1) {
                                     currentCodesetIndex--
                                 } else {
@@ -294,7 +305,7 @@ fun MatchIRScreen(
                             },
                         ) {
                             Icon(
-                                Icons.Default.ArrowBack,
+                                Icons.AutoMirrored.Filled.ArrowBack,
                                 contentDescription = "Previous Code",
                                 tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                             )
@@ -310,7 +321,9 @@ fun MatchIRScreen(
 
                         IconButton(
                             onClick = {
-                                haptic.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress)
+                                haptic.performHapticFeedback(
+                                    androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress,
+                                )
                                 if (currentCodesetIndex < totalCodesets) {
                                     currentCodesetIndex++
                                 } else {
@@ -319,7 +332,7 @@ fun MatchIRScreen(
                             },
                         ) {
                             Icon(
-                                Icons.Default.ArrowForward,
+                                Icons.AutoMirrored.Filled.ArrowForward,
                                 contentDescription = "Next Code",
                                 tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                             )
@@ -330,12 +343,10 @@ fun MatchIRScreen(
                 // Clean and premium bottom instruction card (removes the clutter!)
                 Card(
                     shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                    colors =
+                        CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                     border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 8.dp),
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
                 ) {
                     Row(
                         modifier = Modifier.padding(16.dp),
@@ -343,8 +354,7 @@ fun MatchIRScreen(
                     ) {
                         Box(
                             modifier =
-                                Modifier
-                                    .size(36.dp)
+                                Modifier.size(36.dp)
                                     .background(ElectricBlue.copy(alpha = 0.1f), CircleShape),
                             contentAlignment = Alignment.Center,
                         ) {
@@ -379,18 +389,18 @@ fun MatchIRScreen(
                     dragHandle = {
                         Box(
                             modifier =
-                                Modifier
-                                    .padding(top = 16.dp, bottom = 8.dp)
+                                Modifier.padding(top = 16.dp, bottom = 8.dp)
                                     .width(40.dp)
                                     .height(4.dp)
-                                    .background(MaterialTheme.colorScheme.outline, RoundedCornerShape(2.dp)),
+                                    .background(
+                                        MaterialTheme.colorScheme.outline,
+                                        RoundedCornerShape(2.dp)),
                         )
                     },
                 ) {
                     Column(
                         modifier =
-                            Modifier
-                                .fillMaxWidth()
+                            Modifier.fillMaxWidth()
                                 .padding(horizontal = 24.dp, vertical = 16.dp)
                                 .padding(bottom = 32.dp),
                         // Extra padding for safe area
@@ -399,8 +409,7 @@ fun MatchIRScreen(
                         Box(
                             contentAlignment = Alignment.Center,
                             modifier =
-                                Modifier
-                                    .size(56.dp)
+                                Modifier.size(56.dp)
                                     .background(ElectricBlue.copy(alpha = 0.1f), CircleShape),
                         ) {
                             Icon(
@@ -425,7 +434,10 @@ fun MatchIRScreen(
                         Spacer(modifier = Modifier.height(8.dp))
 
                         Text(
-                            text = "Did your ${brand?.nameEn ?: "device"} turn on/off or respond to the test signal?",
+                            text =
+                                stringResource(
+                                    R.string.did_device_respond_detail,
+                                    brand?.nameEn ?: stringResource(R.string.device_word)),
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontSize = 14.sp,
                             textAlign = TextAlign.Center,
@@ -439,13 +451,19 @@ fun MatchIRScreen(
                             horizontalArrangement = Arrangement.spacedBy(16.dp),
                         ) {
                             // "No" button
-                            val noBtnBg = if (isAppDarkTheme()) Color(0xFF451A1A) else Color(0xFFFFEBEE)
-                            val noBtnBorder = if (isAppDarkTheme()) Color(0xFF7F1D1D) else Color(0xFFFFCDD2)
-                            val noBtnText = if (isAppDarkTheme()) Color(0xFFFECACA) else Color(0xFFC62828)
+                            val noBtnBg =
+                                if (isAppDarkTheme()) Color(0xFF451A1A) else Color(0xFFFFEBEE)
+                            val noBtnBorder =
+                                if (isAppDarkTheme()) Color(0xFF7F1D1D) else Color(0xFFFFCDD2)
+                            val noBtnText =
+                                if (isAppDarkTheme()) Color(0xFFFECACA) else Color(0xFFC62828)
 
                             Button(
                                 onClick = {
-                                    haptic.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress)
+                                    haptic.performHapticFeedback(
+                                        androidx.compose.ui.hapticfeedback.HapticFeedbackType
+                                            .LongPress,
+                                    )
                                     showResponsePopup = false
                                     // Cycle to next code automatically
                                     if (currentCodesetIndex < totalCodesets) {
@@ -457,8 +475,7 @@ fun MatchIRScreen(
                                 colors = ButtonDefaults.buttonColors(containerColor = noBtnBg),
                                 shape = RoundedCornerShape(12.dp),
                                 modifier =
-                                    Modifier
-                                        .weight(1f)
+                                    Modifier.weight(1f)
                                         .height(56.dp)
                                         .border(1.dp, noBtnBorder, RoundedCornerShape(12.dp)),
                             ) {
@@ -471,21 +488,26 @@ fun MatchIRScreen(
                             }
 
                             // "Yes" button
-                            val yesBtnBg = if (isAppDarkTheme()) Color(0xFF14301D) else Color(0xFFE8F5E9)
-                            val yesBtnBorder = if (isAppDarkTheme()) Color(0xFF166534) else Color(0xFFC8E6C9)
-                            val yesBtnText = if (isAppDarkTheme()) Color(0xFFBBF7D0) else Color(0xFF2E7D32)
+                            val yesBtnBg =
+                                if (isAppDarkTheme()) Color(0xFF14301D) else Color(0xFFE8F5E9)
+                            val yesBtnBorder =
+                                if (isAppDarkTheme()) Color(0xFF166534) else Color(0xFFC8E6C9)
+                            val yesBtnText =
+                                if (isAppDarkTheme()) Color(0xFFBBF7D0) else Color(0xFF2E7D32)
 
                             Button(
                                 onClick = {
-                                    haptic.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress)
+                                    haptic.performHapticFeedback(
+                                        androidx.compose.ui.hapticfeedback.HapticFeedbackType
+                                            .LongPress,
+                                    )
                                     showResponsePopup = false
                                     showMatchSuccessModal = true
                                 },
                                 colors = ButtonDefaults.buttonColors(containerColor = yesBtnBg),
                                 shape = RoundedCornerShape(12.dp),
                                 modifier =
-                                    Modifier
-                                        .weight(1f)
+                                    Modifier.weight(1f)
                                         .height(56.dp)
                                         .border(1.dp, yesBtnBorder, RoundedCornerShape(12.dp)),
                             ) {
@@ -506,31 +528,34 @@ fun MatchIRScreen(
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier =
-                        Modifier
-                            .fillMaxSize()
-                            .background(Color.Black.copy(alpha = 0.8f))
-                            .clickable(enabled = false) {},
+                        Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.8f)).clickable(
+                            enabled = false) {},
                 ) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center,
                         modifier =
-                            Modifier
-                                .fillMaxWidth(0.85f)
-                                .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(24.dp))
-                                .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(24.dp))
+                            Modifier.fillMaxWidth(0.85f)
+                                .background(
+                                    MaterialTheme.colorScheme.surface, RoundedCornerShape(24.dp))
+                                .border(
+                                    1.dp,
+                                    MaterialTheme.colorScheme.outline,
+                                    RoundedCornerShape(24.dp))
                                 .padding(28.dp),
                     ) {
                         // Success Glowing Checkmark Icon
-                        val successIconBg = if (isAppDarkTheme()) Color(0xFF14301D) else Color(0xFFE8F5E9)
-                        val successIconBorder = if (isAppDarkTheme()) Color(0xFF166534) else Color(0xFF2E7D32)
-                        val successIconTint = if (isAppDarkTheme()) Color(0xFFBBF7D0) else Color(0xFF2E7D32)
+                        val successIconBg =
+                            if (isAppDarkTheme()) Color(0xFF14301D) else Color(0xFFE8F5E9)
+                        val successIconBorder =
+                            if (isAppDarkTheme()) Color(0xFF166534) else Color(0xFF2E7D32)
+                        val successIconTint =
+                            if (isAppDarkTheme()) Color(0xFFBBF7D0) else Color(0xFF2E7D32)
 
                         Box(
                             contentAlignment = Alignment.Center,
                             modifier =
-                                Modifier
-                                    .size(64.dp)
+                                Modifier.size(64.dp)
                                     .background(successIconBg, CircleShape)
                                     .border(2.dp, successIconBorder, CircleShape),
                         ) {
@@ -602,19 +627,18 @@ fun MatchIRScreen(
                                 onClick = {
                                     showMatchSuccessModal = false
                                     // Save to favorites with custom name
-                                    val isFav = FavoriteManager.isFavorite(context, deviceId, brandId)
+                                    val isFav =
+                                        FavoriteManager.isFavorite(context, deviceId, brandId)
                                     if (!isFav) {
                                         FavoriteManager.toggleFavorite(context, deviceId, brandId)
                                     }
-                                    FavoriteManager.setCustomName(context, deviceId, brandId, customDeviceName)
+                                    FavoriteManager.setCustomName(
+                                        context, deviceId, brandId, customDeviceName)
                                     onSaveAndReturnToDashboard()
                                 },
                                 colors = ButtonDefaults.buttonColors(containerColor = ElectricBlue),
                                 shape = RoundedCornerShape(12.dp),
-                                modifier =
-                                    Modifier
-                                        .fillMaxWidth()
-                                        .height(46.dp),
+                                modifier = Modifier.fillMaxWidth().height(46.dp),
                             ) {
                                 Text(
                                     text = stringResource(R.string.yes_add_to_main_page),
@@ -632,11 +656,11 @@ fun MatchIRScreen(
                                 },
                                 shape = RoundedCornerShape(12.dp),
                                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-                                colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.onSurface),
-                                modifier =
-                                    Modifier
-                                        .fillMaxWidth()
-                                        .height(46.dp),
+                                colors =
+                                    ButtonDefaults.outlinedButtonColors(
+                                        contentColor = MaterialTheme.colorScheme.onSurface,
+                                    ),
+                                modifier = Modifier.fillMaxWidth().height(46.dp),
                             ) {
                                 Text(
                                     text = stringResource(R.string.just_test_controller),
@@ -646,21 +670,6 @@ fun MatchIRScreen(
                             }
                         }
                     }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun rememberVibratingHapticFeedback(): androidx.compose.ui.hapticfeedback.HapticFeedback {
-    val rawHaptic = LocalHapticFeedback.current
-    val context = LocalContext.current
-    return remember(rawHaptic, context) {
-        object : androidx.compose.ui.hapticfeedback.HapticFeedback {
-            override fun performHapticFeedback(hapticFeedbackType: androidx.compose.ui.hapticfeedback.HapticFeedbackType) {
-                if (FavoriteManager.isVibrationEnabled(context)) {
-                    rawHaptic.performHapticFeedback(hapticFeedbackType)
                 }
             }
         }

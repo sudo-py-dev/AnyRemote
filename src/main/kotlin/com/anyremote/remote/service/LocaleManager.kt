@@ -41,7 +41,7 @@ object LocaleManager {
     ): Context {
         if (lang == "system") return context
 
-        val locale = if (lang == "iw") Locale("iw") else Locale(lang)
+        val locale = if (lang == "iw") Locale.forLanguageTag("iw") else Locale.forLanguageTag(lang)
         Locale.setDefault(locale)
 
         val config = Configuration(context.resources.configuration)

@@ -62,7 +62,8 @@ private val CustomDarkColorScheme =
 fun isAppDarkTheme(): Boolean = MaterialTheme.colorScheme.background == DeepBackgroundDark
 
 @Composable
-fun getAppButtonBackground(): Color = if (isAppDarkTheme()) ButtonBackgroundDark else ButtonBackground
+fun getAppButtonBackground(): Color =
+    if (isAppDarkTheme()) ButtonBackgroundDark else ButtonBackground
 
 @Composable
 fun getAppButtonBorder(): Color = if (isAppDarkTheme()) ButtonBorderDark else ButtonBorder

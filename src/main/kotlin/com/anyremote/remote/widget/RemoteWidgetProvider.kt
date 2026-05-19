@@ -50,12 +50,12 @@ class RemoteWidgetProvider : AppWidgetProvider() {
                 // Physically transmit the widget click via Android IR Blaster
                 IRTransmitter.transmit(context, pulses, 38000)
 
-                Toast
-                    .makeText(
+                Toast.makeText(
                         context,
                         "Widget sent: POWER PULSE [$pulseString]",
                         Toast.LENGTH_SHORT,
-                    ).show()
+                    )
+                    .show()
             }
             ACTION_WIDGET_UP -> {
                 // Compile the simulated Volume Up command pulse train
@@ -65,12 +65,12 @@ class RemoteWidgetProvider : AppWidgetProvider() {
                 // Physically transmit the widget click via Android IR Blaster
                 IRTransmitter.transmit(context, pulses, 38200)
 
-                Toast
-                    .makeText(
+                Toast.makeText(
                         context,
                         "Widget sent: VOLUME UP PULSE [$pulseString]",
                         Toast.LENGTH_SHORT,
-                    ).show()
+                    )
+                    .show()
             }
         }
     }
@@ -84,9 +84,7 @@ class RemoteWidgetProvider : AppWidgetProvider() {
 
         // 1. Setup Intent for Power Button click
         val powerIntent =
-            Intent(context, RemoteWidgetProvider::class.java).apply {
-                action = ACTION_WIDGET_POWER
-            }
+            Intent(context, RemoteWidgetProvider::class.java).apply { action = ACTION_WIDGET_POWER }
         val powerPendingIntent =
             PendingIntent.getBroadcast(
                 context,
@@ -98,9 +96,7 @@ class RemoteWidgetProvider : AppWidgetProvider() {
 
         // 2. Setup Intent for Volume/Temp Up Button click
         val upIntent =
-            Intent(context, RemoteWidgetProvider::class.java).apply {
-                action = ACTION_WIDGET_UP
-            }
+            Intent(context, RemoteWidgetProvider::class.java).apply { action = ACTION_WIDGET_UP }
         val upPendingIntent =
             PendingIntent.getBroadcast(
                 context,

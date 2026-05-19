@@ -18,10 +18,10 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.anyremote.remote.service.FavoriteManager
 import com.anyremote.remote.service.LocaleManager
-import com.anyremote.remote.ui.DashboardScreen
-import com.anyremote.remote.ui.MatchIRScreen
-import com.anyremote.remote.ui.RemoteControllerScreen
-import com.anyremote.remote.ui.SettingsScreen
+import com.anyremote.remote.ui.screens.DashboardScreen
+import com.anyremote.remote.ui.screens.MatchIRScreen
+import com.anyremote.remote.ui.screens.RemoteControllerScreen
+import com.anyremote.remote.ui.screens.SettingsScreen
 import com.anyremote.remote.ui.theme.AnyRemoteTheme
 
 class MainActivity : ComponentActivity() {
@@ -35,8 +35,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        com.anyremote.remote.data.RemoteDatabase
-            .init(applicationContext)
+        com.anyremote.remote.data.RemoteDatabase.init(applicationContext)
         FavoriteManager.init(applicationContext)
 
         val initDeviceId = intent?.getIntExtra("deviceId", -1) ?: -1
@@ -102,9 +101,7 @@ fun AppNavigation(
                 onFavoriteSelected = { deviceId, brandId ->
                     navController.navigate("remote/$deviceId/$brandId")
                 },
-                onSettingsClick = {
-                    navController.navigate("settings")
-                },
+                onSettingsClick = { navController.navigate("settings") },
             )
         }
         composable(
@@ -122,18 +119,14 @@ fun AppNavigation(
                 deviceId = deviceId,
                 brandId = brandId,
                 onMatchSuccess = {
-                    navController.navigate("remote/$deviceId/$brandId") {
-                        popUpTo("dashboard")
-                    }
+                    navController.navigate("remote/$deviceId/$brandId") { popUpTo("dashboard") }
                 },
                 onSaveAndReturnToDashboard = {
                     navController.navigate("dashboard") {
                         popUpTo("dashboard") { inclusive = true }
                     }
                 },
-                onBackClick = {
-                    navController.popBackStack()
-                },
+                onBackClick = { navController.popBackStack() },
             )
         }
         composable(
@@ -150,16 +143,12 @@ fun AppNavigation(
             RemoteControllerScreen(
                 deviceId = deviceId,
                 brandId = brandId,
-                onBackClick = {
-                    navController.popBackStack()
-                },
+                onBackClick = { navController.popBackStack() },
             )
         }
         composable("settings") {
             SettingsScreen(
-                onBackClick = {
-                    navController.popBackStack()
-                },
+                onBackClick = { navController.popBackStack() },
             )
         }
     }

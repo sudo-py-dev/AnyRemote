@@ -1,4 +1,4 @@
-package com.anyremote.remote.ui
+package com.anyremote.remote.ui.screens
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.*
@@ -21,6 +21,9 @@ import androidx.compose.ui.unit.sp
 import com.anyremote.remote.R
 import com.anyremote.remote.service.FavoriteManager
 import com.anyremote.remote.service.LocaleManager
+import com.anyremote.remote.ui.components.*
+import com.anyremote.remote.ui.helpers.*
+import com.anyremote.remote.ui.layouts.*
 import com.anyremote.remote.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -80,7 +83,7 @@ fun SettingsScreen(onBackClick: () -> Unit) {
                     }
                 },
                 colors =
-                    TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.background,
                     ),
             )
@@ -89,8 +92,7 @@ fun SettingsScreen(onBackClick: () -> Unit) {
     ) { innerPadding ->
         Column(
             modifier =
-                Modifier
-                    .fillMaxSize()
+                Modifier.fillMaxSize()
                     .padding(innerPadding)
                     .verticalScroll(rememberScrollState())
                     .padding(16.dp),
@@ -114,10 +116,10 @@ fun SettingsScreen(onBackClick: () -> Unit) {
                     ) {
                         Box(
                             modifier =
-                                Modifier
-                                    .size(36.dp)
+                                Modifier.size(36.dp)
                                     .background(
-                                        ElectricBlue.copy(alpha = if (isAppDarkTheme()) 0.2f else 0.1f),
+                                        ElectricBlue.copy(
+                                            alpha = if (isAppDarkTheme()) 0.2f else 0.1f),
                                         CircleShape,
                                     ),
                             contentAlignment = Alignment.Center,
@@ -161,7 +163,9 @@ fun SettingsScreen(onBackClick: () -> Unit) {
                                 ),
                             modifier = Modifier.fillMaxWidth(),
                         ) {
-                            val activeThemeLabelKey = themeModes.firstOrNull { it.first == activeThemeMode }?.second ?: R.string.theme_light
+                            val activeThemeLabelKey =
+                                themeModes.firstOrNull { it.first == activeThemeMode }?.second
+                                    ?: R.string.theme_light
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -184,10 +188,12 @@ fun SettingsScreen(onBackClick: () -> Unit) {
                             expanded = showThemeDropdown,
                             onDismissRequest = { showThemeDropdown = false },
                             modifier =
-                                Modifier
-                                    .fillMaxWidth(0.9f)
+                                Modifier.fillMaxWidth(0.9f)
                                     .background(MaterialTheme.colorScheme.surface)
-                                    .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp)),
+                                    .border(
+                                        1.dp,
+                                        MaterialTheme.colorScheme.outline,
+                                        RoundedCornerShape(8.dp)),
                         ) {
                             themeModes.forEach { (mode, labelKey) ->
                                 DropdownMenuItem(
@@ -195,7 +201,9 @@ fun SettingsScreen(onBackClick: () -> Unit) {
                                         Text(
                                             text = stringResource(labelKey),
                                             color = MaterialTheme.colorScheme.onBackground,
-                                            fontWeight = if (activeThemeMode == mode) FontWeight.Bold else FontWeight.Normal,
+                                            fontWeight =
+                                                if (activeThemeMode == mode) FontWeight.Bold
+                                                else FontWeight.Normal,
                                         )
                                     },
                                     onClick = {
@@ -204,7 +212,10 @@ fun SettingsScreen(onBackClick: () -> Unit) {
                                     },
                                     leadingIcon = {
                                         if (activeThemeMode == mode) {
-                                            Icon(Icons.Default.Check, contentDescription = null, tint = ElectricBlue)
+                                            Icon(
+                                                Icons.Default.Check,
+                                                contentDescription = null,
+                                                tint = ElectricBlue)
                                         }
                                     },
                                 )
@@ -232,10 +243,10 @@ fun SettingsScreen(onBackClick: () -> Unit) {
                     ) {
                         Box(
                             modifier =
-                                Modifier
-                                    .size(36.dp)
+                                Modifier.size(36.dp)
                                     .background(
-                                        AccentGreen.copy(alpha = if (isAppDarkTheme()) 0.2f else 0.1f),
+                                        AccentGreen.copy(
+                                            alpha = if (isAppDarkTheme()) 0.2f else 0.1f),
                                         CircleShape,
                                     ),
                             contentAlignment = Alignment.Center,
@@ -278,7 +289,13 @@ fun SettingsScreen(onBackClick: () -> Unit) {
                                 ),
                             modifier = Modifier.fillMaxWidth(),
                         ) {
-                            val activeLangLabel = languages.firstOrNull { it.first == activeLangCode }?.second ?: "System Default"
+                            val activeLangLabel =
+                                if (activeLangCode == "system") {
+                                    stringResource(R.string.theme_system)
+                                } else {
+                                    languages.firstOrNull { it.first == activeLangCode }?.second
+                                        ?: stringResource(R.string.theme_system)
+                                }
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -301,19 +318,26 @@ fun SettingsScreen(onBackClick: () -> Unit) {
                             expanded = showLanguageDropdown,
                             onDismissRequest = { showLanguageDropdown = false },
                             modifier =
-                                Modifier
-                                    .fillMaxWidth(0.9f)
+                                Modifier.fillMaxWidth(0.9f)
                                     .background(MaterialTheme.colorScheme.surface)
-                                    .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
+                                    .border(
+                                        1.dp,
+                                        MaterialTheme.colorScheme.outline,
+                                        RoundedCornerShape(8.dp))
                                     .heightIn(max = 280.dp),
                         ) {
                             languages.forEach { (code, label) ->
                                 DropdownMenuItem(
                                     text = {
                                         Text(
-                                            text = label,
+                                            text =
+                                                if (code == "system")
+                                                    stringResource(R.string.theme_system)
+                                                else label,
                                             color = MaterialTheme.colorScheme.onBackground,
-                                            fontWeight = if (activeLangCode == code) FontWeight.Bold else FontWeight.Normal,
+                                            fontWeight =
+                                                if (activeLangCode == code) FontWeight.Bold
+                                                else FontWeight.Normal,
                                         )
                                     },
                                     onClick = {
@@ -322,7 +346,10 @@ fun SettingsScreen(onBackClick: () -> Unit) {
                                     },
                                     leadingIcon = {
                                         if (activeLangCode == code) {
-                                            Icon(Icons.Default.Check, contentDescription = null, tint = AccentGreen)
+                                            Icon(
+                                                Icons.Default.Check,
+                                                contentDescription = null,
+                                                tint = AccentGreen)
                                         }
                                     },
                                 )
@@ -343,16 +370,12 @@ fun SettingsScreen(onBackClick: () -> Unit) {
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Row(
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
+                    modifier = Modifier.fillMaxWidth().padding(16.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Box(
                         modifier =
-                            Modifier
-                                .size(36.dp)
+                            Modifier.size(36.dp)
                                 .background(
                                     WarmOrange.copy(alpha = if (isAppDarkTheme()) 0.2f else 0.1f),
                                     CircleShape,
@@ -392,7 +415,8 @@ fun SettingsScreen(onBackClick: () -> Unit) {
                             SwitchDefaults.colors(
                                 checkedThumbColor = Color.White,
                                 checkedTrackColor = WarmOrange,
-                                uncheckedThumbColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.4f),
+                                uncheckedThumbColor =
+                                    MaterialTheme.colorScheme.onBackground.copy(alpha = 0.4f),
                                 uncheckedTrackColor = getAppButtonBackground(),
                             ),
                     )

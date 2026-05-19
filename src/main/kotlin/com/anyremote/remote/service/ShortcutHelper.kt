@@ -15,7 +15,9 @@ import com.anyremote.remote.MainActivity
 object ShortcutHelper {
     private fun createLetterIcon(text: String): android.graphics.Bitmap {
         val size = 192
-        val bitmap = android.graphics.Bitmap.createBitmap(size, size, android.graphics.Bitmap.Config.ARGB_8888)
+        val bitmap =
+            android.graphics.Bitmap.createBitmap(
+                size, size, android.graphics.Bitmap.Config.ARGB_8888)
         val canvas = android.graphics.Canvas(bitmap)
         val paint =
             android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG).apply {
@@ -29,7 +31,9 @@ object ShortcutHelper {
             android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG).apply {
                 color = android.graphics.Color.WHITE
                 textSize = size * 0.5f
-                typeface = android.graphics.Typeface.create(android.graphics.Typeface.SANS_SERIF, android.graphics.Typeface.BOLD)
+                typeface =
+                    android.graphics.Typeface.create(
+                        android.graphics.Typeface.SANS_SERIF, android.graphics.Typeface.BOLD)
                 textAlign = android.graphics.Paint.Align.CENTER
             }
         val letter = if (text.isNotEmpty()) text.substring(0, 1).uppercase() else "R"
@@ -63,8 +67,7 @@ object ShortcutHelper {
                 val iconCompat = IconCompat.createWithAdaptiveBitmap(bitmap)
 
                 val shortcut =
-                    ShortcutInfoCompat
-                        .Builder(context, shortcutId)
+                    ShortcutInfoCompat.Builder(context, shortcutId)
                         .setShortLabel("$brandName $deviceName")
                         .setLongLabel("$brandName $deviceName Remote")
                         .setIcon(iconCompat)
@@ -73,16 +76,26 @@ object ShortcutHelper {
 
                 val success = ShortcutManagerCompat.requestPinShortcut(context, shortcut, null)
                 if (success) {
-                    Toast.makeText(context, "Adding shortcut: $brandName $deviceName", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                            context, "Adding shortcut: $brandName $deviceName", Toast.LENGTH_SHORT)
+                        .show()
                 } else {
-                    Toast.makeText(context, "Launcher pinning not supported by system", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                            context, "Launcher pinning not supported by system", Toast.LENGTH_SHORT)
+                        .show()
                 }
             } else {
-                Toast.makeText(context, "Home screen shortcut pinning is not supported", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                        context,
+                        "Home screen shortcut pinning is not supported",
+                        Toast.LENGTH_SHORT)
+                    .show()
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            Toast.makeText(context, "Failed to pin shortcut: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                    context, "Failed to pin shortcut: ${e.localizedMessage}", Toast.LENGTH_SHORT)
+                .show()
         }
     }
 
@@ -95,7 +108,8 @@ object ShortcutHelper {
     ) {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-                val shortcutManager = context.getSystemService(ShortcutManager::class.java) ?: return
+                val shortcutManager =
+                    context.getSystemService(ShortcutManager::class.java) ?: return
 
                 val shortcutId = "remote_${deviceId}_$brandId"
                 val intent =
@@ -115,8 +129,7 @@ object ShortcutHelper {
                     }
 
                 val shortcut =
-                    ShortcutInfo
-                        .Builder(context, shortcutId)
+                    ShortcutInfo.Builder(context, shortcutId)
                         .setShortLabel("$brandName $deviceName")
                         .setLongLabel("$brandName $deviceName Remote")
                         .setIcon(shortcutIcon)
