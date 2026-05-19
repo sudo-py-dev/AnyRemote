@@ -42,39 +42,34 @@ fun BrandSelectionPanel(
 
     val filteredBrands =
         remember(searchQuery, selectedLetter, device.brands) {
-            val filtered = device.brands.filter { brand ->
-                val matchesSearch =
-                    if (searchQuery.isEmpty()) {
-                        true
-                    } else {
-                        brand.nameEn.contains(searchQuery, ignoreCase = true)
-                    }
+            val filtered =
+                device.brands.filter { brand ->
+                    val matchesSearch =
+                        if (searchQuery.isEmpty()) {
+                            true
+                        } else {
+                            brand.nameEn.contains(searchQuery, ignoreCase = true)
+                        }
 
-                val matchesLetter =
-                    if (selectedLetter == null || searchQuery.isNotEmpty()) {
-                        true
-                    } else {
-                        brand.nameEn.startsWith(selectedLetter!!, ignoreCase = true)
-                    }
+                    val matchesLetter =
+                        if (selectedLetter == null || searchQuery.isNotEmpty()) {
+                            true
+                        } else {
+                            brand.nameEn.startsWith(selectedLetter!!, ignoreCase = true)
+                        }
 
-                matchesSearch && matchesLetter
-            }
+                    matchesSearch && matchesLetter
+                }
 
             if (searchQuery.isEmpty()) {
                 filtered.sortedBy { it.nameEn }
             } else {
                 filtered.sortedWith(
                     compareBy<Brand> { brand ->
-                        // 1. Prioritize brands that start with the query
-                        if (brand.nameEn.startsWith(searchQuery, ignoreCase = true)) 0 else 1
-                    }.thenBy { brand ->
-                        // 2. Prioritize hot category brands
-                        if (brand.category.startsWith("hot")) 0 else 1
-                    }.thenBy { brand ->
-                        // 3. Natural alphabetical order
-                        brand.nameEn.lowercase()
-                    }
-                )
+                            if (brand.nameEn.startsWith(searchQuery, ignoreCase = true)) 0 else 1
+                        }
+                        .thenBy { brand -> if (brand.category.startsWith("hot")) 0 else 1 }
+                        .thenBy { brand -> brand.nameEn.lowercase() })
             }
         }
 
@@ -91,7 +86,6 @@ fun BrandSelectionPanel(
     Column(
         modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
     ) {
-        // Sticky Search Field
         TextField(
             value = searchQuery,
             onValueChange = { searchQuery = it },
@@ -121,13 +115,11 @@ fun BrandSelectionPanel(
             },
         )
 
-        // Modern Horizontally Scrollable Alphabet Index Capsules
         LazyRow(
             modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            // "ALL" Option capsule
             val isAllSelected = selectedLetter == null
             item {
                 Box(
@@ -164,7 +156,6 @@ fun BrandSelectionPanel(
                 }
             }
 
-            // A-Z capsules
             items(alphabet) { ch ->
                 val isSelected = selectedLetter == ch
                 Box(
@@ -200,7 +191,6 @@ fun BrandSelectionPanel(
             }
         }
 
-        // List Header
         Text(
             text = stringResource(R.string.brands),
             color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -210,7 +200,6 @@ fun BrandSelectionPanel(
             modifier = Modifier.padding(bottom = 8.dp),
         )
 
-        // Group brands by first letter
         val groupedBrands =
             remember(filteredBrands) { filteredBrands.groupBy { it.nameEn.take(1).uppercase() } }
 
@@ -234,7 +223,6 @@ fun BrandSelectionPanel(
                 }
             } else {
                 groupedBrands.forEach { (initial, brandsInGroup) ->
-                    // Styled Letter Section Header like in a Premium Contacts app
                     item(key = "header_$initial") {
                         Box(
                             modifier = Modifier.fillMaxWidth().padding(top = 12.dp, bottom = 4.dp),
@@ -257,7 +245,6 @@ fun BrandSelectionPanel(
                 }
             }
 
-            // Bottom spacing
             item { Spacer(modifier = Modifier.height(24.dp)) }
         }
     }

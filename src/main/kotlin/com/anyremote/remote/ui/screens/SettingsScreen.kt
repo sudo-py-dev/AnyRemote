@@ -31,7 +31,6 @@ import com.anyremote.remote.ui.theme.*
 fun SettingsScreen(onBackClick: () -> Unit) {
     val context = LocalContext.current
 
-    // Reactive States from FavoriteManager / LocaleManager
     val activeThemeMode by FavoriteManager.currentThemeState
     val isVibrationEnabled by FavoriteManager.currentVibrationState
     val activeLangCode by LocaleManager.currentLanguage
@@ -98,7 +97,6 @@ fun SettingsScreen(onBackClick: () -> Unit) {
                     .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            // 1. Dark / Light Mode Setting Section
             Card(
                 shape = RoundedCornerShape(16.dp),
                 colors =
@@ -151,7 +149,6 @@ fun SettingsScreen(onBackClick: () -> Unit) {
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Segmented Button or Dropdown selection for Theme
                     Box(modifier = Modifier.fillMaxWidth()) {
                         OutlinedButton(
                             onClick = { showThemeDropdown = true },
@@ -225,7 +222,6 @@ fun SettingsScreen(onBackClick: () -> Unit) {
                 }
             }
 
-            // 2. Language Selection Setting Section
             Card(
                 shape = RoundedCornerShape(16.dp),
                 colors =
@@ -359,7 +355,6 @@ fun SettingsScreen(onBackClick: () -> Unit) {
                 }
             }
 
-            // 3. Vibration Haptics Section
             Card(
                 shape = RoundedCornerShape(16.dp),
                 colors =

@@ -41,8 +41,6 @@ fun TvLayout(onKeyPressed: (Int) -> Unit) {
         verticalArrangement = Arrangement.spacedBy(24.dp),
         modifier = Modifier.fillMaxWidth(),
     ) {
-        // Top Action Row (Power Red button, Source Center button, Numeric Pad toggle, Mute Right
-        // button)
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -58,7 +56,7 @@ fun TvLayout(onKeyPressed: (Int) -> Unit) {
                             CircleShape)
                         .clickable {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            onKeyPressed(12) // TV Power code
+                            onKeyPressed(12)
                         },
                 contentAlignment = Alignment.Center,
             ) {
@@ -77,7 +75,7 @@ fun TvLayout(onKeyPressed: (Int) -> Unit) {
                             CircleShape)
                         .clickable {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            onKeyPressed(11) // Source / Input code
+                            onKeyPressed(11)
                         },
                 contentAlignment = Alignment.Center,
             ) {
@@ -135,7 +133,7 @@ fun TvLayout(onKeyPressed: (Int) -> Unit) {
                             CircleShape)
                         .clickable {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            onKeyPressed(13) // Mute code
+                            onKeyPressed(13)
                         },
                 contentAlignment = Alignment.Center,
             ) {
@@ -191,9 +189,9 @@ fun TvLayout(onKeyPressed: (Int) -> Unit) {
                                             haptic.performHapticFeedback(
                                                 HapticFeedbackType.LongPress)
                                             if (key == "⌫") {
-                                                onKeyPressed(67) // Backspace keycode
+                                                onKeyPressed(67)
                                             } else if (key == "-") {
-                                                onKeyPressed(69) // Minus keycode
+                                                onKeyPressed(69)
                                             } else {
                                                 val digit = key.toInt()
                                                 onKeyPressed(7 + digit)
@@ -213,7 +211,7 @@ fun TvLayout(onKeyPressed: (Int) -> Unit) {
                 }
             }
         } else {
-            // Concentric Dpad
+
             Box(
                 modifier =
                     Modifier.size(200.dp)
@@ -242,7 +240,6 @@ fun TvLayout(onKeyPressed: (Int) -> Unit) {
                 }
 
                 Box(modifier = Modifier.fillMaxSize()) {
-                    // Central OK button
                     Box(
                         modifier =
                             Modifier.size(76.dp)
@@ -255,7 +252,7 @@ fun TvLayout(onKeyPressed: (Int) -> Unit) {
                                 .align(Alignment.Center)
                                 .clickable {
                                     haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                    onKeyPressed(20) // OK command
+                                    onKeyPressed(20)
                                 },
                         contentAlignment = Alignment.Center,
                     ) {
@@ -267,7 +264,6 @@ fun TvLayout(onKeyPressed: (Int) -> Unit) {
                         )
                     }
 
-                    // Up Arrow
                     Box(
                         modifier =
                             Modifier.align(Alignment.TopCenter)
@@ -276,7 +272,7 @@ fun TvLayout(onKeyPressed: (Int) -> Unit) {
                                 .clip(CircleShape)
                                 .clickable {
                                     haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                    onKeyPressed(16) // Up command
+                                    onKeyPressed(16)
                                 },
                         contentAlignment = Alignment.Center,
                     ) {
@@ -288,7 +284,6 @@ fun TvLayout(onKeyPressed: (Int) -> Unit) {
                         )
                     }
 
-                    // Down Arrow
                     Box(
                         modifier =
                             Modifier.align(Alignment.BottomCenter)
@@ -297,7 +292,7 @@ fun TvLayout(onKeyPressed: (Int) -> Unit) {
                                 .clip(CircleShape)
                                 .clickable {
                                     haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                    onKeyPressed(17) // Down command
+                                    onKeyPressed(17)
                                 },
                         contentAlignment = Alignment.Center,
                     ) {
@@ -309,7 +304,6 @@ fun TvLayout(onKeyPressed: (Int) -> Unit) {
                         )
                     }
 
-                    // Left Arrow
                     Box(
                         modifier =
                             Modifier.align(Alignment.CenterStart)
@@ -318,7 +312,7 @@ fun TvLayout(onKeyPressed: (Int) -> Unit) {
                                 .clip(CircleShape)
                                 .clickable {
                                     haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                    onKeyPressed(18) // Left command
+                                    onKeyPressed(18)
                                 },
                         contentAlignment = Alignment.Center,
                     ) {
@@ -330,7 +324,6 @@ fun TvLayout(onKeyPressed: (Int) -> Unit) {
                         )
                     }
 
-                    // Right Arrow
                     Box(
                         modifier =
                             Modifier.align(Alignment.CenterEnd)
@@ -339,7 +332,7 @@ fun TvLayout(onKeyPressed: (Int) -> Unit) {
                                 .clip(CircleShape)
                                 .clickable {
                                     haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                    onKeyPressed(19) // Right command
+                                    onKeyPressed(19)
                                 },
                         contentAlignment = Alignment.Center,
                     ) {
@@ -353,7 +346,6 @@ fun TvLayout(onKeyPressed: (Int) -> Unit) {
                 }
             }
 
-            // Utility Row (Back, Home, Menu)
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly,
@@ -369,7 +361,7 @@ fun TvLayout(onKeyPressed: (Int) -> Unit) {
                                 CircleShape)
                             .clickable {
                                 haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                onKeyPressed(4) // BACK code
+                                onKeyPressed(4)
                             },
                     contentAlignment = Alignment.Center,
                 ) {
@@ -391,7 +383,7 @@ fun TvLayout(onKeyPressed: (Int) -> Unit) {
                                 CircleShape)
                             .clickable {
                                 haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                onKeyPressed(3) // HOME code
+                                onKeyPressed(3)
                             },
                     contentAlignment = Alignment.Center,
                 ) {
@@ -412,7 +404,7 @@ fun TvLayout(onKeyPressed: (Int) -> Unit) {
                                 CircleShape)
                             .clickable {
                                 haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                onKeyPressed(82) // MENU code
+                                onKeyPressed(82)
                             },
                     contentAlignment = Alignment.Center,
                 ) {
@@ -423,7 +415,6 @@ fun TvLayout(onKeyPressed: (Int) -> Unit) {
                 }
             }
 
-            // Rockers (Volume / Channel pills)
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(32.dp),
@@ -445,7 +436,7 @@ fun TvLayout(onKeyPressed: (Int) -> Unit) {
                     IconButton(
                         onClick = {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            onKeyPressed(24) // Vol+ command
+                            onKeyPressed(24)
                         }) {
                             Icon(
                                 Icons.Default.Add,
@@ -462,7 +453,7 @@ fun TvLayout(onKeyPressed: (Int) -> Unit) {
                     IconButton(
                         onClick = {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            onKeyPressed(25) // Vol- command
+                            onKeyPressed(25)
                         }) {
                             Icon(
                                 Icons.Default.Remove,
@@ -489,7 +480,7 @@ fun TvLayout(onKeyPressed: (Int) -> Unit) {
                     IconButton(
                         onClick = {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            onKeyPressed(26) // CH+ command
+                            onKeyPressed(26)
                         }) {
                             Icon(
                                 Icons.Default.KeyboardArrowUp,
@@ -506,7 +497,7 @@ fun TvLayout(onKeyPressed: (Int) -> Unit) {
                     IconButton(
                         onClick = {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            onKeyPressed(27) // CH- command
+                            onKeyPressed(27)
                         }) {
                             Icon(
                                 Icons.Default.KeyboardArrowDown,

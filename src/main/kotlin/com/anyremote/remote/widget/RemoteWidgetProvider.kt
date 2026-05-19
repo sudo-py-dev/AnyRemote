@@ -36,7 +36,7 @@ class RemoteWidgetProvider : AppWidgetProvider() {
 
         when (intent.action) {
             ACTION_WIDGET_POWER -> {
-                // Compile the simulated TV/AC Power IR pulse train
+
                 val pulses =
                     IREncodingEngine.compileGreeAc(
                         power = true,
@@ -47,7 +47,6 @@ class RemoteWidgetProvider : AppWidgetProvider() {
                     )
                 val pulseString = pulses.take(5).joinToString(", ") + "..."
 
-                // Physically transmit the widget click via Android IR Blaster
                 IRTransmitter.transmit(context, pulses, 38000)
 
                 Toast.makeText(
@@ -58,11 +57,10 @@ class RemoteWidgetProvider : AppWidgetProvider() {
                     .show()
             }
             ACTION_WIDGET_UP -> {
-                // Compile the simulated Volume Up command pulse train
+
                 val pulses = IREncodingEngine.compileGenericNec(address = 1, command = 18)
                 val pulseString = pulses.take(5).joinToString(", ") + "..."
 
-                // Physically transmit the widget click via Android IR Blaster
                 IRTransmitter.transmit(context, pulses, 38200)
 
                 Toast.makeText(
@@ -82,7 +80,6 @@ class RemoteWidgetProvider : AppWidgetProvider() {
     ) {
         val views = RemoteViews(context.packageName, R.layout.remote_widget)
 
-        // 1. Setup Intent for Power Button click
         val powerIntent =
             Intent(context, RemoteWidgetProvider::class.java).apply { action = ACTION_WIDGET_POWER }
         val powerPendingIntent =
@@ -94,7 +91,6 @@ class RemoteWidgetProvider : AppWidgetProvider() {
             )
         views.setOnClickPendingIntent(R.id.btn_widget_power, powerPendingIntent)
 
-        // 2. Setup Intent for Volume/Temp Up Button click
         val upIntent =
             Intent(context, RemoteWidgetProvider::class.java).apply { action = ACTION_WIDGET_UP }
         val upPendingIntent =
@@ -106,7 +102,6 @@ class RemoteWidgetProvider : AppWidgetProvider() {
             )
         views.setOnClickPendingIntent(R.id.btn_widget_up, upPendingIntent)
 
-        // 3. Setup Intent to Launch Full Application
         val appIntent =
             Intent(context, MainActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

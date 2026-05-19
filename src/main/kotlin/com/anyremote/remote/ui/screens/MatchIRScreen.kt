@@ -55,14 +55,13 @@ fun MatchIRScreen(
     val haptic = rememberVibratingHapticFeedback()
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    // 1. Look up category & brand details from the database
     val category =
         remember(deviceId, RemoteDatabase.deviceTypes) {
             RemoteDatabase.deviceTypes.firstOrNull { it.id == deviceId }
         }
     val brand = remember(brandId, category) { category?.brands?.firstOrNull { it.id == brandId } }
 
-    val totalCodesets = remember { 5 } // 5 distinct codesets to prune through
+    val totalCodesets = remember { 5 }
     var currentCodesetIndex by remember { mutableIntStateOf(1) }
     var customDeviceName by
         remember(brand, category) {
@@ -73,7 +72,6 @@ fun MatchIRScreen(
     var showMatchSuccessModal by remember { mutableStateOf(false) }
     var showResponsePopup by remember { mutableStateOf(false) }
 
-    // Pulsing animation for the main testing button
     val infiniteTransition = rememberInfiniteTransition(label = "ButtonPulse")
     val buttonScale by
         infiniteTransition.animateFloat(
@@ -87,7 +85,6 @@ fun MatchIRScreen(
             label = "Pulse",
         )
 
-    // Formulate a logical testing button based on device type
     val (testButtonLabelRes, testButtonIcon) =
         remember(deviceId) {
             when (deviceId) {
@@ -100,16 +97,13 @@ fun MatchIRScreen(
             }
         }
 
-    // Trigger IR Transmission pulse sequence
     fun transmitTestPulse() {
         haptic.performHapticFeedback(
             androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress)
 
-        // Compile and broadcast testing pulses
         val pulses =
             if (deviceId == 3) {
-                // AC Gree frame: Power On, Cool Mode, Temp 24C, Auto Fan Speed, Manual Vertical
-                // Swing
+
                 IREncodingEngine.compileGreeAc(
                     power = true,
                     temp = 24,
@@ -118,7 +112,7 @@ fun MatchIRScreen(
                     swing = false,
                 )
             } else {
-                // General television/av-receiver NEC frame based on current codeset index
+
                 val address = 0x01
                 val command = currentCodesetIndex * 12
                 IREncodingEngine.compileGenericNec(address, command)
@@ -164,7 +158,6 @@ fun MatchIRScreen(
                 verticalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxSize().padding(24.dp),
             ) {
-                // Category & Brand info card
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.fillMaxWidth(),
@@ -190,7 +183,6 @@ fun MatchIRScreen(
 
                     Spacer(modifier = Modifier.height(20.dp))
 
-                    // Codeset indicator badge
                     Box(
                         modifier =
                             Modifier.background(
@@ -215,7 +207,6 @@ fun MatchIRScreen(
                     }
                 }
 
-                // Interactive central testing button
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.fillMaxWidth(),
@@ -229,7 +220,6 @@ fun MatchIRScreen(
                         modifier = Modifier.padding(bottom = 20.dp),
                     )
 
-                    // Big glowing neon circular test button
                     Box(
                         contentAlignment = Alignment.Center,
                         modifier =
@@ -286,7 +276,6 @@ fun MatchIRScreen(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Left & Right Manual config selector row
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center,
@@ -340,7 +329,6 @@ fun MatchIRScreen(
                     }
                 }
 
-                // Clean and premium bottom instruction card (removes the clutter!)
                 Card(
                     shape = RoundedCornerShape(16.dp),
                     colors =
@@ -380,7 +368,6 @@ fun MatchIRScreen(
                 }
             }
 
-            // Sleek Modern Bottom Sheet Popup to verify response
             if (showResponsePopup) {
                 ModalBottomSheet(
                     onDismissRequest = { showResponsePopup = false },
@@ -403,7 +390,6 @@ fun MatchIRScreen(
                             Modifier.fillMaxWidth()
                                 .padding(horizontal = 24.dp, vertical = 16.dp)
                                 .padding(bottom = 32.dp),
-                        // Extra padding for safe area
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         Box(
@@ -450,7 +436,6 @@ fun MatchIRScreen(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(16.dp),
                         ) {
-                            // "No" button
                             val noBtnBg =
                                 if (isAppDarkTheme()) Color(0xFF451A1A) else Color(0xFFFFEBEE)
                             val noBtnBorder =
@@ -465,7 +450,7 @@ fun MatchIRScreen(
                                             .LongPress,
                                     )
                                     showResponsePopup = false
-                                    // Cycle to next code automatically
+
                                     if (currentCodesetIndex < totalCodesets) {
                                         currentCodesetIndex++
                                     } else {
@@ -487,7 +472,6 @@ fun MatchIRScreen(
                                 )
                             }
 
-                            // "Yes" button
                             val yesBtnBg =
                                 if (isAppDarkTheme()) Color(0xFF14301D) else Color(0xFFE8F5E9)
                             val yesBtnBorder =
@@ -523,7 +507,6 @@ fun MatchIRScreen(
                 }
             }
 
-            // High-fidelity matching success modal overlay asking to save to main page
             if (showMatchSuccessModal) {
                 Box(
                     contentAlignment = Alignment.Center,
@@ -544,7 +527,6 @@ fun MatchIRScreen(
                                     RoundedCornerShape(24.dp))
                                 .padding(28.dp),
                     ) {
-                        // Success Glowing Checkmark Icon
                         val successIconBg =
                             if (isAppDarkTheme()) Color(0xFF14301D) else Color(0xFFE8F5E9)
                         val successIconBorder =
@@ -622,11 +604,10 @@ fun MatchIRScreen(
                             modifier = Modifier.fillMaxWidth(),
                             verticalArrangement = Arrangement.spacedBy(12.dp),
                         ) {
-                            // Primary option: Save and Return to Main Page
                             Button(
                                 onClick = {
                                     showMatchSuccessModal = false
-                                    // Save to favorites with custom name
+
                                     val isFav =
                                         FavoriteManager.isFavorite(context, deviceId, brandId)
                                     if (!isFav) {
@@ -648,7 +629,6 @@ fun MatchIRScreen(
                                 )
                             }
 
-                            // Secondary option: Just Open Controller to keep testing
                             OutlinedButton(
                                 onClick = {
                                     showMatchSuccessModal = false

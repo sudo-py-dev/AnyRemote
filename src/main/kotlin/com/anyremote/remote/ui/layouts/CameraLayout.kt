@@ -40,7 +40,6 @@ fun CameraLayout(onTrigger: (Int) -> Unit) {
             letterSpacing = 1.5.sp,
         )
 
-        // Shutter Button
         Box(
             modifier =
                 Modifier.size(160.dp)

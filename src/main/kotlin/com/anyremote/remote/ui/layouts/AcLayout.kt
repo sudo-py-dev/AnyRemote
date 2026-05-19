@@ -46,7 +46,6 @@ fun AcLayout(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        // 1. Digital Status Screen Banner
         Column(
             modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -156,7 +155,6 @@ fun AcLayout(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // 2. Tabular White Actions Card
         Card(
             modifier =
                 Modifier.fillMaxWidth()
@@ -166,7 +164,6 @@ fun AcLayout(
             elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         ) {
             Column(modifier = Modifier.fillMaxWidth()) {
-                // ROW 1: Power & Mode
                 Row(
                     modifier = Modifier.fillMaxWidth().height(80.dp),
                     verticalAlignment = Alignment.CenterVertically,
@@ -264,7 +261,6 @@ fun AcLayout(
                             .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)),
                 )
 
-                // ROW 2: Temp Down, Label, Temp Up
                 Row(
                     modifier = Modifier.fillMaxWidth().height(80.dp),
                     verticalAlignment = Alignment.CenterVertically,
@@ -341,7 +337,6 @@ fun AcLayout(
                             .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)),
                 )
 
-                // ROW 3: Wind Speed, Direction, Sweep
                 Row(
                     modifier = Modifier.fillMaxWidth().height(80.dp),
                     verticalAlignment = Alignment.CenterVertically,

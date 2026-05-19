@@ -41,7 +41,7 @@ fun GenericLayout(onKeyPressed: (Int) -> Unit) {
                     .border(1.5.dp, CrimsonRed, CircleShape)
                     .clickable {
                         haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                        onKeyPressed(0) // Power
+                        onKeyPressed(0)
                     },
             contentAlignment = Alignment.Center,
         ) {

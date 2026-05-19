@@ -5,10 +5,6 @@ import android.hardware.ConsumerIrManager
 import android.util.Log
 import android.widget.Toast
 
-/**
- * Handles physical transmission of alternating IR pulse arrays (microseconds) via the native
- * Android ConsumerIrManager API at standard carrier frequencies (38kHz).
- */
 object IRTransmitter {
     private const val TAG = "IRTransmitter"
 

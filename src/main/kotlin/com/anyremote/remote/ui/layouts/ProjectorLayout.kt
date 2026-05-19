@@ -51,7 +51,7 @@ fun ProjectorLayout(onKeyPressed: (Int) -> Unit) {
                         .border(1.5.dp, CrimsonRed, CircleShape)
                         .clickable {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            onKeyPressed(12) // Projector Power
+                            onKeyPressed(12)
                         },
                 contentAlignment = Alignment.Center,
             ) {
@@ -64,7 +64,6 @@ fun ProjectorLayout(onKeyPressed: (Int) -> Unit) {
             }
         }
 
-        // Silver Dpad
         Box(
             modifier =
                 Modifier.size(180.dp)
@@ -87,7 +86,7 @@ fun ProjectorLayout(onKeyPressed: (Int) -> Unit) {
                             CircleShape)
                         .clickable {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            onKeyPressed(20) // OK select
+                            onKeyPressed(20)
                         },
                 contentAlignment = Alignment.Center,
             ) {
@@ -103,7 +102,7 @@ fun ProjectorLayout(onKeyPressed: (Int) -> Unit) {
                 IconButton(
                     onClick = {
                         haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                        onKeyPressed(16) // Up
+                        onKeyPressed(16)
                     },
                     modifier = Modifier.align(Alignment.TopCenter).padding(top = 8.dp),
                 ) {
@@ -117,7 +116,7 @@ fun ProjectorLayout(onKeyPressed: (Int) -> Unit) {
                 IconButton(
                     onClick = {
                         haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                        onKeyPressed(17) // Down
+                        onKeyPressed(17)
                     },
                     modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 8.dp),
                 ) {
@@ -131,7 +130,7 @@ fun ProjectorLayout(onKeyPressed: (Int) -> Unit) {
                 IconButton(
                     onClick = {
                         haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                        onKeyPressed(18) // Left
+                        onKeyPressed(18)
                     },
                     modifier = Modifier.align(Alignment.CenterStart).padding(start = 8.dp),
                 ) {
@@ -145,7 +144,7 @@ fun ProjectorLayout(onKeyPressed: (Int) -> Unit) {
                 IconButton(
                     onClick = {
                         haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                        onKeyPressed(19) // Right
+                        onKeyPressed(19)
                     },
                     modifier = Modifier.align(Alignment.CenterEnd).padding(end = 8.dp),
                 ) {
@@ -165,7 +164,7 @@ fun ProjectorLayout(onKeyPressed: (Int) -> Unit) {
             IconButton(
                 onClick = {
                     haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                    onKeyPressed(4) // Return/Back
+                    onKeyPressed(4)
                 }) {
                     Icon(
                         Icons.AutoMirrored.Filled.ArrowBack,
@@ -177,7 +176,7 @@ fun ProjectorLayout(onKeyPressed: (Int) -> Unit) {
             IconButton(
                 onClick = {
                     haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                    onKeyPressed(3) // Home
+                    onKeyPressed(3)
                 }) {
                     Icon(
                         Icons.Default.Home,
@@ -188,7 +187,7 @@ fun ProjectorLayout(onKeyPressed: (Int) -> Unit) {
             IconButton(
                 onClick = {
                     haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                    onKeyPressed(82) // Menu
+                    onKeyPressed(82)
                 }) {
                     Icon(
                         Icons.Default.Menu,
@@ -214,7 +213,7 @@ fun ProjectorLayout(onKeyPressed: (Int) -> Unit) {
                         )
                         .clickable {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            onKeyPressed(30) // Focus -
+                            onKeyPressed(30)
                         },
                 contentAlignment = Alignment.Center,
             ) {
@@ -238,7 +237,7 @@ fun ProjectorLayout(onKeyPressed: (Int) -> Unit) {
                         )
                         .clickable {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            onKeyPressed(31) // Focus +
+                            onKeyPressed(31)
                         },
                 contentAlignment = Alignment.Center,
             ) {

@@ -47,7 +47,6 @@ fun FanLayout(onKeyPressed: (Int) -> Unit) {
         verticalArrangement = Arrangement.spacedBy(20.dp),
         modifier = Modifier.fillMaxWidth(),
     ) {
-        // Digital Screen Banner
         Box(
             modifier =
                 Modifier.fillMaxWidth()
@@ -94,7 +93,6 @@ fun FanLayout(onKeyPressed: (Int) -> Unit) {
             }
         }
 
-        // Concentric Power Button
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
@@ -116,7 +114,7 @@ fun FanLayout(onKeyPressed: (Int) -> Unit) {
                         .clickable {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                             fanPower = !fanPower
-                            onKeyPressed(12) // Power code
+                            onKeyPressed(12)
                         },
                 contentAlignment = Alignment.Center,
             ) {
@@ -129,7 +127,6 @@ fun FanLayout(onKeyPressed: (Int) -> Unit) {
             }
         }
 
-        // Speed Adjustment Keys
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -148,7 +145,7 @@ fun FanLayout(onKeyPressed: (Int) -> Unit) {
                         .clickable(enabled = fanPower) {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                             if (fanSpeed > 1) fanSpeed--
-                            onKeyPressed(25) // Speed Down
+                            onKeyPressed(25)
                         },
                 contentAlignment = Alignment.Center,
             ) {
@@ -173,7 +170,7 @@ fun FanLayout(onKeyPressed: (Int) -> Unit) {
                         .clickable(enabled = fanPower) {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                             if (fanSpeed < 4) fanSpeed++
-                            onKeyPressed(24) // Speed Up
+                            onKeyPressed(24)
                         },
                 contentAlignment = Alignment.Center,
             ) {
@@ -185,7 +182,6 @@ fun FanLayout(onKeyPressed: (Int) -> Unit) {
             }
         }
 
-        // Swing and Mode Controls
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -214,7 +210,7 @@ fun FanLayout(onKeyPressed: (Int) -> Unit) {
                         .clickable(enabled = fanPower) {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                             fanSwing = !fanSwing
-                            onKeyPressed(20) // Oscillate toggle
+                            onKeyPressed(20)
                         },
                 contentAlignment = Alignment.Center,
             ) {
@@ -249,7 +245,7 @@ fun FanLayout(onKeyPressed: (Int) -> Unit) {
                                     "Natural" -> "Sleep"
                                     else -> "Normal"
                                 }
-                            onKeyPressed(1) // Mode toggle
+                            onKeyPressed(1)
                         },
                 contentAlignment = Alignment.Center,
             ) {

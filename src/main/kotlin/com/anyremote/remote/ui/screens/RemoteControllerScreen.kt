@@ -34,7 +34,7 @@ fun RemoteControllerScreen(
     onBackClick: () -> Unit,
 ) {
     val context = LocalContext.current
-    // Find device and brand info
+
     val device = remember(deviceId) { RemoteDatabase.deviceTypes.firstOrNull { it.id == deviceId } }
     val brand = remember(brandId, device) { device?.brands?.firstOrNull { it.id == brandId } }
 
@@ -43,7 +43,6 @@ fun RemoteControllerScreen(
             mutableStateOf(FavoriteManager.isFavorite(context, deviceId, brandId))
         }
 
-    // Register dynamic launcher shortcuts on screen load
     LaunchedEffect(deviceId, brandId, device, brand) {
         if (device != null && brand != null) {
             ShortcutHelper.registerDynamicShortcuts(
@@ -56,10 +55,8 @@ fun RemoteControllerScreen(
         }
     }
 
-    // Hold transmitted pulses state for real-time oscilloscope sweep
     var currentPulses by remember { mutableStateOf(intArrayOf()) }
 
-    // Transmit physical IR pulses via Android ConsumerIrManager whenever pulses change
     LaunchedEffect(currentPulses) {
         if (currentPulses.isNotEmpty()) {
             val freq = if (deviceId == 3) 38000 else 38200
@@ -67,14 +64,12 @@ fun RemoteControllerScreen(
         }
     }
 
-    // Hold active AC configurations
     var acPower by remember { mutableStateOf(true) }
     var acTemp by remember { mutableIntStateOf(24) }
-    var acMode by remember { mutableStateOf("MC") } // Cool by default
-    var acSpeed by remember { mutableStateOf("SA") } // Auto speed by default
+    var acMode by remember { mutableStateOf("MC") }
+    var acSpeed by remember { mutableStateOf("SA") }
     var acSwing by remember { mutableStateOf(true) }
 
-    // Dynamic accent glow depending on selected Mode
     val activeGlow =
         remember(acMode, acPower) {
             if (!acPower) {
@@ -130,7 +125,6 @@ fun RemoteControllerScreen(
                 actions = {
                     val haptic = rememberVibratingHapticFeedback()
 
-                    // 1. Interactive Favorite Toggle
                     IconButton(
                         onClick = {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
@@ -147,7 +141,6 @@ fun RemoteControllerScreen(
                         )
                     }
 
-                    // 2. Pin to Launcher Dynamic Shortcut
                     IconButton(
                         onClick = {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
@@ -184,10 +177,9 @@ fun RemoteControllerScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            // Load custom interactive layout based on deviceId
             when (deviceId) {
                 3 -> {
-                    // Air Conditioner Layout
+
                     AcLayout(
                         power = acPower,
                         temp = acTemp,
@@ -232,7 +224,7 @@ fun RemoteControllerScreen(
                 4,
                 11,
                 12 -> {
-                    // TV / STB / DVD / Box Layout
+
                     TvLayout(
                         onKeyPressed = { cmdId ->
                             currentPulses =
@@ -241,7 +233,7 @@ fun RemoteControllerScreen(
                     )
                 }
                 6 -> {
-                    // Fan Layout
+
                     FanLayout(
                         onKeyPressed = { cmdId ->
                             currentPulses =
@@ -250,7 +242,7 @@ fun RemoteControllerScreen(
                     )
                 }
                 8 -> {
-                    // Audio / Speaker Layout
+
                     AudioLayout(
                         onKeyPressed = { cmdId ->
                             currentPulses =
@@ -259,7 +251,7 @@ fun RemoteControllerScreen(
                     )
                 }
                 10 -> {
-                    // Projector Layout
+
                     ProjectorLayout(
                         onKeyPressed = { cmdId ->
                             currentPulses =
@@ -268,7 +260,7 @@ fun RemoteControllerScreen(
                     )
                 }
                 13 -> {
-                    // Camera / DSLR Layout
+
                     CameraLayout(
                         onTrigger = { delay ->
                             currentPulses =
@@ -277,7 +269,7 @@ fun RemoteControllerScreen(
                     )
                 }
                 else -> {
-                    // Standard General Layout
+
                     GenericLayout(
                         onKeyPressed = { cmdId ->
                             currentPulses =

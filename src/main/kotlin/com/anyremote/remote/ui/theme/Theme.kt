@@ -11,24 +11,21 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
-// Reusable Premium Light Theme Design Tokens
-val DeepBackground = Color(0xFFF4F6F9) // Clean light silver-grey background
-val CardSurface = Color(0xFFFFFFFF) // Pure white card surfaces
-val ButtonBackground = Color(0xFFEAECEF) // Light gray button background
-val ButtonBorder = Color(0xFFD6D9E0) // Soft gray border color
+val DeepBackground = Color(0xFFF4F6F9)
+val CardSurface = Color(0xFFFFFFFF)
+val ButtonBackground = Color(0xFFEAECEF)
+val ButtonBorder = Color(0xFFD6D9E0)
 
-// Reusable Premium Dark Theme Design Tokens
-val DeepBackgroundDark = Color(0xFF0F172A) // Sleek dark midnight-slate background
-val CardSurfaceDark = Color(0xFF1E293B) // Rich dark card surfaces
-val ButtonBackgroundDark = Color(0xFF334155) // Charcoal slate button background
-val ButtonBorderDark = Color(0xFF475569) // Slate border color
+val DeepBackgroundDark = Color(0xFF0F172A)
+val CardSurfaceDark = Color(0xFF1E293B)
+val ButtonBackgroundDark = Color(0xFF334155)
+val ButtonBorderDark = Color(0xFF475569)
 
-// Accent Colors
-val ElectricBlue = Color(0xFF007AFF) // AC Cooling / Active indicators
-val WarmOrange = Color(0xFFFFA500) // AC Heating / Active warning
-val CrimsonRed = Color(0xFFFF3B30) // Power key
-val AccentGreen = Color(0xFF30D158) // Speeds / Signal transmitted
-val AccentPurple = Color(0xFF985EFF) // Dehumidify state
+val ElectricBlue = Color(0xFF007AFF)
+val WarmOrange = Color(0xFFFFA500)
+val CrimsonRed = Color(0xFFFF3B30)
+val AccentGreen = Color(0xFF30D158)
+val AccentPurple = Color(0xFF985EFF)
 
 private val CustomLightColorScheme =
     lightColorScheme(

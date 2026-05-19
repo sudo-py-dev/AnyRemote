@@ -48,7 +48,6 @@ fun EditRemoteScreen(
         }
     var nameInput by remember { mutableStateOf(currentCustomName) }
 
-    // Handlers for physical back button
     BackHandler { onDismiss() }
 
     val isDark = isSystemInDarkTheme()
@@ -106,7 +105,6 @@ fun EditRemoteScreen(
                     .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(20.dp),
         ) {
-            // Section 1: Device Name
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(
                     text = stringResource(R.string.device_name_section).uppercase(),
@@ -138,7 +136,6 @@ fun EditRemoteScreen(
                     }
             }
 
-            // Section 2: Quick Rename
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(
                     text = stringResource(R.string.quick_rename_section).uppercase(),
@@ -157,7 +154,6 @@ fun EditRemoteScreen(
                         stringResource(R.string.location_dining_room),
                         stringResource(R.string.location_office))
 
-                // 2x3 Grid using Columns and Rows
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     for (i in locations.indices step 2) {
                         Row(

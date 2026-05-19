@@ -110,7 +110,7 @@ fun AudioLayout(onKeyPressed: (Int) -> Unit) {
                         .clickable {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                             audioPower = !audioPower
-                            onKeyPressed(12) // Power code
+                            onKeyPressed(12)
                         },
                 contentAlignment = Alignment.Center,
             ) {
@@ -134,7 +134,7 @@ fun AudioLayout(onKeyPressed: (Int) -> Unit) {
                         )
                         .clickable(enabled = audioPower) {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            onKeyPressed(13) // Mute code
+                            onKeyPressed(13)
                         },
                 contentAlignment = Alignment.Center,
             ) {
@@ -165,7 +165,7 @@ fun AudioLayout(onKeyPressed: (Int) -> Unit) {
                         .clickable(enabled = audioPower) {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                             if (audioVol > 0) audioVol--
-                            onKeyPressed(25) // Vol-
+                            onKeyPressed(25)
                         },
                 contentAlignment = Alignment.Center,
             ) {
@@ -190,7 +190,7 @@ fun AudioLayout(onKeyPressed: (Int) -> Unit) {
                         .clickable(enabled = audioPower) {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                             if (audioVol < 30) audioVol++
-                            onKeyPressed(24) // Vol+
+                            onKeyPressed(24)
                         },
                 contentAlignment = Alignment.Center,
             ) {
@@ -233,7 +233,7 @@ fun AudioLayout(onKeyPressed: (Int) -> Unit) {
                             .clickable(enabled = audioPower) {
                                 haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                                 audioSource = sLabel
-                                onKeyPressed(20) // Select source
+                                onKeyPressed(20)
                             }
                             .padding(vertical = 10.dp),
                     contentAlignment = Alignment.Center,

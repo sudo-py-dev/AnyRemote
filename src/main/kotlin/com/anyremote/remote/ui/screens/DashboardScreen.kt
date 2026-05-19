@@ -49,7 +49,6 @@ fun DashboardScreen(
     val context = LocalContext.current
     RemoteDatabase.init(context)
 
-    // Dynamically retrieve favorite remotes on launch/resume
     var favoriteKeys by remember { mutableStateOf(emptySet<String>()) }
     LaunchedEffect(Unit) { favoriteKeys = FavoriteManager.getFavorites(context) }
 
@@ -61,7 +60,6 @@ fun DashboardScreen(
     }
     var renameTrigger by remember { mutableStateOf(0) }
 
-    // Intercept system back gestures to return to previous stages instead of exiting the app
     if (selectedItemForEditing != null) {
         BackHandler { selectedItemForEditing = null }
     } else if (selectedItemForOptions != null) {
@@ -135,8 +133,7 @@ fun DashboardScreen(
                 modifier = Modifier.fillMaxSize().padding(innerPadding),
             ) {
                 if (!forceShowCategories) {
-                    // First Page/Main Page: Lists saved devices or remains beautifully blank with
-                    // buttons
+
                     MainDashboardPage(
                         favoriteKeys = favoriteKeys,
                         renameTrigger = renameTrigger,
@@ -148,12 +145,12 @@ fun DashboardScreen(
                         onSettingsClick = onSettingsClick,
                         onLongClick = { selectedItemForOptions = it })
                 } else if (selectedDevice == null) {
-                    // Stage 1 of adding device: Device Category Grid
+
                     CategorySelectionGrid(
                         onCategoryClick = { selectedDevice = it },
                     )
                 } else {
-                    // Stage 2 of adding device: Brand Selection Panel with Letter filter & search
+
                     BrandSelectionPanel(
                         device = selectedDevice!!,
                         onBrandClick = { brand -> onDeviceSelected(selectedDevice!!.id, brand.id) },
@@ -162,7 +159,6 @@ fun DashboardScreen(
             }
         }
 
-        // Show the beautiful long-press options dialog here!
         if (selectedItemForOptions != null) {
             val (device, brand, key) = selectedItemForOptions!!
             val defaultName = "${brand.nameEn} ${device.nameEn.substringBefore(" ")}"
@@ -184,7 +180,6 @@ fun DashboardScreen(
                         modifier = Modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
-                        // Option 1: Edit Remote (opens fullscreen EditRemoteScreen)
                         Row(
                             modifier =
                                 Modifier.fillMaxWidth()
@@ -210,7 +205,6 @@ fun DashboardScreen(
                             )
                         }
 
-                        // Option 2: Pin to Home Screen / Add Shortcut
                         Row(
                             modifier =
                                 Modifier.fillMaxWidth()
@@ -243,7 +237,6 @@ fun DashboardScreen(
                             )
                         }
 
-                        // Option 3: Remove Remote / Delete
                         Row(
                             modifier =
                                 Modifier.fillMaxWidth()
@@ -303,7 +296,7 @@ fun MainDashboardPage(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         if (favoriteKeys.isEmpty()) {
-            // Elegant Blank Page Layout
+
             Box(
                 modifier = Modifier.weight(1f).fillMaxWidth(),
                 contentAlignment = Alignment.Center,
@@ -352,7 +345,7 @@ fun MainDashboardPage(
                 }
             }
         } else {
-            // Elegant Main Screen Added Remotes List
+
             Text(
                 text = stringResource(R.string.paired_remotes_title),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -403,12 +396,10 @@ fun MainDashboardPage(
             }
         }
 
-        // Bottom action buttons container visible at all times
         Row(
             modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            // Settings Button
             OutlinedButton(
                 onClick = onSettingsClick,
                 shape = RoundedCornerShape(12.dp),
@@ -430,7 +421,6 @@ fun MainDashboardPage(
                     fontSize = 12.sp)
             }
 
-            // Add New Device Button
             Button(
                 onClick = onAddNewClick,
                 shape = RoundedCornerShape(12.dp),
