@@ -69,6 +69,15 @@ fun RemoteControllerScreen(
     var acMode by remember { mutableStateOf("MC") }
     var acSpeed by remember { mutableStateOf("SA") }
     var acSwing by remember { mutableStateOf(true) }
+    var acTurbo by remember { mutableStateOf(false) }
+    var acLight by remember { mutableStateOf(true) }
+    var acAuxHeat by remember { mutableStateOf(false) }
+    var acHealth by remember { mutableStateOf(false) }
+    var acVentilation by remember { mutableStateOf(false) }
+    var acEco by remember { mutableStateOf(false) }
+    var acSwingH by remember { mutableStateOf(false) }
+    var acMute by remember { mutableStateOf(false) }
+    var acTempDisplay by remember { mutableStateOf(false) }
 
     val activeGlow =
         remember(acMode, acPower) {
@@ -186,36 +195,295 @@ fun RemoteControllerScreen(
                         mode = acMode,
                         speed = acSpeed,
                         swing = acSwing,
+                        turbo = acTurbo,
+                        light = acLight,
+                        auxHeat = acAuxHeat,
+                        health = acHealth,
+                        ventilation = acVentilation,
+                        eco = acEco,
+                        swingH = acSwingH,
+                        mute = acMute,
+                        tempDisplay = acTempDisplay,
                         activeGlow = activeGlow,
                         onPowerToggle = {
                             acPower = !acPower
                             currentPulses =
                                 IREncodingEngine.compileGreeAc(
-                                    acPower, acTemp, acMode, acSpeed, acSwing)
+                                    power = acPower,
+                                    temp = acTemp,
+                                    mode = acMode,
+                                    fanSpeed = acSpeed,
+                                    swing = acSwing,
+                                    turbo = acTurbo,
+                                    light = acLight,
+                                    auxHeat = acAuxHeat,
+                                    health = acHealth,
+                                    ventilation = acVentilation,
+                                    eco = acEco,
+                                    swingH = acSwingH,
+                                    mute = acMute,
+                                    tempDisplay = acTempDisplay,
+                                )
                         },
                         onTempChange = {
                             acTemp = it
                             currentPulses =
                                 IREncodingEngine.compileGreeAc(
-                                    acPower, acTemp, acMode, acSpeed, acSwing)
+                                    power = acPower,
+                                    temp = acTemp,
+                                    mode = acMode,
+                                    fanSpeed = acSpeed,
+                                    swing = acSwing,
+                                    turbo = acTurbo,
+                                    light = acLight,
+                                    auxHeat = acAuxHeat,
+                                    health = acHealth,
+                                    ventilation = acVentilation,
+                                    eco = acEco,
+                                    swingH = acSwingH,
+                                    mute = acMute,
+                                    tempDisplay = acTempDisplay,
+                                )
                         },
                         onModeChange = {
                             acMode = it
                             currentPulses =
                                 IREncodingEngine.compileGreeAc(
-                                    acPower, acTemp, acMode, acSpeed, acSwing)
+                                    power = acPower,
+                                    temp = acTemp,
+                                    mode = acMode,
+                                    fanSpeed = acSpeed,
+                                    swing = acSwing,
+                                    turbo = acTurbo,
+                                    light = acLight,
+                                    auxHeat = acAuxHeat,
+                                    health = acHealth,
+                                    ventilation = acVentilation,
+                                    eco = acEco,
+                                    swingH = acSwingH,
+                                    mute = acMute,
+                                    tempDisplay = acTempDisplay,
+                                )
                         },
                         onSpeedChange = {
                             acSpeed = it
                             currentPulses =
                                 IREncodingEngine.compileGreeAc(
-                                    acPower, acTemp, acMode, acSpeed, acSwing)
+                                    power = acPower,
+                                    temp = acTemp,
+                                    mode = acMode,
+                                    fanSpeed = acSpeed,
+                                    swing = acSwing,
+                                    turbo = acTurbo,
+                                    light = acLight,
+                                    auxHeat = acAuxHeat,
+                                    health = acHealth,
+                                    ventilation = acVentilation,
+                                    eco = acEco,
+                                    swingH = acSwingH,
+                                    mute = acMute,
+                                    tempDisplay = acTempDisplay,
+                                )
                         },
                         onSwingToggle = {
                             acSwing = !acSwing
                             currentPulses =
                                 IREncodingEngine.compileGreeAc(
-                                    acPower, acTemp, acMode, acSpeed, acSwing)
+                                    power = acPower,
+                                    temp = acTemp,
+                                    mode = acMode,
+                                    fanSpeed = acSpeed,
+                                    swing = acSwing,
+                                    turbo = acTurbo,
+                                    light = acLight,
+                                    auxHeat = acAuxHeat,
+                                    health = acHealth,
+                                    ventilation = acVentilation,
+                                    eco = acEco,
+                                    swingH = acSwingH,
+                                    mute = acMute,
+                                    tempDisplay = acTempDisplay,
+                                )
+                        },
+                        onTurboToggle = {
+                            acTurbo = !acTurbo
+                            currentPulses =
+                                IREncodingEngine.compileGreeAc(
+                                    power = acPower,
+                                    temp = acTemp,
+                                    mode = acMode,
+                                    fanSpeed = acSpeed,
+                                    swing = acSwing,
+                                    turbo = acTurbo,
+                                    light = acLight,
+                                    auxHeat = acAuxHeat,
+                                    health = acHealth,
+                                    ventilation = acVentilation,
+                                    eco = acEco,
+                                    swingH = acSwingH,
+                                    mute = acMute,
+                                    tempDisplay = acTempDisplay,
+                                )
+                        },
+                        onLightToggle = {
+                            acLight = !acLight
+                            currentPulses =
+                                IREncodingEngine.compileGreeAc(
+                                    power = acPower,
+                                    temp = acTemp,
+                                    mode = acMode,
+                                    fanSpeed = acSpeed,
+                                    swing = acSwing,
+                                    turbo = acTurbo,
+                                    light = acLight,
+                                    auxHeat = acAuxHeat,
+                                    health = acHealth,
+                                    ventilation = acVentilation,
+                                    eco = acEco,
+                                    swingH = acSwingH,
+                                    mute = acMute,
+                                    tempDisplay = acTempDisplay,
+                                )
+                        },
+                        onAuxHeatToggle = {
+                            acAuxHeat = !acAuxHeat
+                            currentPulses =
+                                IREncodingEngine.compileGreeAc(
+                                    power = acPower,
+                                    temp = acTemp,
+                                    mode = acMode,
+                                    fanSpeed = acSpeed,
+                                    swing = acSwing,
+                                    turbo = acTurbo,
+                                    light = acLight,
+                                    auxHeat = acAuxHeat,
+                                    health = acHealth,
+                                    ventilation = acVentilation,
+                                    eco = acEco,
+                                    swingH = acSwingH,
+                                    mute = acMute,
+                                    tempDisplay = acTempDisplay,
+                                )
+                        },
+                        onHealthToggle = {
+                            acHealth = !acHealth
+                            currentPulses =
+                                IREncodingEngine.compileGreeAc(
+                                    power = acPower,
+                                    temp = acTemp,
+                                    mode = acMode,
+                                    fanSpeed = acSpeed,
+                                    swing = acSwing,
+                                    turbo = acTurbo,
+                                    light = acLight,
+                                    auxHeat = acAuxHeat,
+                                    health = acHealth,
+                                    ventilation = acVentilation,
+                                    eco = acEco,
+                                    swingH = acSwingH,
+                                    mute = acMute,
+                                    tempDisplay = acTempDisplay,
+                                )
+                        },
+                        onVentilationToggle = {
+                            acVentilation = !acVentilation
+                            currentPulses =
+                                IREncodingEngine.compileGreeAc(
+                                    power = acPower,
+                                    temp = acTemp,
+                                    mode = acMode,
+                                    fanSpeed = acSpeed,
+                                    swing = acSwing,
+                                    turbo = acTurbo,
+                                    light = acLight,
+                                    auxHeat = acAuxHeat,
+                                    health = acHealth,
+                                    ventilation = acVentilation,
+                                    eco = acEco,
+                                    swingH = acSwingH,
+                                    mute = acMute,
+                                    tempDisplay = acTempDisplay,
+                                )
+                        },
+                        onEcoToggle = {
+                            acEco = !acEco
+                            currentPulses =
+                                IREncodingEngine.compileGreeAc(
+                                    power = acPower,
+                                    temp = acTemp,
+                                    mode = acMode,
+                                    fanSpeed = acSpeed,
+                                    swing = acSwing,
+                                    turbo = acTurbo,
+                                    light = acLight,
+                                    auxHeat = acAuxHeat,
+                                    health = acHealth,
+                                    ventilation = acVentilation,
+                                    eco = acEco,
+                                    swingH = acSwingH,
+                                    mute = acMute,
+                                    tempDisplay = acTempDisplay,
+                                )
+                        },
+                        onSwingHToggle = {
+                            acSwingH = !acSwingH
+                            currentPulses =
+                                IREncodingEngine.compileGreeAc(
+                                    power = acPower,
+                                    temp = acTemp,
+                                    mode = acMode,
+                                    fanSpeed = acSpeed,
+                                    swing = acSwing,
+                                    turbo = acTurbo,
+                                    light = acLight,
+                                    auxHeat = acAuxHeat,
+                                    health = acHealth,
+                                    ventilation = acVentilation,
+                                    eco = acEco,
+                                    swingH = acSwingH,
+                                    mute = acMute,
+                                    tempDisplay = acTempDisplay,
+                                )
+                        },
+                        onMuteToggle = {
+                            acMute = !acMute
+                            currentPulses =
+                                IREncodingEngine.compileGreeAc(
+                                    power = acPower,
+                                    temp = acTemp,
+                                    mode = acMode,
+                                    fanSpeed = acSpeed,
+                                    swing = acSwing,
+                                    turbo = acTurbo,
+                                    light = acLight,
+                                    auxHeat = acAuxHeat,
+                                    health = acHealth,
+                                    ventilation = acVentilation,
+                                    eco = acEco,
+                                    swingH = acSwingH,
+                                    mute = acMute,
+                                    tempDisplay = acTempDisplay,
+                                )
+                        },
+                        onTempDisplayToggle = {
+                            acTempDisplay = !acTempDisplay
+                            currentPulses =
+                                IREncodingEngine.compileGreeAc(
+                                    power = acPower,
+                                    temp = acTemp,
+                                    mode = acMode,
+                                    fanSpeed = acSpeed,
+                                    swing = acSwing,
+                                    turbo = acTurbo,
+                                    light = acLight,
+                                    auxHeat = acAuxHeat,
+                                    health = acHealth,
+                                    ventilation = acVentilation,
+                                    eco = acEco,
+                                    swingH = acSwingH,
+                                    mute = acMute,
+                                    tempDisplay = acTempDisplay,
+                                )
                         },
                     )
                 }

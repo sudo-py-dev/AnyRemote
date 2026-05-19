@@ -8,7 +8,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -82,18 +86,27 @@ fun AppNavigation(
     initDeviceId: Int,
     initBrandId: Int,
 ) {
-    val startDest =
-        if (initDeviceId != -1 && initBrandId != -1) {
-            "remote/$initDeviceId/$initBrandId"
-        } else {
-            "dashboard"
-        }
+    var consumedInitDevice by remember { mutableStateOf(initDeviceId) }
+    var consumedInitBrand by remember { mutableStateOf(initBrandId) }
 
     NavHost(
         navController = navController,
-        startDestination = startDest,
+        startDestination = "dashboard",
     ) {
         composable("dashboard") {
+            LaunchedEffect(consumedInitDevice, consumedInitBrand) {
+                if (consumedInitDevice != -1 && consumedInitBrand != -1) {
+                    val dId = consumedInitDevice
+                    val bId = consumedInitBrand
+                    consumedInitDevice = -1
+                    consumedInitBrand = -1
+                    navController.navigate("remote/$dId/$bId") {
+                        popUpTo("dashboard") { saveState = false }
+                        launchSingleTop = true
+                    }
+                }
+            }
+
             DashboardScreen(
                 onDeviceSelected = { deviceId, brandId ->
                     navController.navigate("match_ir/$deviceId/$brandId")
@@ -122,9 +135,7 @@ fun AppNavigation(
                     navController.navigate("remote/$deviceId/$brandId") { popUpTo("dashboard") }
                 },
                 onSaveAndReturnToDashboard = {
-                    navController.navigate("dashboard") {
-                        popUpTo("dashboard") { inclusive = true }
-                    }
+                    navController.popBackStack("dashboard", inclusive = false)
                 },
                 onBackClick = { navController.popBackStack() },
             )

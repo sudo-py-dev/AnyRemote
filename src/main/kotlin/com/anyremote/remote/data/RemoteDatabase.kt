@@ -29,19 +29,59 @@ object RemoteDatabase {
     var deviceTypes: List<DeviceType> = emptyList()
         private set
 
+    var acOptions: Map<String, List<String>> = emptyMap()
+        private set
+
+    fun hasAcOption(key: String): Boolean {
+        if (acOptions.isEmpty()) return true
+        val normalized = key.lowercase().replace("_", "")
+        return acOptions.keys.any { it.lowercase().replace("_", "") == normalized }
+    }
+
     @OptIn(ExperimentalSerializationApi::class)
     fun init(context: Context) {
+        loadAcOptions(context)
         if (deviceTypes.isNotEmpty()) return
         try {
 
-            val bytes =
-                context.assets.open("remote.pb").use { stream -> stream.readBytes() }
+            val bytes = context.assets.open("remote.pb").use { stream -> stream.readBytes() }
             val container = ProtoBuf.decodeFromByteArray(DatabaseContainer.serializer(), bytes)
             deviceTypes = container.devices
         } catch (e: Exception) {
             e.printStackTrace()
 
             initFromJson(context)
+        }
+    }
+
+    private fun loadAcOptions(context: Context) {
+        if (acOptions.isNotEmpty()) return
+        try {
+            val jsonString =
+                context.assets.open("remotes_database.json").use { stream ->
+                    stream.bufferedReader().use { it.readText() }
+                }
+            val root = JSONObject(jsonString)
+            if (root.has("gree_ac_protocol")) {
+                val protocol = root.getJSONObject("gree_ac_protocol")
+                if (protocol.has("options")) {
+                    val optionsObj = protocol.getJSONObject("options")
+                    val map = mutableMapOf<String, List<String>>()
+                    val keys = optionsObj.keys()
+                    while (keys.hasNext()) {
+                        val key = keys.next()
+                        val arr = optionsObj.getJSONArray(key)
+                        val list = mutableListOf<String>()
+                        for (i in 0 until arr.length()) {
+                            list.add(arr.getString(i))
+                        }
+                        map[key] = list
+                    }
+                    acOptions = map
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 

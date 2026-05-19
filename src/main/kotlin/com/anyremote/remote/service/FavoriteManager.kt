@@ -7,6 +7,7 @@ object FavoriteManager {
     private const val KEY_FAVORITES = "favorites_list"
     private const val KEY_VIBRATION = "vibration_enabled"
     private const val KEY_THEME = "theme_mode"
+    private const val KEY_IR_NOTICE_DISMISSED = "ir_notice_dismissed"
 
     var currentThemeState = androidx.compose.runtime.mutableStateOf("light")
         private set
@@ -94,5 +95,18 @@ object FavoriteManager {
     ) {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         prefs.edit().putString("name_${deviceId}_$brandId", customName).apply()
+    }
+
+    fun isIrNoticeDismissed(context: Context): Boolean {
+        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        return prefs.getBoolean(KEY_IR_NOTICE_DISMISSED, false)
+    }
+
+    fun setIrNoticeDismissed(
+        context: Context,
+        dismissed: Boolean,
+    ) {
+        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        prefs.edit().putBoolean(KEY_IR_NOTICE_DISMISSED, dismissed).apply()
     }
 }

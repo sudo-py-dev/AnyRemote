@@ -63,11 +63,7 @@ fun MatchIRScreen(
 
     val totalCodesets = remember { 5 }
     var currentCodesetIndex by remember { mutableIntStateOf(1) }
-    var customDeviceName by
-        remember(brand, category) {
-            androidx.compose.runtime.mutableStateOf(
-                "${brand?.nameEn ?: "Brand"} ${category?.nameEn ?: "Device"}")
-        }
+    var showEditRemoteScreen by remember { mutableStateOf(false) }
     var isTestButtonPressed by remember { mutableStateOf(false) }
     var showMatchSuccessModal by remember { mutableStateOf(false) }
     var showResponsePopup by remember { mutableStateOf(false) }
@@ -123,30 +119,32 @@ fun MatchIRScreen(
 
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(R.string.pair_new_remote),
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        fontSize = 18.sp,
-                        letterSpacing = 1.sp,
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = onBackClick) {
-                        Icon(
-                            Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = stringResource(R.string.back),
-                            tint = MaterialTheme.colorScheme.onSurface,
+            if (!showEditRemoteScreen) {
+                CenterAlignedTopAppBar(
+                    title = {
+                        Text(
+                            text = stringResource(R.string.pair_new_remote),
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            fontSize = 18.sp,
+                            letterSpacing = 1.sp,
                         )
-                    }
-                },
-                colors =
-                    TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.background,
-                    ),
-            )
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = onBackClick) {
+                            Icon(
+                                Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = stringResource(R.string.back),
+                                tint = MaterialTheme.colorScheme.onSurface,
+                            )
+                        }
+                    },
+                    colors =
+                        TopAppBarDefaults.topAppBarColors(
+                            containerColor = MaterialTheme.colorScheme.background,
+                        ),
+                )
+            }
         },
         containerColor = MaterialTheme.colorScheme.background,
     ) { innerPadding ->
@@ -583,21 +581,6 @@ fun MatchIRScreen(
                             modifier = Modifier.padding(horizontal = 8.dp),
                         )
 
-                        Spacer(modifier = Modifier.height(12.dp))
-
-                        OutlinedTextField(
-                            value = customDeviceName,
-                            onValueChange = { customDeviceName = it },
-                            label = { Text(stringResource(R.string.device_name_label)) },
-                            singleLine = true,
-                            modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
-                            colors =
-                                OutlinedTextFieldDefaults.colors(
-                                    focusedBorderColor = ElectricBlue,
-                                    unfocusedBorderColor = MaterialTheme.colorScheme.outline,
-                                ),
-                        )
-
                         Spacer(modifier = Modifier.height(24.dp))
 
                         Column(
@@ -613,9 +596,7 @@ fun MatchIRScreen(
                                     if (!isFav) {
                                         FavoriteManager.toggleFavorite(context, deviceId, brandId)
                                     }
-                                    FavoriteManager.setCustomName(
-                                        context, deviceId, brandId, customDeviceName)
-                                    onSaveAndReturnToDashboard()
+                                    showEditRemoteScreen = true
                                 },
                                 colors = ButtonDefaults.buttonColors(containerColor = ElectricBlue),
                                 shape = RoundedCornerShape(12.dp),
@@ -651,6 +632,21 @@ fun MatchIRScreen(
                         }
                     }
                 }
+            }
+
+            if (showEditRemoteScreen && category != null && brand != null) {
+                EditRemoteScreen(
+                    device = category,
+                    brand = brand,
+                    onDismiss = {
+                        showEditRemoteScreen = false
+                        onSaveAndReturnToDashboard()
+                    },
+                    onSave = { newName ->
+                        FavoriteManager.setCustomName(context, deviceId, brandId, newName)
+                        showEditRemoteScreen = false
+                        onSaveAndReturnToDashboard()
+                    })
             }
         }
     }

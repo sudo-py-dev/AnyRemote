@@ -70,7 +70,7 @@ fun BrandSelectionPanel(
                     compareBy<Brand> { brand ->
                             if (brand.nameEn.startsWith(searchQuery, ignoreCase = true)) 0 else 1
                         }
-                        .thenBy { brand -> if (brand.category.startsWith("hot")) 0 else 1 }
+                        .thenBy { brand -> if (brand.category == "popular") 0 else 1 }
                         .thenBy { brand -> brand.nameEn.lowercase() })
             }
         }

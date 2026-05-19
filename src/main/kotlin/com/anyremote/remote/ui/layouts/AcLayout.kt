@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.CompareArrows
+import androidx.compose.material.icons.automirrored.filled.VolumeOff
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -26,6 +27,14 @@ import com.anyremote.remote.ui.theme.*
 import com.anyremote.remote.ui.theme.CrimsonRed
 import com.anyremote.remote.ui.theme.ElectricBlue
 
+private data class AcOptionItem(
+    val key: String,
+    val icon: androidx.compose.ui.graphics.vector.ImageVector,
+    val label: String,
+    val isActive: Boolean,
+    val onClick: () -> Unit
+)
+
 @Composable
 fun AcLayout(
     power: Boolean,
@@ -33,14 +42,33 @@ fun AcLayout(
     mode: String,
     speed: String,
     swing: Boolean,
+    turbo: Boolean,
+    light: Boolean,
+    auxHeat: Boolean,
+    health: Boolean,
+    ventilation: Boolean,
+    eco: Boolean,
+    swingH: Boolean,
+    mute: Boolean,
+    tempDisplay: Boolean,
     activeGlow: Color,
     onPowerToggle: () -> Unit,
     onTempChange: (Int) -> Unit,
     onModeChange: (String) -> Unit,
     onSpeedChange: (String) -> Unit,
     onSwingToggle: () -> Unit,
+    onTurboToggle: () -> Unit,
+    onLightToggle: () -> Unit,
+    onAuxHeatToggle: () -> Unit,
+    onHealthToggle: () -> Unit,
+    onVentilationToggle: () -> Unit,
+    onEcoToggle: () -> Unit,
+    onSwingHToggle: () -> Unit,
+    onMuteToggle: () -> Unit,
+    onTempDisplayToggle: () -> Unit,
 ) {
     val haptic = rememberVibratingHapticFeedback()
+    val hasOption = { key: String -> com.anyremote.remote.data.RemoteDatabase.hasAcOption(key) }
 
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -133,7 +161,7 @@ fun AcLayout(
                     )
                 }
 
-                if (swing) {
+                if (swing && (hasOption("wind_model") || hasOption("swing"))) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
                             Icons.AutoMirrored.Filled.CompareArrows,
@@ -144,6 +172,168 @@ fun AcLayout(
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
                             stringResource(R.string.swing),
+                            color = MaterialTheme.colorScheme.onSurface,
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    }
+                }
+
+                if (turbo && power && hasOption("turbo")) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            Icons.Default.FlashOn,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.size(16.dp),
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            stringResource(R.string.ac_label_turbo),
+                            color = MaterialTheme.colorScheme.onSurface,
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    }
+                }
+
+                if (light && power && hasOption("light")) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            Icons.Default.Lightbulb,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.size(16.dp),
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            stringResource(R.string.ac_label_light),
+                            color = MaterialTheme.colorScheme.onSurface,
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    }
+                }
+
+                if (auxHeat && power && hasOption("aux_heat")) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            Icons.Default.Whatshot,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.size(16.dp),
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            stringResource(R.string.ac_label_aux_heat),
+                            color = MaterialTheme.colorScheme.onSurface,
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    }
+                }
+
+                if (health && power && hasOption("health")) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            Icons.Default.Favorite,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.size(16.dp),
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            stringResource(R.string.ac_label_health),
+                            color = MaterialTheme.colorScheme.onSurface,
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    }
+                }
+
+                if (ventilation && power && hasOption("ventilation")) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            Icons.Default.Loop,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.size(16.dp),
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            stringResource(R.string.ac_label_ventilation),
+                            color = MaterialTheme.colorScheme.onSurface,
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    }
+                }
+
+                if (eco && power && hasOption("eco")) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            Icons.Default.Eco,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.size(16.dp),
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            stringResource(R.string.ac_label_eco),
+                            color = MaterialTheme.colorScheme.onSurface,
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    }
+                }
+
+                if (swingH && power && hasOption("swing_h")) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            Icons.Default.SwapHoriz,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.size(16.dp),
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            stringResource(R.string.ac_label_swing_h),
+                            color = MaterialTheme.colorScheme.onSurface,
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    }
+                }
+
+                if (mute && power && hasOption("mute")) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            Icons.AutoMirrored.Filled.VolumeOff,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.size(16.dp),
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            stringResource(R.string.ac_label_mute),
+                            color = MaterialTheme.colorScheme.onSurface,
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    }
+                }
+
+                if (tempDisplay && power && hasOption("temp_display")) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            Icons.Default.DeviceThermostat,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.size(16.dp),
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            stringResource(R.string.ac_label_temp_display),
                             color = MaterialTheme.colorScheme.onSurface,
                             fontSize = 11.sp,
                             fontWeight = FontWeight.Bold,
@@ -460,6 +650,153 @@ fun AcLayout(
                                 fontSize = 10.sp,
                                 fontWeight = FontWeight.Bold,
                             )
+                        }
+                    }
+                }
+
+                val allOptions = listOf(
+                    AcOptionItem(
+                        key = "turbo",
+                        icon = Icons.Default.FlashOn,
+                        label = if (turbo && power) stringResource(R.string.ac_label_turbo_on) else stringResource(R.string.ac_label_turbo),
+                        isActive = turbo,
+                        onClick = onTurboToggle
+                    ),
+                    AcOptionItem(
+                        key = "light",
+                        icon = Icons.Default.Lightbulb,
+                        label = if (light && power) stringResource(R.string.ac_label_light_on) else stringResource(R.string.ac_label_light),
+                        isActive = light,
+                        onClick = onLightToggle
+                    ),
+                    AcOptionItem(
+                        key = "aux_heat",
+                        icon = Icons.Default.Whatshot,
+                        label = stringResource(R.string.ac_label_aux_heat),
+                        isActive = auxHeat,
+                        onClick = onAuxHeatToggle
+                    ),
+                    AcOptionItem(
+                        key = "health",
+                        icon = Icons.Default.Favorite,
+                        label = stringResource(R.string.ac_label_health),
+                        isActive = health,
+                        onClick = onHealthToggle
+                    ),
+                    AcOptionItem(
+                        key = "ventilation",
+                        icon = Icons.Default.Loop,
+                        label = stringResource(R.string.ac_label_ventilation),
+                        isActive = ventilation,
+                        onClick = onVentilationToggle
+                    ),
+                    AcOptionItem(
+                        key = "eco",
+                        icon = Icons.Default.Eco,
+                        label = stringResource(R.string.ac_label_eco),
+                        isActive = eco,
+                        onClick = onEcoToggle
+                    ),
+                    AcOptionItem(
+                        key = "swing_h",
+                        icon = Icons.Default.SwapHoriz,
+                        label = stringResource(R.string.ac_label_swing_h),
+                        isActive = swingH,
+                        onClick = onSwingHToggle
+                    ),
+                    AcOptionItem(
+                        key = "mute",
+                        icon = Icons.AutoMirrored.Filled.VolumeOff,
+                        label = stringResource(R.string.ac_label_mute),
+                        isActive = mute,
+                        onClick = onMuteToggle
+                    ),
+                    AcOptionItem(
+                        key = "temp_display",
+                        icon = Icons.Default.DeviceThermostat,
+                        label = stringResource(R.string.ac_label_temp_display),
+                        isActive = tempDisplay,
+                        onClick = onTempDisplayToggle
+                    )
+                )
+
+                val enabledOptions = allOptions.filter { hasOption(it.key) }
+                val optionChunks = enabledOptions.chunked(2)
+
+                optionChunks.forEach { chunk ->
+                    Box(
+                        modifier =
+                            Modifier.fillMaxWidth()
+                                .height(1.5.dp)
+                                .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)),
+                    )
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth().height(80.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        chunk.forEachIndexed { index, option ->
+                            if (index > 0) {
+                                Box(
+                                    modifier =
+                                        Modifier.width(1.5.dp)
+                                            .fillMaxHeight()
+                                            .background(
+                                                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
+                                            ),
+                                )
+                            }
+
+                            Box(
+                                modifier =
+                                    Modifier.weight(1f).fillMaxHeight().clickable(enabled = power) {
+                                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                        option.onClick()
+                                    },
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                    Icon(
+                                        imageVector = option.icon,
+                                        contentDescription = option.label,
+                                        tint =
+                                            if (option.isActive && power) {
+                                                ElectricBlue
+                                            } else {
+                                                MaterialTheme.colorScheme.onSurface.copy(
+                                                    alpha = if (power) 1f else 0.4f
+                                                )
+                                            },
+                                        modifier = Modifier.size(24.dp),
+                                    )
+                                    Spacer(modifier = Modifier.height(4.dp))
+                                    Text(
+                                        text = option.label,
+                                        color =
+                                            if (option.isActive && power) {
+                                                ElectricBlue
+                                            } else {
+                                                MaterialTheme.colorScheme.onSurface.copy(
+                                                    alpha = if (power) 1f else 0.4f
+                                                )
+                                            },
+                                        fontSize = 10.sp,
+                                        fontWeight = FontWeight.Bold,
+                                    )
+                                }
+                            }
+                        }
+
+                        if (chunk.size == 1) {
+                            Box(
+                                modifier =
+                                    Modifier.width(1.5.dp)
+                                        .fillMaxHeight()
+                                        .background(
+                                            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
+                                        ),
+                            )
+                            Box(modifier = Modifier.weight(1f).fillMaxHeight())
                         }
                     }
                 }

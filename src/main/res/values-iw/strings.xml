@@ -96,6 +96,17 @@
     <string name="ac_label_direction">כיוון</string>
     <string name="ac_label_sweep">תנודה</string>
     <string name="ac_label_sweep_on">תנודה פעילה</string>
+    <string name="ac_label_turbo">טורבו</string>
+    <string name="ac_label_turbo_on">טורבו פעיל</string>
+    <string name="ac_label_light">תאורה</string>
+    <string name="ac_label_light_on">תאורה פעילה</string>
+    <string name="ac_label_aux_heat">חום נוסף</string>
+    <string name="ac_label_health">מצב בריאות</string>
+    <string name="ac_label_ventilation">אוורור</string>
+    <string name="ac_label_eco">eco</string>
+    <string name="ac_label_swing_h">תנועה אופקית</string>
+    <string name="ac_label_mute">השתקה</string>
+    <string name="ac_label_temp_display">הצג טמפרטורה</string>
     <string name="fan_speed_banner">מהירות מאוורר: %1$d</string>
     <string name="fan_power_off_banner">מאוורר כבוי</string>
     <string name="fan_status_banner">מצב: %1$s | תנודה: %2$s</string>
@@ -125,5 +136,8 @@
     <string name="remote_fallback_title">שלט</string>
     <string name="controller_fallback_subtitle">שלט רחוק</string>
     <string name="all_caps">הכול</string>
+    <string name="ir_sensor_missing_title">לא זוהה משדר IR</string>
+    <string name="ir_sensor_missing_message">למכשיר שלך אין משדר אינפרא-אדום (IR) מובנה. לא ניתן להשתמש במכשיר זה לשליטה במכשירי חשמל ביתיים באמצעות אותות אינפרא-אדום.</string>
+    <string name="ir_sensor_missing_action">הבנתי</string>
 </resources>
 

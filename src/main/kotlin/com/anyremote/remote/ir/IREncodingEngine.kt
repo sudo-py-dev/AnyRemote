@@ -11,6 +11,15 @@ object IREncodingEngine {
         mode: String,
         fanSpeed: String,
         swing: Boolean,
+        turbo: Boolean = false,
+        light: Boolean = true,
+        auxHeat: Boolean = false,
+        health: Boolean = false,
+        ventilation: Boolean = false,
+        eco: Boolean = false,
+        swingH: Boolean = false,
+        mute: Boolean = false,
+        tempDisplay: Boolean = false,
     ): IntArray {
         val state = ByteArray(8)
 
@@ -33,7 +42,7 @@ object IREncodingEngine {
                 else -> 0
             }
         val swingAutoVal = if (swing) 1 else 0
-        val sleepVal = 0
+        val sleepVal = if (power && mute) 1 else 0
 
         state[0] =
             ((modeVal and 0x07) or
@@ -47,16 +56,29 @@ object IREncodingEngine {
         val tempVal = tempC - 16
         state[1] = (tempVal and 0x0F).toByte()
 
-        state[2] = 0x20.toByte()
+        val turboVal = if (power && turbo) 1 else 0
+        state[2] = (0x20 or (turboVal shl 4)).toByte()
 
         state[3] = 0x50.toByte()
 
         val swingVVal = if (swing) 1 else 0
-        state[4] = (swingVVal and 0x0F).toByte()
+        val lightVal = if (power && light) 1 else 0
+        val swingHVal = if (power && swingH) 1 else 0
+        val auxHeatVal = if (power && auxHeat) 1 else 0
+        val healthVal = if (power && health) 1 else 0
+        val ventilationVal = if (power && ventilation) 1 else 0
+        state[4] = ((swingVVal and 0x0F) or
+                    (lightVal shl 6) or
+                    (swingHVal shl 3) or
+                    (auxHeatVal) or
+                    (healthVal shl 4) or
+                    (ventilationVal shl 5)).toByte()
 
         state[5] = 0x21.toByte()
 
-        state[6] = 0x00.toByte()
+        val ecoVal = if (power && eco) 1 else 0
+        val tempDisplayVal = if (power && tempDisplay) 1 else 0
+        state[6] = ((ecoVal shl 6) or (tempDisplayVal shl 2)).toByte()
 
         var sum = 10
         for (i in 0..3) {

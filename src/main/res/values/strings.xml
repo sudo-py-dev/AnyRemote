@@ -96,6 +96,17 @@
     <string name="ac_label_direction">DIRECTION</string>
     <string name="ac_label_sweep">SWEEP</string>
     <string name="ac_label_sweep_on">SWEEP ON</string>
+    <string name="ac_label_turbo">TURBO</string>
+    <string name="ac_label_turbo_on">TURBO ON</string>
+    <string name="ac_label_light">LIGHT</string>
+    <string name="ac_label_light_on">LIGHT ON</string>
+    <string name="ac_label_aux_heat">AUX HEAT</string>
+    <string name="ac_label_health">HEALTH</string>
+    <string name="ac_label_ventilation">VENTILATION</string>
+    <string name="ac_label_eco">ECO</string>
+    <string name="ac_label_swing_h">H-SWING</string>
+    <string name="ac_label_mute">MUTE</string>
+    <string name="ac_label_temp_display">TEMP DISPLAY</string>
     <string name="fan_speed_banner">FAN SPEED: %1$d</string>
     <string name="fan_power_off_banner">FAN POWER OFF</string>
     <string name="fan_status_banner">MODE: %1$s | SWING: %2$s</string>
@@ -125,5 +136,8 @@
     <string name="remote_fallback_title">REMOTE</string>
     <string name="controller_fallback_subtitle">Controller</string>
     <string name="all_caps">ALL</string>
+    <string name="ir_sensor_missing_title">No IR Transmitter Detected</string>
+    <string name="ir_sensor_missing_message">Your device doesn\'t have a built-in Infrared (IR) transmitter. You cannot use this device to control physical home appliances via infrared signals.</string>
+    <string name="ir_sensor_missing_action">GOT IT</string>
 </resources>
 

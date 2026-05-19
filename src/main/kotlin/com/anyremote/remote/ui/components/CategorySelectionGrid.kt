@@ -7,18 +7,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Dvr
-import androidx.compose.material.icons.filled.AcUnit
-import androidx.compose.material.icons.filled.Cast
-import androidx.compose.material.icons.filled.PhotoCamera
-import androidx.compose.material.icons.filled.Power
-import androidx.compose.material.icons.filled.Router
-import androidx.compose.material.icons.filled.SettingsInputAntenna
-import androidx.compose.material.icons.filled.SettingsInputHdmi
-import androidx.compose.material.icons.filled.Speaker
-import androidx.compose.material.icons.filled.Tv
-import androidx.compose.material.icons.filled.WindPower
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -75,20 +63,7 @@ fun CategoryCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val icon =
-        when (device.id) {
-            1 -> Icons.Default.Tv
-            2 -> Icons.Default.Router
-            3 -> Icons.Default.AcUnit
-            4 -> Icons.AutoMirrored.Filled.Dvr
-            6 -> Icons.Default.WindPower
-            8 -> Icons.Default.Speaker
-            10 -> Icons.Default.SettingsInputHdmi
-            11 -> Icons.Default.SettingsInputAntenna
-            12 -> Icons.Default.Cast
-            13 -> Icons.Default.PhotoCamera
-            else -> Icons.Default.Power
-        }
+    val icon = getDeviceIcon(device.id)
 
     Box(
         modifier =

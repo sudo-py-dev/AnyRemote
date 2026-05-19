@@ -52,6 +52,20 @@ fun DashboardScreen(
     var favoriteKeys by remember { mutableStateOf(emptySet<String>()) }
     LaunchedEffect(Unit) { favoriteKeys = FavoriteManager.getFavorites(context) }
 
+    val hasIr = remember {
+        try {
+            val irManager =
+                context.getSystemService(android.content.Context.CONSUMER_IR_SERVICE)
+                    as? android.hardware.ConsumerIrManager
+            irManager != null && irManager.hasIrEmitter()
+        } catch (e: Exception) {
+            false
+        }
+    }
+    var showIrNotice by remember {
+        mutableStateOf(!hasIr && !FavoriteManager.isIrNoticeDismissed(context))
+    }
+
     var selectedItemForOptions by remember {
         mutableStateOf<Triple<DeviceType, Brand, String>?>(null)
     }
@@ -137,6 +151,11 @@ fun DashboardScreen(
                     MainDashboardPage(
                         favoriteKeys = favoriteKeys,
                         renameTrigger = renameTrigger,
+                        showIrNotice = showIrNotice,
+                        onDismissIrNotice = {
+                            FavoriteManager.setIrNoticeDismissed(context, true)
+                            showIrNotice = false
+                        },
                         onRemoteClick = onFavoriteSelected,
                         onFavoritesChanged = {
                             favoriteKeys = FavoriteManager.getFavorites(context)
@@ -283,6 +302,8 @@ fun DashboardScreen(
 fun MainDashboardPage(
     favoriteKeys: Set<String>,
     renameTrigger: Int,
+    showIrNotice: Boolean,
+    onDismissIrNotice: () -> Unit,
     onRemoteClick: (deviceId: Int, brandId: Int) -> Unit,
     onFavoritesChanged: () -> Unit,
     onAddNewClick: () -> Unit,
@@ -295,6 +316,64 @@ fun MainDashboardPage(
         modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        if (showIrNotice) {
+            Card(
+                shape = RoundedCornerShape(14.dp),
+                colors = CardDefaults.cardColors(containerColor = CrimsonRed.copy(alpha = 0.08f)),
+                border = BorderStroke(1.dp, CrimsonRed.copy(alpha = 0.2f)),
+                modifier = Modifier.fillMaxWidth()) {
+                    Row(
+                        modifier = Modifier.padding(14.dp),
+                        verticalAlignment = Alignment.CenterVertically) {
+                            Box(
+                                modifier =
+                                    Modifier.size(36.dp)
+                                        .background(CrimsonRed.copy(alpha = 0.1f), CircleShape),
+                                contentAlignment = Alignment.Center) {
+                                    Icon(
+                                        imageVector = Icons.Default.Warning,
+                                        contentDescription = null,
+                                        tint = CrimsonRed,
+                                        modifier = Modifier.size(20.dp))
+                                }
+
+                            Spacer(modifier = Modifier.width(12.dp))
+
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text =
+                                        stringResource(R.string.ir_sensor_missing_title)
+                                            .uppercase(),
+                                    color = CrimsonRed,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 12.sp,
+                                    letterSpacing = 0.5.sp)
+                                Spacer(modifier = Modifier.height(2.dp))
+                                Text(
+                                    text = stringResource(R.string.ir_sensor_missing_message),
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    fontSize = 11.sp,
+                                    fontWeight = FontWeight.Medium,
+                                    lineHeight = 15.sp)
+                            }
+
+                            Spacer(modifier = Modifier.width(8.dp))
+
+                            IconButton(
+                                onClick = onDismissIrNotice, modifier = Modifier.size(28.dp)) {
+                                    Icon(
+                                        imageVector = Icons.Default.Close,
+                                        contentDescription = stringResource(R.string.cancel),
+                                        tint =
+                                            MaterialTheme.colorScheme.onSurfaceVariant.copy(
+                                                alpha = 0.7f),
+                                        modifier = Modifier.size(16.dp))
+                                }
+                        }
+                }
+            Spacer(modifier = Modifier.height(12.dp))
+        }
+
         if (favoriteKeys.isEmpty()) {
 
             Box(
@@ -477,11 +556,11 @@ fun FavoriteRemoteListItem(
                         .border(1.dp, MaterialTheme.colorScheme.outline, CircleShape),
                 contentAlignment = Alignment.Center,
             ) {
-                Text(
-                    text = brand.nameEn.take(1).uppercase(),
-                    color = ElectricBlue,
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 16.sp,
+                Icon(
+                    imageVector = getDeviceIcon(device.id),
+                    contentDescription = device.nameEn,
+                    tint = ElectricBlue,
+                    modifier = Modifier.size(20.dp),
                 )
             }
 
