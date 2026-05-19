@@ -5,11 +5,12 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -31,6 +32,7 @@ import com.anyremote.remote.service.FavoriteManager
 import com.anyremote.remote.ui.helpers.*
 import com.anyremote.remote.ui.theme.*
 import com.anyremote.remote.ui.theme.ElectricBlue
+import kotlinx.coroutines.launch
 
 @Composable
 fun BrandSelectionPanel(
@@ -82,6 +84,8 @@ fun BrandSelectionPanel(
 
     val haptic = LocalHapticFeedback.current
     val context = LocalContext.current
+    val listState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
 
     Column(
         modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
@@ -97,7 +101,7 @@ fun BrandSelectionPanel(
             },
             modifier =
                 Modifier.fillMaxWidth()
-                    .padding(top = 12.dp, bottom = 4.dp)
+                    .padding(top = 12.dp, bottom = 12.dp)
                     .clip(RoundedCornerShape(10.dp))
                     .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(10.dp)),
             colors =
@@ -115,138 +119,114 @@ fun BrandSelectionPanel(
             },
         )
 
-        LazyRow(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            val isAllSelected = selectedLetter == null
-            item {
-                Box(
-                    modifier =
-                        Modifier.height(34.dp)
-                            .clip(RoundedCornerShape(17.dp))
-                            .background(
-                                if (isAllSelected) ElectricBlue
-                                else MaterialTheme.colorScheme.surfaceVariant)
-                            .border(
-                                width = 1.dp,
-                                color =
-                                    if (isAllSelected) ElectricBlue
-                                    else MaterialTheme.colorScheme.outline,
-                                shape = RoundedCornerShape(17.dp),
-                            )
-                            .clickable {
-                                if (FavoriteManager.isVibrationEnabled(context)) {
-                                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                }
-                                selectedLetter = null
-                            }
-                            .padding(horizontal = 16.dp),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(
-                        text = stringResource(R.string.all_caps),
-                        color =
-                            if (isAllSelected) Color.White else MaterialTheme.colorScheme.onSurface,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 11.sp,
-                        letterSpacing = 0.5.sp,
-                    )
-                }
-            }
-
-            items(alphabet) { ch ->
-                val isSelected = selectedLetter == ch
-                Box(
-                    modifier =
-                        Modifier.size(34.dp)
-                            .clip(CircleShape)
-                            .background(
-                                if (isSelected) ElectricBlue
-                                else MaterialTheme.colorScheme.surfaceVariant)
-                            .border(
-                                width = 1.dp,
-                                color =
-                                    if (isSelected) ElectricBlue
-                                    else MaterialTheme.colorScheme.outline,
-                                shape = CircleShape,
-                            )
-                            .clickable {
-                                if (FavoriteManager.isVibrationEnabled(context)) {
-                                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                }
-                                selectedLetter = if (isSelected) null else ch
-                            },
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(
-                        text = ch.toString(),
-                        color =
-                            if (isSelected) Color.White else MaterialTheme.colorScheme.onSurface,
-                        fontWeight = FontWeight.ExtraBold,
-                        fontSize = 12.sp,
-                    )
-                }
-            }
-        }
-
-        Text(
-            text = stringResource(R.string.brands),
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            fontSize = 10.sp,
-            fontWeight = FontWeight.Bold,
-            letterSpacing = 1.5.sp,
-            modifier = Modifier.padding(bottom = 8.dp),
-        )
-
         val groupedBrands =
             remember(filteredBrands) { filteredBrands.groupBy { it.nameEn.take(1).uppercase() } }
 
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth().weight(1f),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            if (filteredBrands.isEmpty()) {
-                item {
-                    Box(
-                        modifier = Modifier.fillMaxWidth().padding(40.dp),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Text(
-                            text = stringResource(R.string.no_brands_found),
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            fontSize = 13.sp,
-                            fontWeight = FontWeight.Medium,
-                        )
-                    }
-                }
-            } else {
+        val headerIndices =
+            remember(groupedBrands) {
+                val indices = mutableMapOf<String, Int>()
+                var currentIndex = 0
                 groupedBrands.forEach { (initial, brandsInGroup) ->
-                    item(key = "header_$initial") {
-                        Box(
-                            modifier = Modifier.fillMaxWidth().padding(top = 12.dp, bottom = 4.dp),
-                        ) {
-                            Text(
-                                text = initial,
-                                color = ElectricBlue,
-                                fontWeight = FontWeight.ExtraBold,
-                                fontSize = 15.sp,
-                            )
+                    indices[initial] = currentIndex
+                    currentIndex += 1
+                    currentIndex += brandsInGroup.size
+                }
+                indices
+            }
+
+        Row(
+            modifier = Modifier.fillMaxWidth().weight(1f),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                LazyColumn(
+                    state = listState,
+                    modifier = Modifier.weight(1f).fillMaxHeight(),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    contentPadding = PaddingValues(bottom = 24.dp)) {
+                        if (filteredBrands.isEmpty()) {
+                            item {
+                                Box(
+                                    modifier = Modifier.fillMaxWidth().padding(40.dp),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.no_brands_found),
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        fontSize = 13.sp,
+                                        fontWeight = FontWeight.Medium,
+                                    )
+                                }
+                            }
+                        } else {
+                            groupedBrands.forEach { (initial, brandsInGroup) ->
+                                item(key = "header_$initial") {
+                                    Box(
+                                        modifier =
+                                            Modifier.fillMaxWidth()
+                                                .padding(top = 12.dp, bottom = 4.dp),
+                                    ) {
+                                        Text(
+                                            text = initial,
+                                            color = ElectricBlue,
+                                            fontWeight = FontWeight.ExtraBold,
+                                            fontSize = 15.sp,
+                                        )
+                                    }
+                                }
+
+                                items(brandsInGroup) { brand ->
+                                    BrandListItem(
+                                        brand = brand,
+                                        onClick = { onBrandClick(brand) },
+                                    )
+                                }
+                            }
                         }
                     }
 
-                    items(brandsInGroup) { brand ->
-                        BrandListItem(
-                            brand = brand,
-                            onClick = { onBrandClick(brand) },
-                        )
-                    }
+                if (filteredBrands.isNotEmpty() && searchQuery.isEmpty()) {
+                    Column(
+                        modifier = Modifier.width(28.dp).fillMaxHeight().padding(vertical = 12.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center) {
+                            alphabet.forEach { ch ->
+                                val isSelected = selectedLetter == ch
+                                Box(
+                                    modifier =
+                                        Modifier.size(22.dp)
+                                            .clip(CircleShape)
+                                            .background(
+                                                if (isSelected) ElectricBlue else Color.Transparent)
+                                            .clickable {
+                                                if (FavoriteManager.isVibrationEnabled(context)) {
+                                                    haptic.performHapticFeedback(
+                                                        HapticFeedbackType.LongPress)
+                                                }
+                                                selectedLetter = if (isSelected) null else ch
+                                                val headerIndex = headerIndices[ch.toString()]
+                                                if (headerIndex != null) {
+                                                    coroutineScope.launch {
+                                                        listState.animateScrollToItem(headerIndex)
+                                                    }
+                                                }
+                                            },
+                                    contentAlignment = Alignment.Center) {
+                                        Text(
+                                            text = ch.toString(),
+                                            color =
+                                                if (isSelected) Color.White
+                                                else
+                                                    MaterialTheme.colorScheme.onSurfaceVariant.copy(
+                                                        alpha = 0.8f),
+                                            fontWeight =
+                                                if (isSelected) FontWeight.Bold
+                                                else FontWeight.SemiBold,
+                                            fontSize = 10.sp,
+                                        )
+                                    }
+                            }
+                        }
                 }
             }
-
-            item { Spacer(modifier = Modifier.height(24.dp)) }
-        }
     }
 }
 
@@ -262,35 +242,23 @@ fun BrandListItem(
                 .background(MaterialTheme.colorScheme.surface)
                 .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(10.dp))
                 .clickable(onClick = onClick)
-                .padding(12.dp),
+                .padding(horizontal = 16.dp, vertical = 14.dp),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Box(
-                modifier =
-                    Modifier.size(36.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.surfaceVariant)
-                        .border(1.dp, MaterialTheme.colorScheme.outline, CircleShape),
-                contentAlignment = Alignment.Center,
-            ) {
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth()) {
                 Text(
-                    text = brand.nameEn.take(1).uppercase(),
-                    color = ElectricBlue,
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 16.sp,
+                    text = brand.nameEn,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp,
                 )
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+                    modifier = Modifier.size(18.dp))
             }
-
-            Spacer(modifier = Modifier.width(16.dp))
-
-            Text(
-                text = brand.nameEn,
-                color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.Bold,
-                fontSize = 14.sp,
-            )
-        }
     }
 }
