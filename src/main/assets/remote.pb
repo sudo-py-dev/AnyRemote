@@ -47,4 +47,11 @@ Mitsubishipopular}Samsungpopular~SanyopopularÉJVCnormal
 CineVersumnormalâ	PanasonicpopularçSonypopularëTumeishidainormalìVidikronnormalïSharppopularóPioneerpopular XJSnormalûYamahanormalüActonormal•UNICnormal¶	ViewSonicpopular¨ZhongbaonormalÆCOSTARnormal
 NCable / Satellite box˛Africa Sat.popular˝
 ChinaSat 9popular
-_Camera∑OlympuspopularTCanonpopular∏KodakpopularÉNikonpopular
+_Camera∑OlympuspopularTCanonpopular∏KodakpopularÉNikonpopular
+poweronoff
+modeMAMDMCMVMH
+
+wind_speedSASHSMSL
+
+wind_modelWAWMX
+temperature16C17C18C19C20C21C22C23C24C25C26C27C28C29C30C
