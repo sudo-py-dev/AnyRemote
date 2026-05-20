@@ -161,7 +161,8 @@ fun MatchIRScreen(
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(
-                        text = "${brand?.nameEn ?: "GENERIC"} - ${category?.nameEn ?: "REMOTE"}",
+                        text =
+                            "${brand?.nameEn ?: "GENERIC"} - ${category?.localizedName() ?: stringResource(R.string.remote_fallback_title)}",
                         color = MaterialTheme.colorScheme.onSurface,
                         fontSize = 22.sp,
                         fontWeight = FontWeight.ExtraBold,

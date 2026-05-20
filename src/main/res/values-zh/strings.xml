@@ -139,4 +139,17 @@
     <string name="ir_sensor_missing_title">未检测到红外发射器</string>
     <string name="ir_sensor_missing_message">您的设备没有内置的红外（IR）发射器。您无法使用此设备通过红外信号控制物理家用电器。</string>
     <string name="ir_sensor_missing_action">知道了</string>
+
+    <!-- Device Category Translations -->
+    <string name="category_tv">电视</string>
+    <string name="category_set_top_box">机顶盒</string>
+    <string name="category_ac">空调</string>
+    <string name="category_fan">电风扇</string>
+    <string name="category_box">盒子</string>
+    <string name="category_av_receiver">AV接收机</string>
+    <string name="category_dvd_player">DVD播放机</string>
+    <string name="category_projector">投影仪</string>
+    <string name="category_cable_satellite_box">有线/卫星电视盒</string>
+    <string name="category_camera">相机</string>
 </resources>
+

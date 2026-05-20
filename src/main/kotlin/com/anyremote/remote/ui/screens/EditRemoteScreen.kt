@@ -41,7 +41,7 @@ fun EditRemoteScreen(
     onSave: (newName: String) -> Unit,
 ) {
     val context = LocalContext.current
-    val defaultName = "${brand.nameEn} ${device.nameEn.substringBefore(" ")}"
+    val defaultName = "${brand.nameEn} ${device.getLocalizedName(context).substringBefore(" ")}"
     val currentCustomName =
         remember(device, brand) {
             FavoriteManager.getCustomName(context, device.id, brand.id, defaultName)

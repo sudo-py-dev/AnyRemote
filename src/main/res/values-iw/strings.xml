@@ -139,5 +139,18 @@
     <string name="ir_sensor_missing_title">לא זוהה משדר IR</string>
     <string name="ir_sensor_missing_message">למכשיר שלך אין משדר אינפרא-אדום (IR) מובנה. לא ניתן להשתמש במכשיר זה לשליטה במכשירי חשמל ביתיים באמצעות אותות אינפרא-אדום.</string>
     <string name="ir_sensor_missing_action">הבנתי</string>
+
+    <!-- Device Category Translations -->
+    <string name="category_tv">טלוויזיה</string>
+    <string name="category_set_top_box">ממיר</string>
+    <string name="category_ac">מזגן</string>
+    <string name="category_fan">מאוורר</string>
+    <string name="category_box">סטרימר</string>
+    <string name="category_av_receiver">רסיבר</string>
+    <string name="category_dvd_player">נגן DVD</string>
+    <string name="category_projector">מקרן</string>
+    <string name="category_cable_satellite_box">ממיר כבלים/לוויין</string>
+    <string name="category_camera">מצלמה</string>
 </resources>
+
 

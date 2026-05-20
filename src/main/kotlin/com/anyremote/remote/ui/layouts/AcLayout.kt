@@ -654,71 +654,66 @@ fun AcLayout(
                     }
                 }
 
-                val allOptions = listOf(
-                    AcOptionItem(
-                        key = "turbo",
-                        icon = Icons.Default.FlashOn,
-                        label = if (turbo && power) stringResource(R.string.ac_label_turbo_on) else stringResource(R.string.ac_label_turbo),
-                        isActive = turbo,
-                        onClick = onTurboToggle
-                    ),
-                    AcOptionItem(
-                        key = "light",
-                        icon = Icons.Default.Lightbulb,
-                        label = if (light && power) stringResource(R.string.ac_label_light_on) else stringResource(R.string.ac_label_light),
-                        isActive = light,
-                        onClick = onLightToggle
-                    ),
-                    AcOptionItem(
-                        key = "aux_heat",
-                        icon = Icons.Default.Whatshot,
-                        label = stringResource(R.string.ac_label_aux_heat),
-                        isActive = auxHeat,
-                        onClick = onAuxHeatToggle
-                    ),
-                    AcOptionItem(
-                        key = "health",
-                        icon = Icons.Default.Favorite,
-                        label = stringResource(R.string.ac_label_health),
-                        isActive = health,
-                        onClick = onHealthToggle
-                    ),
-                    AcOptionItem(
-                        key = "ventilation",
-                        icon = Icons.Default.Loop,
-                        label = stringResource(R.string.ac_label_ventilation),
-                        isActive = ventilation,
-                        onClick = onVentilationToggle
-                    ),
-                    AcOptionItem(
-                        key = "eco",
-                        icon = Icons.Default.Eco,
-                        label = stringResource(R.string.ac_label_eco),
-                        isActive = eco,
-                        onClick = onEcoToggle
-                    ),
-                    AcOptionItem(
-                        key = "swing_h",
-                        icon = Icons.Default.SwapHoriz,
-                        label = stringResource(R.string.ac_label_swing_h),
-                        isActive = swingH,
-                        onClick = onSwingHToggle
-                    ),
-                    AcOptionItem(
-                        key = "mute",
-                        icon = Icons.AutoMirrored.Filled.VolumeOff,
-                        label = stringResource(R.string.ac_label_mute),
-                        isActive = mute,
-                        onClick = onMuteToggle
-                    ),
-                    AcOptionItem(
-                        key = "temp_display",
-                        icon = Icons.Default.DeviceThermostat,
-                        label = stringResource(R.string.ac_label_temp_display),
-                        isActive = tempDisplay,
-                        onClick = onTempDisplayToggle
-                    )
-                )
+                val allOptions =
+                    listOf(
+                        AcOptionItem(
+                            key = "turbo",
+                            icon = Icons.Default.FlashOn,
+                            label =
+                                if (turbo && power) stringResource(R.string.ac_label_turbo_on)
+                                else stringResource(R.string.ac_label_turbo),
+                            isActive = turbo,
+                            onClick = onTurboToggle),
+                        AcOptionItem(
+                            key = "light",
+                            icon = Icons.Default.Lightbulb,
+                            label =
+                                if (light && power) stringResource(R.string.ac_label_light_on)
+                                else stringResource(R.string.ac_label_light),
+                            isActive = light,
+                            onClick = onLightToggle),
+                        AcOptionItem(
+                            key = "aux_heat",
+                            icon = Icons.Default.Whatshot,
+                            label = stringResource(R.string.ac_label_aux_heat),
+                            isActive = auxHeat,
+                            onClick = onAuxHeatToggle),
+                        AcOptionItem(
+                            key = "health",
+                            icon = Icons.Default.Favorite,
+                            label = stringResource(R.string.ac_label_health),
+                            isActive = health,
+                            onClick = onHealthToggle),
+                        AcOptionItem(
+                            key = "ventilation",
+                            icon = Icons.Default.Loop,
+                            label = stringResource(R.string.ac_label_ventilation),
+                            isActive = ventilation,
+                            onClick = onVentilationToggle),
+                        AcOptionItem(
+                            key = "eco",
+                            icon = Icons.Default.Eco,
+                            label = stringResource(R.string.ac_label_eco),
+                            isActive = eco,
+                            onClick = onEcoToggle),
+                        AcOptionItem(
+                            key = "swing_h",
+                            icon = Icons.Default.SwapHoriz,
+                            label = stringResource(R.string.ac_label_swing_h),
+                            isActive = swingH,
+                            onClick = onSwingHToggle),
+                        AcOptionItem(
+                            key = "mute",
+                            icon = Icons.AutoMirrored.Filled.VolumeOff,
+                            label = stringResource(R.string.ac_label_mute),
+                            isActive = mute,
+                            onClick = onMuteToggle),
+                        AcOptionItem(
+                            key = "temp_display",
+                            icon = Icons.Default.DeviceThermostat,
+                            label = stringResource(R.string.ac_label_temp_display),
+                            isActive = tempDisplay,
+                            onClick = onTempDisplayToggle))
 
                 val enabledOptions = allOptions.filter { hasOption(it.key) }
                 val optionChunks = enabledOptions.chunked(2)
@@ -728,7 +723,8 @@ fun AcLayout(
                         modifier =
                             Modifier.fillMaxWidth()
                                 .height(1.5.dp)
-                                .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)),
+                                .background(
+                                    MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)),
                     )
 
                     Row(
@@ -742,7 +738,8 @@ fun AcLayout(
                                         Modifier.width(1.5.dp)
                                             .fillMaxHeight()
                                             .background(
-                                                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
+                                                MaterialTheme.colorScheme.onSurface.copy(
+                                                    alpha = 0.08f),
                                             ),
                                 )
                             }
@@ -764,8 +761,7 @@ fun AcLayout(
                                                 ElectricBlue
                                             } else {
                                                 MaterialTheme.colorScheme.onSurface.copy(
-                                                    alpha = if (power) 1f else 0.4f
-                                                )
+                                                    alpha = if (power) 1f else 0.4f)
                                             },
                                         modifier = Modifier.size(24.dp),
                                     )
@@ -777,8 +773,7 @@ fun AcLayout(
                                                 ElectricBlue
                                             } else {
                                                 MaterialTheme.colorScheme.onSurface.copy(
-                                                    alpha = if (power) 1f else 0.4f
-                                                )
+                                                    alpha = if (power) 1f else 0.4f)
                                             },
                                         fontSize = 10.sp,
                                         fontWeight = FontWeight.Bold,

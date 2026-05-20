@@ -139,4 +139,17 @@
     <string name="ir_sensor_missing_title">ИК-передатчик не обнаружен</string>
     <string name="ir_sensor_missing_message">Ваше устройство не имеет встроенного инфракрасного (ИК) передатчика. Вы не можете использовать это устройство для управления физической бытовой техникой с помощью ИК-сигналов.</string>
     <string name="ir_sensor_missing_action">ПОНЯТНО</string>
+
+    <!-- Device Category Translations -->
+    <string name="category_tv">Телевизор</string>
+    <string name="category_set_top_box">ТВ-приставка</string>
+    <string name="category_ac">Кондиционер</string>
+    <string name="category_fan">Вентилятор</string>
+    <string name="category_box">ТВ Бокс</string>
+    <string name="category_av_receiver">AV-ресивер</string>
+    <string name="category_dvd_player">DVD-плеер</string>
+    <string name="category_projector">Проектор</string>
+    <string name="category_cable_satellite_box">Кабельный / Спутниковый ресивер</string>
+    <string name="category_camera">Камера</string>
 </resources>
+

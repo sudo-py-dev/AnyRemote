@@ -139,4 +139,17 @@
     <string name="ir_sensor_missing_title">لم يتم العثور على مرسل الأشعة تحت الحمراء (IR)</string>
     <string name="ir_sensor_missing_message">جهازك لا يحتوي على مرسل الأشعة تحت الحمراء (IR) مدمج. لا يمكنك استخدام هذا الجهاز للتحكم في الأجهزة المنزلية عبر إشارات الأشعة تحت الحمراء.</string>
     <string name="ir_sensor_missing_action">فهمت</string>
+
+    <!-- Device Category Translations -->
+    <string name="category_tv">تلفاز</string>
+    <string name="category_set_top_box">جهاز فك التشفير</string>
+    <string name="category_ac">مكيف هواء</string>
+    <string name="category_fan">مروحة</string>
+    <string name="category_box">صندوق التلفزيون</string>
+    <string name="category_av_receiver">مستقبل الصوت والصورة</string>
+    <string name="category_dvd_player">مشغل دي في دي</string>
+    <string name="category_projector">جهاز عرض</string>
+    <string name="category_cable_satellite_box">جهاز استقبال كابل/قمر صناعي</string>
+    <string name="category_camera">كاميرا</string>
 </resources>
+

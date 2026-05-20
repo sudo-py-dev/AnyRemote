@@ -139,4 +139,17 @@
     <string name="ir_sensor_missing_title">Nessun trasmettitore IR rilevato</string>
     <string name="ir_sensor_missing_message">Il tuo dispositivo non ha un trasmettitore a infrarossi (IR) integrato. Non puoi utilizzare questo dispositivo per controllare elettrodomestici tramite segnali a infrarossi.</string>
     <string name="ir_sensor_missing_action">HO CAPITO</string>
+
+    <!-- Device Category Translations -->
+    <string name="category_tv">TV</string>
+    <string name="category_set_top_box">Set-top box</string>
+    <string name="category_ac">Condizionatore</string>
+    <string name="category_fan">Ventilatore</string>
+    <string name="category_box">TV Box</string>
+    <string name="category_av_receiver">Ricevitore A/V</string>
+    <string name="category_dvd_player">Lettore DVD</string>
+    <string name="category_projector">Proiettore</string>
+    <string name="category_cable_satellite_box">Ricevitore via cavo/satellite</string>
+    <string name="category_camera">Fotocamera</string>
 </resources>
+

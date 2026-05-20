@@ -139,4 +139,17 @@
     <string name="ir_sensor_missing_title">IR送信機が検出されませんでした</string>
     <string name="ir_sensor_missing_message">お使いのデバイスには赤外線（IR）送信機が内蔵されていません。赤外線信号を介して物理的な家電製品を制御することはできません。</string>
     <string name="ir_sensor_missing_action">了解</string>
+
+    <!-- Device Category Translations -->
+    <string name="category_tv">テレビ</string>
+    <string name="category_set_top_box">セットトップボックス</string>
+    <string name="category_ac">エアコン</string>
+    <string name="category_fan">扇風機</string>
+    <string name="category_box">TVボックス</string>
+    <string name="category_av_receiver">AVレシーバー</string>
+    <string name="category_dvd_player">DVDプレーヤー</string>
+    <string name="category_projector">プロジェクター</string>
+    <string name="category_cable_satellite_box">ケーブル/衛星放送ボックス</string>
+    <string name="category_camera">カメラ</string>
 </resources>
+

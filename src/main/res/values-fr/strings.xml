@@ -139,4 +139,17 @@
     <string name="ir_sensor_missing_title">Aucun émetteur IR détecté</string>
     <string name="ir_sensor_missing_message">Votre appareil ne dispose pas d\'un émetteur infrarouge (IR) intégré. Vous ne pouvez pas utiliser cet appareil pour contrôler des appareils électroménagers physiques via des signaux infrarouges.</string>
     <string name="ir_sensor_missing_action">COMPRIS</string>
+
+    <!-- Device Category Translations -->
+    <string name="category_tv">Téléviseur</string>
+    <string name="category_set_top_box">Décodeur</string>
+    <string name="category_ac">Climatiseur</string>
+    <string name="category_fan">Ventilateur</string>
+    <string name="category_box">TV Box</string>
+    <string name="category_av_receiver">Récepteur A/V</string>
+    <string name="category_dvd_player">Lecteur DVD</string>
+    <string name="category_projector">Projecteur</string>
+    <string name="category_cable_satellite_box">Décodeur câble / satellite</string>
+    <string name="category_camera">Appareil photo</string>
 </resources>
+

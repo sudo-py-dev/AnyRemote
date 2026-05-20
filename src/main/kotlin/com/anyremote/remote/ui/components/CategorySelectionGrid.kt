@@ -83,13 +83,13 @@ fun CategoryCard(
         ) {
             Icon(
                 imageVector = icon,
-                contentDescription = device.nameEn,
+                contentDescription = device.localizedName(),
                 tint = ElectricBlue,
                 modifier = Modifier.size(32.dp).padding(bottom = 8.dp),
             )
 
             Text(
-                text = device.nameEn,
+                text = device.localizedName(),
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold,
                 fontSize = 13.sp,

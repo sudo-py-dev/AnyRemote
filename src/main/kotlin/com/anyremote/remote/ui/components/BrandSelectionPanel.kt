@@ -53,11 +53,12 @@ fun BrandSelectionPanel(
                             brand.nameEn.contains(searchQuery, ignoreCase = true)
                         }
 
+                    val letter = selectedLetter
                     val matchesLetter =
-                        if (selectedLetter == null || searchQuery.isNotEmpty()) {
+                        if (letter == null || searchQuery.isNotEmpty()) {
                             true
                         } else {
-                            brand.nameEn.startsWith(selectedLetter!!, ignoreCase = true)
+                            brand.nameEn.startsWith(letter, ignoreCase = true)
                         }
 
                     matchesSearch && matchesLetter

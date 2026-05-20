@@ -84,8 +84,9 @@ fun DashboardScreen(
         BackHandler { forceShowCategories = false }
     }
 
-    if (selectedItemForEditing != null) {
-        val (device, brand, _) = selectedItemForEditing!!
+    val editingItem = selectedItemForEditing
+    if (editingItem != null) {
+        val (device, brand, _) = editingItem
         EditRemoteScreen(
             device = device,
             brand = brand,
@@ -103,13 +104,12 @@ fun DashboardScreen(
                     title = {
                         Text(
                             text =
-                                if (selectedDevice != null) {
-                                    selectedDevice!!.nameEn.uppercase()
-                                } else if (forceShowCategories) {
-                                    stringResource(R.string.select_device_type)
-                                } else {
-                                    stringResource(R.string.app_name).uppercase()
-                                },
+                                selectedDevice?.localizedName()?.uppercase()
+                                    ?: if (forceShowCategories) {
+                                        stringResource(R.string.select_device_type)
+                                    } else {
+                                        stringResource(R.string.app_name).uppercase()
+                                    },
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onBackground,
                             fontSize = 18.sp,
@@ -170,17 +170,22 @@ fun DashboardScreen(
                     )
                 } else {
 
-                    BrandSelectionPanel(
-                        device = selectedDevice!!,
-                        onBrandClick = { brand -> onDeviceSelected(selectedDevice!!.id, brand.id) },
-                    )
+                    val dev = selectedDevice
+                    if (dev != null) {
+                        BrandSelectionPanel(
+                            device = dev,
+                            onBrandClick = { brand -> onDeviceSelected(dev.id, brand.id) },
+                        )
+                    }
                 }
             }
         }
 
-        if (selectedItemForOptions != null) {
-            val (device, brand, key) = selectedItemForOptions!!
-            val defaultName = "${brand.nameEn} ${device.nameEn.substringBefore(" ")}"
+        val optionsItem = selectedItemForOptions
+        if (optionsItem != null) {
+            val (device, brand, key) = optionsItem
+            val defaultName =
+                "${brand.nameEn} ${device.getLocalizedName(context).substringBefore(" ")}"
             val currentCustomName =
                 FavoriteManager.getCustomName(context, device.id, brand.id, defaultName)
 
@@ -234,7 +239,7 @@ fun DashboardScreen(
                                                 context = context,
                                                 deviceId = device.id,
                                                 brandId = brand.id,
-                                                deviceName = device.nameEn,
+                                                deviceName = device.getLocalizedName(context),
                                                 brandName = brand.nameEn,
                                             )
                                     }
@@ -459,7 +464,8 @@ fun MainDashboardPage(
                 verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
                 items(favoritesList) { (device, brand, key) ->
-                    val defaultName = "${brand.nameEn} ${device.nameEn.substringBefore(" ")}"
+                    val defaultName =
+                        "${brand.nameEn} ${device.getLocalizedName(context).substringBefore(" ")}"
                     val displayName =
                         remember(device, brand, renameTrigger) {
                             FavoriteManager.getCustomName(context, device.id, brand.id, defaultName)
@@ -558,7 +564,7 @@ fun FavoriteRemoteListItem(
             ) {
                 Icon(
                     imageVector = getDeviceIcon(device.id),
-                    contentDescription = device.nameEn,
+                    contentDescription = device.localizedName(),
                     tint = ElectricBlue,
                     modifier = Modifier.size(20.dp),
                 )
@@ -575,7 +581,7 @@ fun FavoriteRemoteListItem(
                     maxLines = 1,
                 )
                 Text(
-                    text = device.nameEn.uppercase(),
+                    text = device.localizedName().uppercase(),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 10.sp,

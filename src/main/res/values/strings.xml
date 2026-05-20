@@ -139,5 +139,18 @@
     <string name="ir_sensor_missing_title">No IR Transmitter Detected</string>
     <string name="ir_sensor_missing_message">Your device doesn\'t have a built-in Infrared (IR) transmitter. You cannot use this device to control physical home appliances via infrared signals.</string>
     <string name="ir_sensor_missing_action">GOT IT</string>
+
+    <!-- Device Category Translations -->
+    <string name="category_tv">TV</string>
+    <string name="category_set_top_box">Set-top box</string>
+    <string name="category_ac">AC</string>
+    <string name="category_fan">Fan</string>
+    <string name="category_box">Box</string>
+    <string name="category_av_receiver">A/V receiver</string>
+    <string name="category_dvd_player">DVD Player</string>
+    <string name="category_projector">Projector</string>
+    <string name="category_cable_satellite_box">Cable / Satellite box</string>
+    <string name="category_camera">Camera</string>
 </resources>
+
 

@@ -13,9 +13,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.anyremote.remote.R
 import com.anyremote.remote.data.RemoteDatabase
 import com.anyremote.remote.ir.IREncodingEngine
 import com.anyremote.remote.ir.IRTransmitter
@@ -49,7 +51,7 @@ fun RemoteControllerScreen(
                 context = context,
                 deviceId = deviceId,
                 brandId = brandId,
-                deviceName = device.nameEn,
+                deviceName = device.getLocalizedName(context),
                 brandName = brand.nameEn,
             )
         }
@@ -116,7 +118,9 @@ fun RemoteControllerScreen(
                             letterSpacing = 1.sp,
                         )
                         Text(
-                            text = device?.nameEn ?: "Controller",
+                            text =
+                                device?.localizedName()
+                                    ?: stringResource(R.string.controller_fallback_subtitle),
                             color = subTextColor,
                             fontSize = 10.sp,
                             fontWeight = FontWeight.Bold,
@@ -157,7 +161,9 @@ fun RemoteControllerScreen(
                                 context = context,
                                 deviceId = deviceId,
                                 brandId = brandId,
-                                deviceName = device?.nameEn ?: "Controller",
+                                deviceName =
+                                    device?.getLocalizedName(context)
+                                        ?: context.getString(R.string.controller_fallback_subtitle),
                                 brandName = brand?.nameEn ?: "Brand",
                             )
                         },

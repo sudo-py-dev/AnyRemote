@@ -139,4 +139,17 @@
     <string name="ir_sensor_missing_title">Nenhum transmissor IR detectado</string>
     <string name="ir_sensor_missing_message">Seu dispositivo não possui um transmissor de infravermelho (IR) integrado. Você não pode usar este dispositivo para controlar eletrodomésticos físicos por meio de sinais de infravermelho.</string>
     <string name="ir_sensor_missing_action">ENTENDI</string>
+
+    <!-- Device Category Translations -->
+    <string name="category_tv">TV</string>
+    <string name="category_set_top_box">Conversor digital</string>
+    <string name="category_ac">Ar condicionado</string>
+    <string name="category_fan">Ventilador</string>
+    <string name="category_box">TV Box</string>
+    <string name="category_av_receiver">Receptor A/V</string>
+    <string name="category_dvd_player">Leitor de DVD</string>
+    <string name="category_projector">Projetor</string>
+    <string name="category_cable_satellite_box">Receptor de cabo/satélite</string>
+    <string name="category_camera">Câmera</string>
 </resources>
+

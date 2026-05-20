@@ -67,12 +67,14 @@ object IREncodingEngine {
         val auxHeatVal = if (power && auxHeat) 1 else 0
         val healthVal = if (power && health) 1 else 0
         val ventilationVal = if (power && ventilation) 1 else 0
-        state[4] = ((swingVVal and 0x0F) or
+        state[4] =
+            ((swingVVal and 0x0F) or
                     (lightVal shl 6) or
                     (swingHVal shl 3) or
                     (auxHeatVal) or
                     (healthVal shl 4) or
-                    (ventilationVal shl 5)).toByte()
+                    (ventilationVal shl 5))
+                .toByte()
 
         state[5] = 0x21.toByte()
 
