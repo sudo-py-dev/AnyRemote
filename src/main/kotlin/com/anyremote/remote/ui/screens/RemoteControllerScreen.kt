@@ -15,6 +15,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -46,8 +47,10 @@ fun RemoteControllerScreen(
     var isFavorite by
         remember(deviceId, brandId) { mutableStateOf(FavoriteManager.isFavorite(context, deviceId, brandId)) }
 
+    // Previews (screenshot tests) have no launcher to register shortcuts with.
+    val inPreview = LocalInspectionMode.current
     LaunchedEffect(deviceId, brandId, device, brand) {
-        if (device != null && brand != null) {
+        if (device != null && brand != null && !inPreview) {
             ShortcutHelper.registerDynamicShortcuts(
                 context = context,
                 deviceId = deviceId,

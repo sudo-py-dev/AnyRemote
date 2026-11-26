@@ -215,7 +215,7 @@ fun DashboardScreen(
 }
 
 @Composable
-private fun RemotesHome(
+internal fun RemotesHome(
     remotes: List<SavedRemote>,
     showIrNotice: Boolean,
     onDismissIrNotice: () -> Unit,

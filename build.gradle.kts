@@ -47,6 +47,19 @@ android {
         compose = true
     }
 
+    // Renders the @PreviewTest previews in src/screenshotTest to PNGs (CI uploads them for UI review).
+    testOptions {
+        screenshotTests.create("screenshotTest") {
+            engineVersion = libs.versions.screenshot.get()
+            targetVariants.add("debug")
+
+            dependencies {
+                implementation(libs.androidx.compose.ui.tooling)
+                implementation(libs.screenshot.validation.api)
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true

@@ -45,6 +45,14 @@ object RemoteDatabase {
 
     private var loaded = false
 
+    /** Screenshot previews only: use [devices] instead of reading remote.pb from assets. */
+    internal fun loadForPreview(devices: List<DeviceType>) {
+        deviceTypes = devices
+        acOptions = emptyMap()
+        loadFailed = false
+        loaded = true
+    }
+
     @OptIn(ExperimentalSerializationApi::class)
     fun init(context: Context) {
         if (loaded) return
