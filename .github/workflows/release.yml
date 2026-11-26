@@ -1,0 +1,87 @@
+name: Release
+
+# Push a tag like v0.0.1 to build a signed release APK and publish it as a GitHub release.
+# The tag must match versionName in build.gradle.kts.
+#
+# Needs two repository secrets (Settings → Secrets and variables → Actions):
+#   ANYREMOTE_KEYSTORE_BASE64    release.keystore, base64-encoded (key alias key0)
+#   ANYREMOTE_KEYSTORE_PASSWORD  password for both the keystore and the key
+
+on:
+  push:
+    tags: ["v*"]
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Check tag matches versionName
+        id: version
+        run: |
+          version="$(grep -oP 'versionName\s*=\s*"\K[^"]+' build.gradle.kts)"
+          if [ "v$version" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match versionName $version in build.gradle.kts"
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: android-actions/setup-android@v4
+
+      - name: Install Android SDK packages
+        run: sdkmanager --install "platforms;android-37.2" "build-tools;37.0.0" "platform-tools"
+
+      - name: Restore signing keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANYREMOTE_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANYREMOTE_KEYSTORE_PASSWORD }}
+        run: |
+          if [ -z "$KEYSTORE_BASE64" ] || [ -z "$KEYSTORE_PASSWORD" ]; then
+            echo "::error::Set the ANYREMOTE_KEYSTORE_BASE64 and ANYREMOTE_KEYSTORE_PASSWORD repository secrets first"
+            exit 1
+          fi
+          echo "$KEYSTORE_BASE64" | base64 --decode > release.keystore
+
+      - uses: gradle/actions/setup-gradle@v6
+
+      - name: Test and build release APK
+        env:
+          ANYREMOTE_KEYSTORE_PASSWORD: ${{ secrets.ANYREMOTE_KEYSTORE_PASSWORD }}
+        run: ./gradlew testDebugUnitTest assembleRelease
+
+      # An unsigned build is named app-release-unsigned.apk, so a missing file means signing failed.
+      - name: Verify signature
+        run: |
+          apk=build/outputs/apk/release/app-release.apk
+          test -f "$apk" || { echo "::error::Signed APK not found; signing did not run"; ls build/outputs/apk/release; exit 1; }
+          "$ANDROID_HOME/build-tools/37.0.0/apksigner" verify --verbose --print-certs "$apk"
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          out="AnyRemote-$VERSION.apk"
+          cp build/outputs/apk/release/app-release.apk "$out"
+          sha256sum "$out" > "$out.sha256"
+          gh release create "$GITHUB_REF_NAME" "$out" "$out.sha256" \
+            --title "AnyRemote $VERSION" \
+            --generate-notes
+
+      - name: Remove keystore
+        if: always()
+        run: rm -f release.keystore
