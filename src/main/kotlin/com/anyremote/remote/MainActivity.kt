@@ -1,25 +1,31 @@
 package com.anyremote.remote
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
+import com.anyremote.remote.data.RemoteDatabase
 import com.anyremote.remote.service.FavoriteManager
 import com.anyremote.remote.service.LocaleManager
 import com.anyremote.remote.ui.screens.DashboardScreen
@@ -27,40 +33,57 @@ import com.anyremote.remote.ui.screens.MatchIRScreen
 import com.anyremote.remote.ui.screens.RemoteControllerScreen
 import com.anyremote.remote.ui.screens.SettingsScreen
 import com.anyremote.remote.ui.theme.AnyRemoteTheme
+import kotlinx.serialization.Serializable
+
+@Serializable data object DashboardRoute
+
+@Serializable data object SettingsRoute
+
+@Serializable data class MatchIrRoute(val deviceId: Int, val brandId: Int)
+
+@Serializable data class RemoteRoute(val deviceId: Int, val brandId: Int)
 
 class MainActivity : ComponentActivity() {
     private var navController: NavHostController? = null
 
-    override fun attachBaseContext(newBase: android.content.Context) {
+    override fun attachBaseContext(newBase: Context) {
         LocaleManager.init(newBase)
-        val lang = LocaleManager.getSavedLanguage(newBase)
-        super.attachBaseContext(LocaleManager.applyLocale(newBase, lang))
+        super.attachBaseContext(LocaleManager.applyLocale(newBase, LocaleManager.getSavedLanguage(newBase)))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
-        com.anyremote.remote.data.RemoteDatabase.init(applicationContext)
+        RemoteDatabase.init(applicationContext)
         FavoriteManager.init(applicationContext)
 
-        val initDeviceId = intent?.getIntExtra("deviceId", -1) ?: -1
-        val initBrandId = intent?.getIntExtra("brandId", -1) ?: -1
+        // Only honor a shortcut launch on a fresh start, not after rotation or process restore.
+        val startRemote = if (savedInstanceState == null) intent.remoteRoute() else null
 
         setContent {
-            val currentThemeMode = FavoriteManager.currentThemeState.value
             val darkTheme =
-                when (currentThemeMode) {
+                when (FavoriteManager.currentThemeState.value) {
                     "light" -> false
                     "dark" -> true
-                    else -> androidx.compose.foundation.isSystemInDarkTheme()
+                    else -> isSystemInDarkTheme()
                 }
+
+            // System bar icons follow the in-app theme, not just the system setting.
+            DisposableEffect(darkTheme) {
+                val style =
+                    if (darkTheme) SystemBarStyle.dark(android.graphics.Color.TRANSPARENT)
+                    else
+                        SystemBarStyle.light(
+                            android.graphics.Color.TRANSPARENT, android.graphics.Color.TRANSPARENT)
+                enableEdgeToEdge(statusBarStyle = style, navigationBarStyle = style)
+                onDispose {}
+            }
+
             AnyRemoteTheme(darkTheme = darkTheme) {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background,
-                ) {
+                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     val controller = rememberNavController()
                     navController = controller
-                    AppNavigation(controller, initDeviceId, initBrandId)
+                    AppNavigation(controller, startRemote)
                 }
             }
         }
@@ -69,98 +92,67 @@ class MainActivity : ComponentActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
-        val deviceId = intent.getIntExtra("deviceId", -1)
-        val brandId = intent.getIntExtra("brandId", -1)
-        if (deviceId != -1 && brandId != -1) {
-            navController?.navigate("remote/$deviceId/$brandId") {
-                popUpTo("dashboard") { saveState = false }
-                launchSingleTop = true
-            }
-        }
+        intent.remoteRoute()?.let { navController?.openRemote(it) }
     }
 }
+
+/** Launcher shortcuts carry deviceId/brandId extras pointing at a saved remote. */
+private fun Intent?.remoteRoute(): RemoteRoute? {
+    val deviceId = this?.getIntExtra("deviceId", -1) ?: -1
+    val brandId = this?.getIntExtra("brandId", -1) ?: -1
+    return if (deviceId != -1 && brandId != -1) RemoteRoute(deviceId, brandId) else null
+}
+
+private fun NavHostController.openRemote(route: RemoteRoute) =
+    navigate(route) {
+        popUpTo(DashboardRoute)
+        launchSingleTop = true
+    }
 
 @Composable
 fun AppNavigation(
     navController: NavHostController,
-    initDeviceId: Int,
-    initBrandId: Int,
+    startRemote: RemoteRoute?,
 ) {
-    var consumedInitDevice by remember { mutableStateOf(initDeviceId) }
-    var consumedInitBrand by remember { mutableStateOf(initBrandId) }
+    var startHandled by rememberSaveable { mutableStateOf(false) }
 
-    NavHost(
-        navController = navController,
-        startDestination = "dashboard",
-    ) {
-        composable("dashboard") {
-            LaunchedEffect(consumedInitDevice, consumedInitBrand) {
-                if (consumedInitDevice != -1 && consumedInitBrand != -1) {
-                    val dId = consumedInitDevice
-                    val bId = consumedInitBrand
-                    consumedInitDevice = -1
-                    consumedInitBrand = -1
-                    navController.navigate("remote/$dId/$bId") {
-                        popUpTo("dashboard") { saveState = false }
-                        launchSingleTop = true
-                    }
+    NavHost(navController = navController, startDestination = DashboardRoute) {
+        composable<DashboardRoute> {
+            LaunchedEffect(Unit) {
+                if (!startHandled && startRemote != null) {
+                    startHandled = true
+                    navController.openRemote(startRemote)
                 }
             }
 
             DashboardScreen(
                 onDeviceSelected = { deviceId, brandId ->
-                    navController.navigate("match_ir/$deviceId/$brandId")
+                    navController.navigate(MatchIrRoute(deviceId, brandId))
                 },
                 onFavoriteSelected = { deviceId, brandId ->
-                    navController.navigate("remote/$deviceId/$brandId")
+                    navController.navigate(RemoteRoute(deviceId, brandId))
                 },
-                onSettingsClick = { navController.navigate("settings") },
+                onSettingsClick = { navController.navigate(SettingsRoute) },
             )
         }
-        composable(
-            route = "match_ir/{deviceId}/{brandId}",
-            arguments =
-                listOf(
-                    navArgument("deviceId") { type = NavType.IntType },
-                    navArgument("brandId") { type = NavType.IntType },
-                ),
-        ) { backStackEntry ->
-            val deviceId = backStackEntry.arguments?.getInt("deviceId") ?: 1
-            val brandId = backStackEntry.arguments?.getInt("brandId") ?: 1
-
+        composable<MatchIrRoute> { entry ->
+            val route = entry.toRoute<MatchIrRoute>()
             MatchIRScreen(
-                deviceId = deviceId,
-                brandId = brandId,
-                onMatchSuccess = {
-                    navController.navigate("remote/$deviceId/$brandId") { popUpTo("dashboard") }
-                },
-                onSaveAndReturnToDashboard = {
-                    navController.popBackStack("dashboard", inclusive = false)
-                },
+                deviceId = route.deviceId,
+                brandId = route.brandId,
+                onMatchSuccess = { navController.openRemote(RemoteRoute(route.deviceId, route.brandId)) },
+                onSaveAndReturnToDashboard = { navController.popBackStack(DashboardRoute, inclusive = false) },
                 onBackClick = { navController.popBackStack() },
             )
         }
-        composable(
-            route = "remote/{deviceId}/{brandId}",
-            arguments =
-                listOf(
-                    navArgument("deviceId") { type = NavType.IntType },
-                    navArgument("brandId") { type = NavType.IntType },
-                ),
-        ) { backStackEntry ->
-            val deviceId = backStackEntry.arguments?.getInt("deviceId") ?: 1
-            val brandId = backStackEntry.arguments?.getInt("brandId") ?: 1
-
+        composable<RemoteRoute> { entry ->
+            val route = entry.toRoute<RemoteRoute>()
             RemoteControllerScreen(
-                deviceId = deviceId,
-                brandId = brandId,
+                deviceId = route.deviceId,
+                brandId = route.brandId,
                 onBackClick = { navController.popBackStack() },
             )
         }
-        composable("settings") {
-            SettingsScreen(
-                onBackClick = { navController.popBackStack() },
-            )
-        }
+        composable<SettingsRoute> { SettingsScreen(onBackClick = { navController.popBackStack() }) }
     }
 }

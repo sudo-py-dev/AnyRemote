@@ -30,9 +30,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.anyremote.remote.R
 import com.anyremote.remote.data.RemoteDatabase
-import com.anyremote.remote.ir.IREncodingEngine
+import com.anyremote.remote.ir.AcState
+import com.anyremote.remote.ir.IrCodebook
+import com.anyremote.remote.ir.RemoteKey
 import com.anyremote.remote.ir.IRTransmitter
 import com.anyremote.remote.service.FavoriteManager
+import kotlinx.coroutines.launch
 import com.anyremote.remote.ui.components.*
 import com.anyremote.remote.ui.helpers.*
 import com.anyremote.remote.ui.layouts.*
@@ -53,7 +56,11 @@ fun MatchIRScreen(
     val context = LocalContext.current
     RemoteDatabase.init(context)
     val haptic = rememberVibratingHapticFeedback()
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val sheetState =
+        rememberBottomSheetState(
+            initialValue = SheetValue.Hidden,
+            enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
+        )
 
     val category =
         remember(deviceId, RemoteDatabase.deviceTypes) {
@@ -61,7 +68,7 @@ fun MatchIRScreen(
         }
     val brand = remember(brandId, category) { category?.brands?.firstOrNull { it.id == brandId } }
 
-    val totalCodesets = remember { 5 }
+    val totalCodesets = IrCodebook.CODESET_COUNT
     var currentCodesetIndex by remember { mutableIntStateOf(1) }
     var showEditRemoteScreen by remember { mutableStateOf(false) }
     var isTestButtonPressed by remember { mutableStateOf(false) }
@@ -93,28 +100,22 @@ fun MatchIRScreen(
             }
         }
 
+    val testKey =
+        when (deviceId) {
+            6 -> RemoteKey.SPEED_UP
+            8 -> RemoteKey.MUTE
+            else -> RemoteKey.POWER
+        }
+    val scope = rememberCoroutineScope()
+
+    // Same codebook as RemoteControllerScreen, so the codeset that works here is the one the remote uses.
     fun transmitTestPulse() {
         haptic.performHapticFeedback(
             androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress)
-
         val pulses =
-            if (deviceId == 3) {
-
-                IREncodingEngine.compileGreeAc(
-                    power = true,
-                    temp = 24,
-                    mode = "MC",
-                    fanSpeed = "SA",
-                    swing = false,
-                )
-            } else {
-
-                val address = 0x01
-                val command = currentCodesetIndex * 12
-                IREncodingEngine.compileGenericNec(address, command)
-            }
-
-        IRTransmitter.transmit(context, pulses, frequencyHz = 38000)
+            if (deviceId == 3) AcState(power = true, swing = false).toPulses()
+            else IrCodebook.pulses(deviceId, currentCodesetIndex, testKey)
+        scope.launch { IRTransmitter.send(context, pulses) }
     }
 
     Scaffold(
@@ -485,6 +486,8 @@ fun MatchIRScreen(
                                             .LongPress,
                                     )
                                     showResponsePopup = false
+                                    FavoriteManager.setCodeset(
+                                        context, deviceId, brandId, currentCodesetIndex)
                                     showMatchSuccessModal = true
                                 },
                                 colors = ButtonDefaults.buttonColors(containerColor = yesBtnBg),

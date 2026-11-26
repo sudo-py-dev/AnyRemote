@@ -1,46 +1,50 @@
 plugins {
-    id("com.android.application") version "9.2.0"
-    kotlin("plugin.compose") version "2.3.20"
-    kotlin("plugin.serialization") version "2.3.20"
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
 }
 
-group = "com.anyremote.remote"
-version = "0.0.1"
-
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(17)
 }
 
 android {
     namespace = "com.anyremote.remote"
-    compileSdk = 36
+    // Compose 1.13 needs the 37.1+ platform; 37.2 is the newest one installed.
+    compileSdk {
+        version = release(37) { minorApiLevel = 2 }
+    }
 
     defaultConfig {
         applicationId = "com.anyremote.remote"
         minSdk = 26
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 1
         versionName = "0.0.1"
     }
 
+    val keystorePassword =
+        providers.environmentVariable("ANYREMOTE_KEYSTORE_PASSWORD").orNull
+            ?: file("keystore.password").takeIf { it.exists() }?.readText()?.trim()
+
     signingConfigs {
-        create("release") {
-            storeFile = file("release.keystore")
-            val keystorePassword = file("keystore.password").readText().trim()
-            storePassword = keystorePassword
-            keyAlias = "key0"
-            keyPassword = keystorePassword
+        if (keystorePassword != null) {
+            create("release") {
+                storeFile = file("release.keystore")
+                storePassword = keystorePassword
+                keyAlias = "key0"
+                keyPassword = keystorePassword
+            }
         }
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     buildFeatures {
         compose = true
-        buildConfig = true
     }
 
     buildTypes {
@@ -48,12 +52,11 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            signingConfig = signingConfigs.getByName("release")
+            signingConfig = signingConfigs.findByName("release")
         }
         debug {
             isMinifyEnabled = false
             isDebuggable = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
 
@@ -65,16 +68,17 @@ android {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.16.0")
-    implementation("androidx.appcompat:appcompat:1.7.0")
-    implementation("androidx.activity:activity-compose:1.10.1")
-    implementation(platform("androidx.compose:compose-bom:2026.04.01"))
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
-    implementation("androidx.compose.material:material-icons-extended")
-    implementation("androidx.navigation:navigation-compose:2.8.8")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-protobuf:1.8.0")
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons.extended)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.serialization.protobuf)
+    debugImplementation(libs.androidx.compose.ui.tooling)
 }

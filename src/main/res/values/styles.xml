@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Custom Application theme utilizing lightweight AppCompat NoActionBar -->
-    <style name="Theme.AnyRemote" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:statusBarColor">#0B0D0F</item>
-        <item name="android:windowBackground">#0B0D0F</item>
+    <!-- Platform theme; Compose draws everything, so AppCompat isn't needed. -->
+    <style name="Theme.AnyRemote" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/window_background</item>
+    </style>
+
+    <!-- Android 12-style launch screen, shown until the first frame is ready. -->
+    <style name="Theme.AnyRemote.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/window_background</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_round</item>
+        <item name="postSplashScreenTheme">@style/Theme.AnyRemote</item>
     </style>
 </resources>

@@ -26,6 +26,7 @@ val WarmOrange = Color(0xFFFFA500)
 val CrimsonRed = Color(0xFFFF3B30)
 val AccentGreen = Color(0xFF30D158)
 val AccentPurple = Color(0xFF985EFF)
+val HighlightBlue = Color(0xFF00B0FF)
 
 private val CustomLightColorScheme =
     lightColorScheme(
