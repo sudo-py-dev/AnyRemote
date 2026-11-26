@@ -37,7 +37,7 @@ fun SettingsScreen(onBackClick: () -> Unit) {
 
     val languages =
         listOf(
-            "system" to "System Default",
+            "system" to "", // shown as R.string.theme_system
             "en" to "English",
             "iw" to "עברית (Hebrew)",
             "es" to "Español (Spanish)",

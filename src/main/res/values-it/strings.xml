@@ -100,12 +100,8 @@
     <string name="ac_label_turbo_on">TURBO ATTIVO</string>
     <string name="ac_label_light">LUCE</string>
     <string name="ac_label_light_on">LUCE ACCESA</string>
-    <string name="ac_label_aux_heat">RISCALDAMENTO AUX</string>
-    <string name="ac_label_health">SALUTE</string>
-    <string name="ac_label_ventilation">VENTILAZIONE</string>
     <string name="ac_label_eco">ECO</string>
     <string name="ac_label_swing_h">OSCILLAZIONE ORIZ</string>
-    <string name="ac_label_mute">SILENZIOSO</string>
     <string name="ac_label_temp_display">MOSTRA TEMP</string>
     <string name="fan_speed_banner">VELOCITÀ VENTILATORE: %1$d</string>
     <string name="fan_power_off_banner">VENTILATORE SPENTO</string>
@@ -151,5 +147,40 @@
     <string name="category_projector">Proiettore</string>
     <string name="category_cable_satellite_box">Ricevitore via cavo/satellite</string>
     <string name="category_camera">Fotocamera</string>
-</resources>
 
+    <string name="cd_power">Accensione</string>
+    <string name="cd_source">Sorgente</string>
+    <string name="cd_mute">Muto</string>
+    <string name="cd_home">Home</string>
+    <string name="cd_menu">Menu</string>
+    <string name="cd_up">Su</string>
+    <string name="cd_down">Giù</string>
+    <string name="cd_left">Sinistra</string>
+    <string name="cd_right">Destra</string>
+    <string name="cd_volume_up">Alza volume</string>
+    <string name="cd_volume_down">Abbassa volume</string>
+    <string name="cd_channel_up">Canale successivo</string>
+    <string name="cd_channel_down">Canale precedente</string>
+    <string name="cd_temp_up">Alza temperatura</string>
+    <string name="cd_temp_down">Abbassa temperatura</string>
+    <string name="cd_shutter">Otturatore</string>
+    <string name="cd_toggle_favorite">Aggiungi ai preferiti</string>
+    <string name="cd_search">Cerca</string>
+    <string name="cd_test_signal">Prova segnale IR</string>
+    <string name="cd_previous_code">Codice precedente</string>
+    <string name="cd_next_code">Codice successivo</string>
+    <string name="ir_no_emitter">Nessun emettitore IR trovato su questo telefono</string>
+    <string name="ir_permission_denied">Autorizzazione IR negata</string>
+    <string name="ir_error">Impossibile inviare il segnale IR</string>
+    <string name="shortcut_long_label">Telecomando %1$s %2$s</string>
+    <string name="shortcut_adding">Aggiunta scorciatoia: %1$s</string>
+    <string name="shortcut_not_supported">Il tuo launcher non supporta le scorciatoie fissate</string>
+    <string name="shortcut_failed">Impossibile aggiungere la scorciatoia</string>
+    <string name="widget_label">Widget rapido AnyRemote</string>
+    <string name="widget_title">TELECOMANDO RAPIDO</string>
+    <string name="widget_ready">● PRONTO</string>
+    <string name="widget_power">ACCENDI</string>
+    <string name="widget_volume_up">VOL +</string>
+    <string name="widget_open">APRI</string>
+    <string name="db_load_error">Impossibile caricare il database dei telecomandi. Prova a reinstallare l\'app.</string>
+</resources>

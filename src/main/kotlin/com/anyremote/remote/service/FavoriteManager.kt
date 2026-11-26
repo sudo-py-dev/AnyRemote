@@ -3,7 +3,7 @@ package com.anyremote.remote.service
 import android.content.Context
 
 object FavoriteManager {
-    private const val PREFS_NAME = "mi_favorites_prefs"
+    internal const val PREFS_NAME = "mi_favorites_prefs"
     private const val KEY_FAVORITES = "favorites_list"
     private const val KEY_VIBRATION = "vibration_enabled"
     private const val KEY_THEME = "theme_mode"
@@ -17,13 +17,13 @@ object FavoriteManager {
         private set
 
     fun init(context: Context) {
-        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val prefs = prefs(context)
         currentThemeState.value = prefs.getString(KEY_THEME, "light") ?: "light"
         currentVibrationState.value = prefs.getBoolean(KEY_VIBRATION, true)
     }
 
     fun getThemeMode(context: Context): String {
-        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val prefs = prefs(context)
         return prefs.getString(KEY_THEME, "light") ?: "light"
     }
 
@@ -31,7 +31,7 @@ object FavoriteManager {
         context: Context,
         mode: String,
     ) {
-        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val prefs = prefs(context)
         prefs.edit().putString(KEY_THEME, mode).apply()
         currentThemeState.value = mode
     }
@@ -41,7 +41,7 @@ object FavoriteManager {
         deviceId: Int,
         brandId: Int,
     ): Boolean {
-        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val prefs = prefs(context)
         val favorites = getFavorites(context).toMutableSet()
         val item = "${deviceId}_$brandId"
         val isAdded: Boolean
@@ -63,7 +63,7 @@ object FavoriteManager {
     ): Boolean = getFavorites(context).contains("${deviceId}_$brandId")
 
     fun getFavorites(context: Context): Set<String> {
-        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val prefs = prefs(context)
         return prefs.getStringSet(KEY_FAVORITES, emptySet()) ?: emptySet()
     }
 
@@ -73,7 +73,7 @@ object FavoriteManager {
         context: Context,
         enabled: Boolean,
     ) {
-        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val prefs = prefs(context)
         prefs.edit().putBoolean(KEY_VIBRATION, enabled).apply()
         currentVibrationState.value = enabled
     }
@@ -84,7 +84,7 @@ object FavoriteManager {
         brandId: Int,
         defaultName: String,
     ): String {
-        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val prefs = prefs(context)
         return prefs.getString("name_${deviceId}_$brandId", defaultName) ?: defaultName
     }
 
@@ -94,7 +94,7 @@ object FavoriteManager {
         brandId: Int,
         customName: String,
     ) {
-        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val prefs = prefs(context)
         prefs.edit().putString("name_${deviceId}_$brandId", customName).apply()
     }
 
@@ -127,7 +127,7 @@ object FavoriteManager {
     private fun prefs(context: Context) = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
     fun isIrNoticeDismissed(context: Context): Boolean {
-        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val prefs = prefs(context)
         return prefs.getBoolean(KEY_IR_NOTICE_DISMISSED, false)
     }
 
@@ -135,7 +135,7 @@ object FavoriteManager {
         context: Context,
         dismissed: Boolean,
     ) {
-        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val prefs = prefs(context)
         prefs.edit().putBoolean(KEY_IR_NOTICE_DISMISSED, dismissed).apply()
     }
 }

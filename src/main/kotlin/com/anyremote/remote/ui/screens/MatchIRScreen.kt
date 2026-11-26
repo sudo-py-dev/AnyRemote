@@ -257,7 +257,7 @@ fun MatchIRScreen(
                         ) {
                             Icon(
                                 imageVector = testButtonIcon,
-                                contentDescription = "Test IR Signal",
+                                contentDescription = stringResource(R.string.cd_test_signal),
                                 tint = AccentCyan,
                                 modifier = Modifier.size(54.dp),
                             )
@@ -295,7 +295,7 @@ fun MatchIRScreen(
                         ) {
                             Icon(
                                 Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "Previous Code",
+                                contentDescription = stringResource(R.string.cd_previous_code),
                                 tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                             )
                         }
@@ -322,7 +322,7 @@ fun MatchIRScreen(
                         ) {
                             Icon(
                                 Icons.AutoMirrored.Filled.ArrowForward,
-                                contentDescription = "Next Code",
+                                contentDescription = stringResource(R.string.cd_next_code),
                                 tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                             )
                         }
@@ -545,7 +545,7 @@ fun MatchIRScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Check,
-                                contentDescription = "Test Success",
+                                contentDescription = stringResource(R.string.test_successful),
                                 tint = successIconTint,
                                 modifier = Modifier.size(32.dp),
                             )

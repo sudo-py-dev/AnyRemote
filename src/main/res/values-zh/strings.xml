@@ -100,12 +100,8 @@
     <string name="ac_label_turbo_on">强劲开启</string>
     <string name="ac_label_light">灯光</string>
     <string name="ac_label_light_on">灯光开启</string>
-    <string name="ac_label_aux_heat">辅热</string>
-    <string name="ac_label_health">健康</string>
-    <string name="ac_label_ventilation">换气</string>
     <string name="ac_label_eco">节能</string>
     <string name="ac_label_swing_h">左右扫风</string>
-    <string name="ac_label_mute">静音</string>
     <string name="ac_label_temp_display">温度显示</string>
     <string name="fan_speed_banner">风扇风速：%1$d</string>
     <string name="fan_power_off_banner">风扇关机</string>
@@ -151,5 +147,40 @@
     <string name="category_projector">投影仪</string>
     <string name="category_cable_satellite_box">有线/卫星电视盒</string>
     <string name="category_camera">相机</string>
-</resources>
 
+    <string name="cd_power">电源</string>
+    <string name="cd_source">信号源</string>
+    <string name="cd_mute">静音</string>
+    <string name="cd_home">主页</string>
+    <string name="cd_menu">菜单</string>
+    <string name="cd_up">上</string>
+    <string name="cd_down">下</string>
+    <string name="cd_left">左</string>
+    <string name="cd_right">右</string>
+    <string name="cd_volume_up">音量加</string>
+    <string name="cd_volume_down">音量减</string>
+    <string name="cd_channel_up">下一频道</string>
+    <string name="cd_channel_down">上一频道</string>
+    <string name="cd_temp_up">升高温度</string>
+    <string name="cd_temp_down">降低温度</string>
+    <string name="cd_shutter">快门</string>
+    <string name="cd_toggle_favorite">切换收藏</string>
+    <string name="cd_search">搜索</string>
+    <string name="cd_test_signal">测试红外信号</string>
+    <string name="cd_previous_code">上一个代码</string>
+    <string name="cd_next_code">下一个代码</string>
+    <string name="ir_no_emitter">此手机未检测到红外发射器</string>
+    <string name="ir_permission_denied">红外权限被拒绝</string>
+    <string name="ir_error">无法发送红外信号</string>
+    <string name="shortcut_long_label">%1$s %2$s 遥控器</string>
+    <string name="shortcut_adding">正在添加快捷方式：%1$s</string>
+    <string name="shortcut_not_supported">您的启动器不支持固定快捷方式</string>
+    <string name="shortcut_failed">无法添加快捷方式</string>
+    <string name="widget_label">AnyRemote 快捷小部件</string>
+    <string name="widget_title">快捷遥控</string>
+    <string name="widget_ready">● 就绪</string>
+    <string name="widget_power">电源</string>
+    <string name="widget_volume_up">音量 +</string>
+    <string name="widget_open">打开</string>
+    <string name="db_load_error">无法加载遥控器数据库。请尝试重新安装应用。</string>
+</resources>

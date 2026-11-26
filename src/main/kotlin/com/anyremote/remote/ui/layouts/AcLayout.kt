@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.CompareArrows
-import androidx.compose.material.icons.automirrored.filled.VolumeOff
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -43,18 +42,10 @@ private enum class AcToggle(
         { it.turbo }, { it.copy(turbo = !it.turbo) }),
     LIGHT("light", Icons.Default.Lightbulb, R.string.ac_label_light, R.string.ac_label_light_on,
         { it.light }, { it.copy(light = !it.light) }),
-    AUX_HEAT("aux_heat", Icons.Default.Whatshot, R.string.ac_label_aux_heat, null,
-        { it.auxHeat }, { it.copy(auxHeat = !it.auxHeat) }),
-    HEALTH("health", Icons.Default.Favorite, R.string.ac_label_health, null,
-        { it.health }, { it.copy(health = !it.health) }),
-    VENTILATION("ventilation", Icons.Default.Loop, R.string.ac_label_ventilation, null,
-        { it.ventilation }, { it.copy(ventilation = !it.ventilation) }),
     ECO("eco", Icons.Default.Eco, R.string.ac_label_eco, null,
         { it.eco }, { it.copy(eco = !it.eco) }),
     SWING_H("swing_h", Icons.Default.SwapHoriz, R.string.ac_label_swing_h, null,
         { it.swingH }, { it.copy(swingH = !it.swingH) }),
-    MUTE("mute", Icons.AutoMirrored.Filled.VolumeOff, R.string.ac_label_mute, null,
-        { it.mute }, { it.copy(mute = !it.mute) }),
     TEMP_DISPLAY("temp_display", Icons.Default.DeviceThermostat, R.string.ac_label_temp_display, null,
         { it.tempDisplay }, { it.copy(tempDisplay = !it.tempDisplay) }),
 }
@@ -184,7 +175,7 @@ fun AcLayout(
                 AcRow {
                     AcCell(
                         icon = Icons.Default.Remove,
-                        contentDescription = "Temp Down",
+                        contentDescription = stringResource(R.string.cd_temp_down),
                         enabled = power,
                         iconSize = 32.dp,
                     ) {
@@ -200,7 +191,7 @@ fun AcLayout(
                     VDivider()
                     AcCell(
                         icon = Icons.Default.Add,
-                        contentDescription = "Temp Up",
+                        contentDescription = stringResource(R.string.cd_temp_up),
                         enabled = power,
                         iconSize = 32.dp,
                     ) {

@@ -7,8 +7,7 @@
 # Keep essential attributes for Android/Kotlin/Compose runtime
 -keepattributes *Annotation*,Signature,InnerClasses,EnclosingMethod
 
-# Keep our core classes intact to avoid class verification issues
--keep class com.anyremote.remote.** { *; }
+# App code is shrunk by R8; only the serializable data classes below are kept.
 
 # Keep compose runtime classes to prevent layout verification issues
 -keep class androidx.compose.runtime.** { *; }

@@ -100,12 +100,8 @@
     <string name="ac_label_turbo_on">TURBO ATIVO</string>
     <string name="ac_label_light">LUZ</string>
     <string name="ac_label_light_on">LUZ ACESA</string>
-    <string name="ac_label_aux_heat">AQUECIMENTO AUX</string>
-    <string name="ac_label_health">SAÚDE</string>
-    <string name="ac_label_ventilation">VENTILAÇÃO</string>
     <string name="ac_label_eco">ECO</string>
     <string name="ac_label_swing_h">OSCILAÇÃO HORIZ</string>
-    <string name="ac_label_mute">MUTE</string>
     <string name="ac_label_temp_display">EXIBIR TEMP</string>
     <string name="fan_speed_banner">VELOCIDADE DO VENTILADOR: %1$d</string>
     <string name="fan_power_off_banner">VENTILADOR DESLIGADO</string>
@@ -151,5 +147,40 @@
     <string name="category_projector">Projetor</string>
     <string name="category_cable_satellite_box">Receptor de cabo/satélite</string>
     <string name="category_camera">Câmera</string>
-</resources>
 
+    <string name="cd_power">Ligar/Desligar</string>
+    <string name="cd_source">Fonte</string>
+    <string name="cd_mute">Mudo</string>
+    <string name="cd_home">Início</string>
+    <string name="cd_menu">Menu</string>
+    <string name="cd_up">Cima</string>
+    <string name="cd_down">Baixo</string>
+    <string name="cd_left">Esquerda</string>
+    <string name="cd_right">Direita</string>
+    <string name="cd_volume_up">Aumentar volume</string>
+    <string name="cd_volume_down">Diminuir volume</string>
+    <string name="cd_channel_up">Próximo canal</string>
+    <string name="cd_channel_down">Canal anterior</string>
+    <string name="cd_temp_up">Aumentar temperatura</string>
+    <string name="cd_temp_down">Diminuir temperatura</string>
+    <string name="cd_shutter">Obturador</string>
+    <string name="cd_toggle_favorite">Alternar favorito</string>
+    <string name="cd_search">Pesquisar</string>
+    <string name="cd_test_signal">Testar sinal IR</string>
+    <string name="cd_previous_code">Código anterior</string>
+    <string name="cd_next_code">Próximo código</string>
+    <string name="ir_no_emitter">Nenhum emissor IR encontrado neste telefone</string>
+    <string name="ir_permission_denied">Permissão de IR negada</string>
+    <string name="ir_error">Não foi possível enviar o sinal IR</string>
+    <string name="shortcut_long_label">Controle %1$s %2$s</string>
+    <string name="shortcut_adding">Adicionando atalho: %1$s</string>
+    <string name="shortcut_not_supported">Seu launcher não suporta atalhos fixados</string>
+    <string name="shortcut_failed">Não foi possível adicionar o atalho</string>
+    <string name="widget_label">Widget rápido do AnyRemote</string>
+    <string name="widget_title">CONTROLE RÁPIDO</string>
+    <string name="widget_ready">● PRONTO</string>
+    <string name="widget_power">LIGAR</string>
+    <string name="widget_volume_up">VOL +</string>
+    <string name="widget_open">ABRIR</string>
+    <string name="db_load_error">Não foi possível carregar o banco de controles. Tente reinstalar o app.</string>
+</resources>

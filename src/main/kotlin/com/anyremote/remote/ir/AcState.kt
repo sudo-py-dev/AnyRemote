@@ -13,16 +13,12 @@ data class AcState(
     val swingPosition: Int = 0,
     val turbo: Boolean = false,
     val light: Boolean = true,
-    val auxHeat: Boolean = false,
-    val health: Boolean = false,
-    val ventilation: Boolean = false,
     val eco: Boolean = false,
     val swingH: Boolean = false,
-    val mute: Boolean = false,
     val tempDisplay: Boolean = false,
 ) {
-    fun toPulses(): IntArray =
-        IREncodingEngine.compileGreeAc(
+    fun toBytes(): ByteArray =
+        IREncodingEngine.greeState(
             power = power,
             temp = temp,
             mode = mode,
@@ -31,14 +27,12 @@ data class AcState(
             swingPosition = swingPosition,
             turbo = turbo,
             light = light,
-            auxHeat = auxHeat,
-            health = health,
-            ventilation = ventilation,
             eco = eco,
             swingH = swingH,
-            mute = mute,
             tempDisplay = tempDisplay,
         )
+
+    fun toPulses(): IntArray = IREncodingEngine.encodeGree(toBytes())
 
     companion object {
         val Saver =
@@ -46,8 +40,7 @@ data class AcState(
                 save = {
                     listOf(
                         it.power, it.temp, it.mode, it.speed, it.swing, it.swingPosition, it.turbo,
-                        it.light, it.auxHeat, it.health, it.ventilation, it.eco, it.swingH, it.mute,
-                        it.tempDisplay)
+                        it.light, it.eco, it.swingH, it.tempDisplay)
                 },
                 restore = {
                     AcState(
@@ -59,13 +52,9 @@ data class AcState(
                         swingPosition = it[5] as Int,
                         turbo = it[6] as Boolean,
                         light = it[7] as Boolean,
-                        auxHeat = it[8] as Boolean,
-                        health = it[9] as Boolean,
-                        ventilation = it[10] as Boolean,
-                        eco = it[11] as Boolean,
-                        swingH = it[12] as Boolean,
-                        mute = it[13] as Boolean,
-                        tempDisplay = it[14] as Boolean,
+                        eco = it[8] as Boolean,
+                        swingH = it[9] as Boolean,
+                        tempDisplay = it[10] as Boolean,
                     )
                 },
             )

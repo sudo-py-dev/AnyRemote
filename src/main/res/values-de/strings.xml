@@ -100,12 +100,8 @@
     <string name="ac_label_turbo_on">TURBO AN</string>
     <string name="ac_label_light">LICHT</string>
     <string name="ac_label_light_on">LICHT AN</string>
-    <string name="ac_label_aux_heat">ZUSATZHEIZUNG</string>
-    <string name="ac_label_health">GESUNDHEIT</string>
-    <string name="ac_label_ventilation">BELÜFTUNG</string>
     <string name="ac_label_eco">ECO</string>
     <string name="ac_label_swing_h">H-SCHWENKEN</string>
-    <string name="ac_label_mute">STUMM</string>
     <string name="ac_label_temp_display">TEMP-ANZEIGE</string>
     <string name="fan_speed_banner">LÜFTERGESCHWINDIGKEIT: %1$d</string>
     <string name="fan_power_off_banner">LÜFTER AUS</string>
@@ -151,5 +147,40 @@
     <string name="category_projector">Projektor</string>
     <string name="category_cable_satellite_box">Kabel- / Satelliten-Receiver</string>
     <string name="category_camera">Kamera</string>
-</resources>
 
+    <string name="cd_power">Ein/Aus</string>
+    <string name="cd_source">Quelle</string>
+    <string name="cd_mute">Stumm</string>
+    <string name="cd_home">Startseite</string>
+    <string name="cd_menu">Menü</string>
+    <string name="cd_up">Hoch</string>
+    <string name="cd_down">Runter</string>
+    <string name="cd_left">Links</string>
+    <string name="cd_right">Rechts</string>
+    <string name="cd_volume_up">Lauter</string>
+    <string name="cd_volume_down">Leiser</string>
+    <string name="cd_channel_up">Nächster Kanal</string>
+    <string name="cd_channel_down">Vorheriger Kanal</string>
+    <string name="cd_temp_up">Temperatur erhöhen</string>
+    <string name="cd_temp_down">Temperatur senken</string>
+    <string name="cd_shutter">Auslöser</string>
+    <string name="cd_toggle_favorite">Favorit umschalten</string>
+    <string name="cd_search">Suchen</string>
+    <string name="cd_test_signal">IR-Signal testen</string>
+    <string name="cd_previous_code">Vorheriger Code</string>
+    <string name="cd_next_code">Nächster Code</string>
+    <string name="ir_no_emitter">Kein IR-Sender auf diesem Telefon gefunden</string>
+    <string name="ir_permission_denied">IR-Berechtigung verweigert</string>
+    <string name="ir_error">IR-Signal konnte nicht gesendet werden</string>
+    <string name="shortcut_long_label">%1$s %2$s Fernbedienung</string>
+    <string name="shortcut_adding">Verknüpfung wird hinzugefügt: %1$s</string>
+    <string name="shortcut_not_supported">Dein Launcher unterstützt keine angehefteten Verknüpfungen</string>
+    <string name="shortcut_failed">Verknüpfung konnte nicht hinzugefügt werden</string>
+    <string name="widget_label">AnyRemote Schnell-Widget</string>
+    <string name="widget_title">SCHNELLFERNBEDIENUNG</string>
+    <string name="widget_ready">● BEREIT</string>
+    <string name="widget_power">EIN/AUS</string>
+    <string name="widget_volume_up">LAUT +</string>
+    <string name="widget_open">ÖFFNEN</string>
+    <string name="db_load_error">Die Fernbedienungsdatenbank konnte nicht geladen werden. Installiere die App neu.</string>
+</resources>

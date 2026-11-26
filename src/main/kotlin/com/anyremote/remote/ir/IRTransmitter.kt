@@ -6,6 +6,8 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.StringRes
+import com.anyremote.remote.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -36,21 +38,21 @@ object IRTransmitter {
                 true
             } else {
                 Log.w(TAG, "No IR emitter on this device")
-                toast(context, "Physical IR Blaster not detected on this phone!")
+                toast(context, R.string.ir_no_emitter)
                 false
             }
         } catch (e: SecurityException) {
             Log.e(TAG, "Permission denied while transmitting IR signal", e)
-            toast(context, "IR permission denied!")
+            toast(context, R.string.ir_permission_denied)
             false
         } catch (e: Exception) {
             Log.e(TAG, "Error transmitting IR signal", e)
-            toast(context, "Hardware IR error")
+            toast(context, R.string.ir_error)
             false
         }
     }
 
-    private fun toast(context: Context, message: String) {
+    private fun toast(context: Context, @StringRes message: Int) {
         val app = context.applicationContext
         Handler(Looper.getMainLooper()).post {
             Toast.makeText(app, message, Toast.LENGTH_SHORT).show()

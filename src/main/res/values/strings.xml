@@ -100,12 +100,8 @@
     <string name="ac_label_turbo_on">TURBO ON</string>
     <string name="ac_label_light">LIGHT</string>
     <string name="ac_label_light_on">LIGHT ON</string>
-    <string name="ac_label_aux_heat">AUX HEAT</string>
-    <string name="ac_label_health">HEALTH</string>
-    <string name="ac_label_ventilation">VENTILATION</string>
     <string name="ac_label_eco">ECO</string>
     <string name="ac_label_swing_h">H-SWING</string>
-    <string name="ac_label_mute">MUTE</string>
     <string name="ac_label_temp_display">TEMP DISPLAY</string>
     <string name="fan_speed_banner">FAN SPEED: %1$d</string>
     <string name="fan_power_off_banner">FAN POWER OFF</string>
@@ -151,6 +147,40 @@
     <string name="category_projector">Projector</string>
     <string name="category_cable_satellite_box">Cable / Satellite box</string>
     <string name="category_camera">Camera</string>
+
+    <string name="cd_power">Power</string>
+    <string name="cd_source">Source</string>
+    <string name="cd_mute">Mute</string>
+    <string name="cd_home">Home</string>
+    <string name="cd_menu">Menu</string>
+    <string name="cd_up">Up</string>
+    <string name="cd_down">Down</string>
+    <string name="cd_left">Left</string>
+    <string name="cd_right">Right</string>
+    <string name="cd_volume_up">Volume up</string>
+    <string name="cd_volume_down">Volume down</string>
+    <string name="cd_channel_up">Channel up</string>
+    <string name="cd_channel_down">Channel down</string>
+    <string name="cd_temp_up">Temperature up</string>
+    <string name="cd_temp_down">Temperature down</string>
+    <string name="cd_shutter">Shutter</string>
+    <string name="cd_toggle_favorite">Toggle favorite</string>
+    <string name="cd_search">Search</string>
+    <string name="cd_test_signal">Test IR signal</string>
+    <string name="cd_previous_code">Previous code</string>
+    <string name="cd_next_code">Next code</string>
+    <string name="ir_no_emitter">No IR blaster found on this phone</string>
+    <string name="ir_permission_denied">IR permission denied</string>
+    <string name="ir_error">Couldn\'t send the IR signal</string>
+    <string name="shortcut_long_label">%1$s %2$s remote</string>
+    <string name="shortcut_adding">Adding shortcut: %1$s</string>
+    <string name="shortcut_not_supported">Your launcher doesn\'t support pinned shortcuts</string>
+    <string name="shortcut_failed">Couldn\'t add the shortcut</string>
+    <string name="widget_label">AnyRemote quick widget</string>
+    <string name="widget_title">QUICK REMOTE</string>
+    <string name="widget_ready">● READY</string>
+    <string name="widget_power">POWER</string>
+    <string name="widget_volume_up">VOL +</string>
+    <string name="widget_open">OPEN</string>
+    <string name="db_load_error">Couldn\'t load the remote database. Try reinstalling the app.</string>
 </resources>
-
-
