@@ -63,20 +63,33 @@ jobs:
           ANYREMOTE_KEYSTORE_PASSWORD: ${{ secrets.ANYREMOTE_KEYSTORE_PASSWORD }}
         run: ./gradlew testDebugUnitTest assembleRelease
 
-      # An unsigned build is named app-release-unsigned.apk, so a missing file means signing failed.
+      # The APK is named after the project (AnyRemote-release.apk); Gradle adds -unsigned
+      # when no signing config applied. apksigner is the real check.
       - name: Verify signature
+        id: apk
         run: |
-          apk=build/outputs/apk/release/app-release.apk
-          test -f "$apk" || { echo "::error::Signed APK not found; signing did not run"; ls build/outputs/apk/release; exit 1; }
-          "$ANDROID_HOME/build-tools/37.0.0/apksigner" verify --verbose --print-certs "$apk"
+          shopt -s nullglob
+          dir=build/outputs/apk/release
+          unsigned=("$dir"/*-unsigned.apk)
+          if [ ${#unsigned[@]} -gt 0 ]; then
+            echo "::error::Release APK is unsigned: ${unsigned[*]}"
+            exit 1
+          fi
+          apks=("$dir"/*.apk)
+          if [ ${#apks[@]} -ne 1 ]; then
+            echo "::error::Expected one release APK, found ${#apks[@]}:"; ls "$dir"; exit 1
+          fi
+          "$ANDROID_HOME/build-tools/37.0.0/apksigner" verify --verbose --print-certs "${apks[0]}"
+          echo "path=${apks[0]}" >> "$GITHUB_OUTPUT"
 
       - name: Publish GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ steps.version.outputs.version }}
+          APK: ${{ steps.apk.outputs.path }}
         run: |
           out="AnyRemote-$VERSION.apk"
-          cp build/outputs/apk/release/app-release.apk "$out"
+          cp "$APK" "$out"
           sha256sum "$out" > "$out.sha256"
           gh release create "$GITHUB_REF_NAME" "$out" "$out.sha256" \
             --title "AnyRemote $VERSION" \
