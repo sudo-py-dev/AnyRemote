@@ -85,10 +85,10 @@
     <string name="ac_mode_dry">تجفيف</string>
     <string name="ac_mode_fan">مروحة</string>
     <string name="ac_mode_auto">تلقائي</string>
-    <string name="ac_wind_auto">رياح تلقائية</string>
-    <string name="ac_wind_low">رياح منخفضة</string>
-    <string name="ac_wind_medium">رياح متوسطة</string>
-    <string name="ac_wind_high">رياح عالية</string>
+    <string name="ac_wind_auto">تلقائي</string>
+    <string name="ac_wind_low">منخفضة</string>
+    <string name="ac_wind_medium">متوسطة</string>
+    <string name="ac_wind_high">عالية</string>
     <string name="ac_label_power">الطاقة</string>
     <string name="ac_label_mode">الوضع</string>
     <string name="ac_label_temperature">درجة الحرارة</string>
@@ -183,4 +183,20 @@
     <string name="widget_volume_up">صوت +</string>
     <string name="widget_open">فتح</string>
     <string name="db_load_error">تعذر تحميل قاعدة بيانات أجهزة التحكم. حاول إعادة تثبيت التطبيق.</string>
+    <string name="your_remotes">أجهزة التحكم الخاصة بك</string>
+    <string name="add_remote">إضافة جهاز تحكم</string>
+    <string name="remote_removed">تمت إزالة جهاز التحكم</string>
+    <string name="undo">تراجع</string>
+    <string name="more_options">مزيد من الخيارات</string>
+    <string name="dynamic_color">ألوان ديناميكية</string>
+    <string name="dynamic_color_subtitle">استخدام ألوان الخلفية</string>
+    <string name="dpad">لوحة الاتجاهات</string>
+    <string name="number_pad">لوحة الأرقام</string>
+    <string name="code_set_of">الرمز %1$d من %2$d</string>
+    <string name="appearance">المظهر</string>
+    <string name="general">عام</string>
+    <string name="airflow">تدفق الهواء</string>
+    <string name="clear_search">مسح البحث</string>
+    <string name="delay">تأخير</string>
+    <string name="cd_backspace">حذف</string>
 </resources>

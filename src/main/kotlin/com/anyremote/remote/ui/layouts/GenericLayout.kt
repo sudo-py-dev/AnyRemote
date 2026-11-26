@@ -14,10 +14,10 @@ private val genericKeys =
     listOf(
         RemoteKey.TIMER to R.string.generic_timer,
         RemoteKey.MODE to R.string.generic_mode,
-        RemoteKey.SPEED_UP to R.string.generic_speed_plus,
-        RemoteKey.SPEED_DOWN to R.string.generic_speed_minus,
-        RemoteKey.MUTE to R.string.generic_mute,
         RemoteKey.MENU to R.string.generic_menu,
+        RemoteKey.SPEED_DOWN to R.string.generic_speed_minus,
+        RemoteKey.SPEED_UP to R.string.generic_speed_plus,
+        RemoteKey.MUTE to R.string.generic_mute,
     )
 
 @Composable
@@ -27,16 +27,17 @@ fun GenericLayout(onKeyPressed: (RemoteKey) -> Unit) {
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.fillMaxWidth(),
     ) {
-        PowerKey(onClick = { onKeyPressed(RemoteKey.POWER) })
+        PowerKey(onClick = { onKeyPressed(RemoteKey.POWER) }, size = 80.dp)
+
+        Spacer(Modifier.height(8.dp))
 
         genericKeys.chunked(3).forEach { row ->
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 row.forEach { (key, label) ->
                     TextKey(
                         stringResource(label),
                         onClick = { onKeyPressed(key) },
                         modifier = Modifier.weight(1f),
-                        fontSize = 13,
                     )
                 }
             }

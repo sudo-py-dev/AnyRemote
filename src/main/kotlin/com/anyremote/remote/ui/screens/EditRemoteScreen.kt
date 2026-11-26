@@ -1,38 +1,29 @@
 package com.anyremote.remote.ui.screens
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.anyremote.remote.R
 import com.anyremote.remote.data.RemoteDatabase.Brand
 import com.anyremote.remote.data.RemoteDatabase.DeviceType
 import com.anyremote.remote.service.FavoriteManager
-import com.anyremote.remote.ui.components.*
-import com.anyremote.remote.ui.helpers.*
-import com.anyremote.remote.ui.layouts.*
-import com.anyremote.remote.ui.theme.*
-import com.anyremote.remote.ui.theme.ElectricBlue
+import com.anyremote.remote.ui.helpers.defaultRemoteName
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun EditRemoteScreen(
     device: DeviceType,
@@ -41,160 +32,92 @@ fun EditRemoteScreen(
     onSave: (newName: String) -> Unit,
 ) {
     val context = LocalContext.current
-    val defaultName = "${brand.nameEn} ${device.getLocalizedName(context).substringBefore(" ")}"
-    val currentCustomName =
+    val currentName =
         remember(device, brand) {
-            FavoriteManager.getCustomName(context, device.id, brand.id, defaultName)
+            FavoriteManager.getCustomName(context, device.id, brand.id, defaultRemoteName(context, device, brand))
         }
-    var nameInput by remember { mutableStateOf(currentCustomName) }
+    var nameInput by remember { mutableStateOf(currentName) }
+    val canSave = nameInput.isNotBlank()
+    fun save() {
+        if (canSave) onSave(nameInput.trim())
+    }
 
     BackHandler { onDismiss() }
 
-    val isDark = isAppDarkTheme()
-    val bgColor = if (isDark) Color(0xFF121212) else Color(0xFFF7F8FA)
-    val cardColor = if (isDark) Color(0xFF1E1E1E) else Color.White
-    val labelColor = if (isDark) Color(0xFF90A4AE) else Color(0xFF8E9AA7)
-
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(R.string.edit_remote).uppercase(),
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        fontSize = 18.sp,
-                    )
-                },
+            TopAppBar(
+                title = { Text(stringResource(R.string.edit_remote)) },
                 navigationIcon = {
                     IconButton(onClick = onDismiss) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = stringResource(R.string.back),
-                            tint = MaterialTheme.colorScheme.onBackground,
-                        )
+                        Icon(Icons.Default.Close, contentDescription = stringResource(R.string.cancel))
                     }
                 },
                 actions = {
-                    IconButton(
-                        onClick = {
-                            if (nameInput.isNotBlank()) {
-                                onSave(nameInput.trim())
-                            }
-                        }) {
-                            Icon(
-                                imageVector = Icons.Default.Check,
-                                contentDescription = stringResource(R.string.save),
-                                tint = ElectricBlue,
-                            )
-                        }
+                    TextButton(onClick = ::save, enabled = canSave, modifier = Modifier.padding(end = 8.dp)) {
+                        Text(stringResource(R.string.save))
+                    }
                 },
-                colors =
-                    TopAppBarDefaults.topAppBarColors(
-                        containerColor = bgColor,
-                    ),
             )
         },
-        containerColor = bgColor,
     ) { innerPadding ->
         Column(
             modifier =
                 Modifier.fillMaxSize()
                     .padding(innerPadding)
-                    .padding(horizontal = 20.dp, vertical = 8.dp)
-                    .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(20.dp),
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(
-                    text = stringResource(R.string.device_name_section).uppercase(),
-                    color = labelColor,
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = 1.sp,
-                    modifier = Modifier.padding(horizontal = 4.dp))
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = cardColor),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-                    border =
-                        BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.12f))) {
-                        OutlinedTextField(
-                            value = nameInput,
-                            onValueChange = { nameInput = it },
-                            singleLine = true,
-                            colors =
-                                OutlinedTextFieldDefaults.colors(
-                                    focusedBorderColor = Color.Transparent,
-                                    unfocusedBorderColor = Color.Transparent,
-                                    focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                                    unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-                                ),
-                            modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp),
-                        )
-                    }
-            }
+            OutlinedTextField(
+                value = nameInput,
+                onValueChange = { nameInput = it },
+                label = { Text(stringResource(R.string.remote_name_label)) },
+                singleLine = true,
+                isError = !canSave,
+                keyboardOptions =
+                    KeyboardOptions(capitalization = KeyboardCapitalization.Words, imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(onDone = { save() }),
+                modifier = Modifier.fillMaxWidth(),
+            )
 
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(
-                    text = stringResource(R.string.quick_rename_section).uppercase(),
-                    color = labelColor,
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = 1.sp,
-                    modifier = Modifier.padding(horizontal = 4.dp))
-
+                    stringResource(R.string.quick_rename_section),
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
                 val locations =
                     listOf(
-                        stringResource(R.string.location_default),
-                        stringResource(R.string.location_living_room),
-                        stringResource(R.string.location_bedroom),
-                        stringResource(R.string.location_study_room),
-                        stringResource(R.string.location_dining_room),
-                        stringResource(R.string.location_office))
-
-                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    for (i in locations.indices step 2) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                                for (j in 0..1) {
-                                    val index = i + j
-                                    if (index < locations.size) {
-                                        val loc = locations[index]
-                                        Card(
-                                            modifier =
-                                                Modifier.weight(1f).clickable { nameInput = loc },
-                                            shape = RoundedCornerShape(14.dp),
-                                            colors =
-                                                CardDefaults.cardColors(containerColor = cardColor),
-                                            elevation =
-                                                CardDefaults.cardElevation(defaultElevation = 0.dp),
-                                            border =
-                                                BorderStroke(
-                                                    1.dp,
-                                                    MaterialTheme.colorScheme.outline.copy(
-                                                        alpha = 0.12f))) {
-                                                Box(
-                                                    modifier =
-                                                        Modifier.fillMaxWidth()
-                                                            .padding(
-                                                                vertical = 16.dp,
-                                                                horizontal = 12.dp),
-                                                    contentAlignment = Alignment.Center) {
-                                                        Text(
-                                                            text = loc,
-                                                            color =
-                                                                MaterialTheme.colorScheme.onSurface,
-                                                            fontWeight = FontWeight.SemiBold,
-                                                            fontSize = 14.sp,
-                                                            textAlign = TextAlign.Center)
-                                                    }
-                                            }
-                                    }
-                                }
-                            }
+                        R.string.location_living_room,
+                        R.string.location_bedroom,
+                        R.string.location_study_room,
+                        R.string.location_dining_room,
+                        R.string.location_office,
+                    ).map { stringResource(it) }
+                val defaultName = remember(device, brand) { defaultRemoteName(context, device, brand) }
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    // "Default" goes back to the brand + device name rather than a literal "Default".
+                    FilterChip(
+                        selected = nameInput == defaultName,
+                        onClick = { nameInput = defaultName },
+                        label = { Text(stringResource(R.string.location_default)) },
+                        leadingIcon =
+                            if (nameInput == defaultName) {
+                                { Icon(Icons.Default.Check, null, Modifier.size(FilterChipDefaults.IconSize)) }
+                            } else null,
+                    )
+                    locations.forEach { location ->
+                        val selected = nameInput == location
+                        FilterChip(
+                            selected = selected,
+                            onClick = { nameInput = location },
+                            label = { Text(location) },
+                            leadingIcon =
+                                if (selected) {
+                                    { Icon(Icons.Default.Check, null, Modifier.size(FilterChipDefaults.IconSize)) }
+                                } else null,
+                        )
                     }
                 }
             }

@@ -7,10 +7,14 @@ object FavoriteManager {
     private const val KEY_FAVORITES = "favorites_list"
     private const val KEY_VIBRATION = "vibration_enabled"
     private const val KEY_THEME = "theme_mode"
+    private const val KEY_DYNAMIC_COLOR = "dynamic_color"
     private const val KEY_IR_NOTICE_DISMISSED = "ir_notice_dismissed"
     private const val KEY_WIDGET_AC_POWER = "widget_ac_power"
 
-    var currentThemeState = androidx.compose.runtime.mutableStateOf("light")
+    var currentThemeState = androidx.compose.runtime.mutableStateOf("system")
+        private set
+
+    var currentDynamicColorState = androidx.compose.runtime.mutableStateOf(true)
         private set
 
     var currentVibrationState = androidx.compose.runtime.mutableStateOf(true)
@@ -18,13 +22,14 @@ object FavoriteManager {
 
     fun init(context: Context) {
         val prefs = prefs(context)
-        currentThemeState.value = prefs.getString(KEY_THEME, "light") ?: "light"
+        currentThemeState.value = prefs.getString(KEY_THEME, "system") ?: "system"
+        currentDynamicColorState.value = prefs.getBoolean(KEY_DYNAMIC_COLOR, true)
         currentVibrationState.value = prefs.getBoolean(KEY_VIBRATION, true)
     }
 
     fun getThemeMode(context: Context): String {
         val prefs = prefs(context)
-        return prefs.getString(KEY_THEME, "light") ?: "light"
+        return prefs.getString(KEY_THEME, "system") ?: "system"
     }
 
     fun setThemeMode(
@@ -34,6 +39,14 @@ object FavoriteManager {
         val prefs = prefs(context)
         prefs.edit().putString(KEY_THEME, mode).apply()
         currentThemeState.value = mode
+    }
+
+    fun setDynamicColor(
+        context: Context,
+        enabled: Boolean,
+    ) {
+        prefs(context).edit().putBoolean(KEY_DYNAMIC_COLOR, enabled).apply()
+        currentDynamicColorState.value = enabled
     }
 
     fun toggleFavorite(
