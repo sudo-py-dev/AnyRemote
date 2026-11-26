@@ -1,14 +1,12 @@
 package com.anyremote.remote.ui.screens
 
 import android.os.Build
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -181,12 +179,13 @@ private fun SettingsItem(
     onClick: () -> Unit,
 ) {
     ListItem(
-        headlineContent = { Text(title) },
+        onClick = onClick,
         supportingContent = { Text(summary) },
         leadingContent = { Icon(icon, contentDescription = null) },
         colors = ListItemDefaults.colors(containerColor = Color.Transparent),
-        modifier = Modifier.clickable(onClick = onClick),
-    )
+    ) {
+        Text(title)
+    }
 }
 
 @Composable
@@ -197,15 +196,17 @@ private fun SettingsSwitchItem(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
 ) {
+    // The whole row toggles; the switch itself is just the indicator.
     ListItem(
-        headlineContent = { Text(title) },
+        checked = checked,
+        onCheckedChange = onCheckedChange,
         supportingContent = { Text(summary) },
         leadingContent = { Icon(icon, contentDescription = null) },
-        // The whole row toggles; the switch itself is just the indicator.
         trailingContent = { Switch(checked = checked, onCheckedChange = null) },
         colors = ListItemDefaults.colors(containerColor = Color.Transparent),
-        modifier = Modifier.toggleable(value = checked, onValueChange = onCheckedChange, role = Role.Switch),
-    )
+    ) {
+        Text(title)
+    }
 }
 
 @Composable

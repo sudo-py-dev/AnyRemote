@@ -2,7 +2,6 @@ package com.anyremote.remote.ui.screens
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -412,14 +411,19 @@ private fun RemoteOptionsSheet(
     onPin: () -> Unit,
     onRemove: () -> Unit,
 ) {
-    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)) {
+    ModalBottomSheet(onDismissRequest = onDismiss, sheetState =
+            rememberBottomSheetState(
+                initialValue = SheetValue.Hidden,
+                enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
+            )) {
         Column(modifier = Modifier.padding(bottom = 24.dp)) {
             ListItem(
-                headlineContent = { Text(remote.name, style = MaterialTheme.typography.titleLarge) },
                 supportingContent = { Text(remote.device.localizedName()) },
                 leadingContent = { Icon(getDeviceIcon(remote.device.id), contentDescription = null) },
                 colors = ListItemDefaults.colors(containerColor = androidx.compose.ui.graphics.Color.Transparent),
-            )
+            ) {
+                Text(remote.name, style = MaterialTheme.typography.titleLarge)
+            }
             HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
             SheetAction(Icons.Outlined.Edit, stringResource(R.string.rename_remote), onRename)
             SheetAction(Icons.Outlined.PushPin, stringResource(R.string.pin_to_home), onPin)
@@ -441,9 +445,10 @@ private fun SheetAction(
     tint: androidx.compose.ui.graphics.Color = MaterialTheme.colorScheme.onSurface,
 ) {
     ListItem(
-        headlineContent = { Text(label, color = tint) },
+        onClick = onClick,
         leadingContent = { Icon(icon, contentDescription = null, tint = tint) },
         colors = ListItemDefaults.colors(containerColor = androidx.compose.ui.graphics.Color.Transparent),
-        modifier = Modifier.clickable(onClick = onClick).padding(horizontal = 8.dp),
-    )
+    ) {
+        Text(label, color = tint)
+    }
 }
