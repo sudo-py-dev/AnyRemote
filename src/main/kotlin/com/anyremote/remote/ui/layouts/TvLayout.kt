@@ -1,39 +1,48 @@
 package com.anyremote.remote.ui.layouts
 
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Input
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.automirrored.filled.VolumeMute
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.*
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Remove
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.anyremote.remote.R
-import com.anyremote.remote.ui.helpers.*
-import com.anyremote.remote.ui.theme.*
-import com.anyremote.remote.ui.theme.CrimsonRed
+import com.anyremote.remote.ir.RemoteKey
+import com.anyremote.remote.ui.components.*
+import com.anyremote.remote.ui.theme.HighlightBlue
+
+private val numberPad =
+    listOf(
+        listOf("1", "2", "3"),
+        listOf("4", "5", "6"),
+        listOf("7", "8", "9"),
+        listOf("-", "0", "⌫"),
+    )
+
+private fun padKey(label: String): RemoteKey =
+    when (label) {
+        "⌫" -> RemoteKey.BACKSPACE
+        "-" -> RemoteKey.DASH
+        else -> RemoteKey.digit(label.toInt())
+    }
 
 @Composable
-fun TvLayout(onKeyPressed: (Int) -> Unit) {
-    val haptic = rememberVibratingHapticFeedback()
+fun TvLayout(onKeyPressed: (RemoteKey) -> Unit) {
     var showNumericPad by remember { mutableStateOf(false) }
 
     Column(
@@ -41,166 +50,46 @@ fun TvLayout(onKeyPressed: (Int) -> Unit) {
         verticalArrangement = Arrangement.spacedBy(24.dp),
         modifier = Modifier.fillMaxWidth(),
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Box(
-                modifier =
-                    Modifier.size(54.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.surface)
-                        .border(
-                            1.5.dp,
-                            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
-                            CircleShape)
-                        .clickable {
-                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            onKeyPressed(12)
-                        },
-                contentAlignment = Alignment.Center,
-            ) {
-                Icon(
-                    Icons.Default.PowerSettingsNew, contentDescription = "Power", tint = CrimsonRed)
-            }
-
-            Box(
-                modifier =
-                    Modifier.size(54.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.surface)
-                        .border(
-                            1.5.dp,
-                            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
-                            CircleShape)
-                        .clickable {
-                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            onKeyPressed(11)
-                        },
-                contentAlignment = Alignment.Center,
-            ) {
-                Icon(
-                    Icons.AutoMirrored.Filled.Input,
-                    contentDescription = "Source",
-                    tint = MaterialTheme.colorScheme.onSurface,
-                )
-            }
-
-            Box(
-                modifier =
-                    Modifier.size(54.dp)
-                        .clip(CircleShape)
-                        .background(
-                            if (showNumericPad) {
-                                Color(0xFF00B0FF).copy(alpha = 0.1f)
-                            } else {
-                                MaterialTheme.colorScheme.surface
-                            },
-                        )
-                        .border(
-                            1.5.dp,
-                            if (showNumericPad) {
-                                Color(0xFF00B0FF)
-                            } else {
-                                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
-                            },
-                            CircleShape,
-                        )
-                        .clickable {
-                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            showNumericPad = !showNumericPad
-                        },
-                contentAlignment = Alignment.Center,
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            PowerKey(onClick = { onKeyPressed(RemoteKey.POWER) }, size = 54.dp)
+            RoundIconKey(Icons.AutoMirrored.Filled.Input, "Source", { onKeyPressed(RemoteKey.SOURCE) })
+            RemoteButton(
+                onClick = { showNumericPad = !showNumericPad },
+                modifier = Modifier.size(54.dp),
+                highlighted = showNumericPad,
             ) {
                 Text(
                     stringResource(R.string.num_pad),
-                    color =
-                        if (showNumericPad) Color(0xFF00B0FF)
-                        else MaterialTheme.colorScheme.onSurface,
+                    color = if (showNumericPad) HighlightBlue else MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp,
                 )
             }
-
-            Box(
-                modifier =
-                    Modifier.size(54.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.surface)
-                        .border(
-                            1.5.dp,
-                            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
-                            CircleShape)
-                        .clickable {
-                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            onKeyPressed(13)
-                        },
-                contentAlignment = Alignment.Center,
-            ) {
-                Icon(
-                    Icons.AutoMirrored.Filled.VolumeMute,
-                    contentDescription = "Mute",
-                    tint = MaterialTheme.colorScheme.onSurface,
-                )
-            }
+            RoundIconKey(Icons.AutoMirrored.Filled.VolumeMute, "Mute", { onKeyPressed(RemoteKey.MUTE) })
         }
 
         if (showNumericPad) {
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp),
             ) {
-                val numGrid =
-                    listOf(
-                        listOf("1", "2", "3"),
-                        listOf("4", "5", "6"),
-                        listOf("7", "8", "9"),
-                        listOf("-", "0", "⌫"),
-                    )
-
-                numGrid.forEach { rowKeys ->
+                numberPad.forEach { row ->
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(16.dp),
                     ) {
-                        rowKeys.forEach { key ->
-                            val isSpecial = key == "-" || key == "⌫"
-                            Box(
-                                modifier =
-                                    Modifier.weight(1f)
-                                        .height(58.dp)
-                                        .clip(RoundedCornerShape(14.dp))
-                                        .background(
-                                            if (isSpecial) {
-                                                MaterialTheme.colorScheme.onSurface.copy(
-                                                    alpha = 0.05f,
-                                                )
-                                            } else {
-                                                MaterialTheme.colorScheme.surface
-                                            },
-                                        )
-                                        .border(
-                                            1.5.dp,
-                                            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
-                                            RoundedCornerShape(14.dp),
-                                        )
-                                        .clickable {
-                                            haptic.performHapticFeedback(
-                                                HapticFeedbackType.LongPress)
-                                            if (key == "⌫") {
-                                                onKeyPressed(67)
-                                            } else if (key == "-") {
-                                                onKeyPressed(69)
-                                            } else {
-                                                val digit = key.toInt()
-                                                onKeyPressed(7 + digit)
-                                            }
-                                        },
-                                contentAlignment = Alignment.Center,
+                        row.forEach { label ->
+                            val isSpecial = label == "-" || label == "⌫"
+                            RemoteButton(
+                                onClick = { onKeyPressed(padKey(label)) },
+                                modifier = Modifier.weight(1f).height(58.dp),
+                                shape = RoundedCornerShape(14.dp),
+                                background =
+                                    if (isSpecial) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f)
+                                    else null,
                             ) {
                                 Text(
-                                    text = key,
+                                    label,
                                     color = MaterialTheme.colorScheme.onSurface,
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 20.sp,
@@ -211,302 +100,36 @@ fun TvLayout(onKeyPressed: (Int) -> Unit) {
                 }
             }
         } else {
+            DPad(onKey = onKeyPressed)
+        }
 
-            Box(
-                modifier =
-                    Modifier.size(200.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.surface)
-                        .border(
-                            1.5.dp,
-                            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
-                            CircleShape),
-                contentAlignment = Alignment.Center,
-            ) {
-                val dividerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
-                Canvas(modifier = Modifier.fillMaxSize()) {
-                    drawLine(
-                        color = dividerColor,
-                        start = Offset(0f, 0f),
-                        end = Offset(size.width, size.height),
-                        strokeWidth = 1.5f,
-                    )
-                    drawLine(
-                        color = dividerColor,
-                        start = Offset(0f, size.height),
-                        end = Offset(size.width, 0f),
-                        strokeWidth = 1.5f,
-                    )
-                }
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+            RoundIconKey(Icons.AutoMirrored.Filled.ArrowBack, "Back", { onKeyPressed(RemoteKey.BACK) })
+            RoundIconKey(Icons.Default.Home, "Home", { onKeyPressed(RemoteKey.HOME) })
+            RoundIconKey(Icons.Default.Menu, "Menu", { onKeyPressed(RemoteKey.MENU) })
+        }
 
-                Box(modifier = Modifier.fillMaxSize()) {
-                    Box(
-                        modifier =
-                            Modifier.size(76.dp)
-                                .clip(CircleShape)
-                                .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f))
-                                .border(
-                                    1.5.dp,
-                                    MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
-                                    CircleShape)
-                                .align(Alignment.Center)
-                                .clickable {
-                                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                    onKeyPressed(20)
-                                },
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Text(
-                            stringResource(R.string.ok),
-                            color = MaterialTheme.colorScheme.onSurface,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 14.sp,
-                        )
-                    }
-
-                    Box(
-                        modifier =
-                            Modifier.align(Alignment.TopCenter)
-                                .padding(top = 12.dp)
-                                .size(54.dp)
-                                .clip(CircleShape)
-                                .clickable {
-                                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                    onKeyPressed(16)
-                                },
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Icon(
-                            Icons.Default.KeyboardArrowUp,
-                            contentDescription = "Up",
-                            tint = MaterialTheme.colorScheme.onSurface,
-                            modifier = Modifier.size(28.dp),
-                        )
-                    }
-
-                    Box(
-                        modifier =
-                            Modifier.align(Alignment.BottomCenter)
-                                .padding(bottom = 12.dp)
-                                .size(54.dp)
-                                .clip(CircleShape)
-                                .clickable {
-                                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                    onKeyPressed(17)
-                                },
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Icon(
-                            Icons.Default.KeyboardArrowDown,
-                            contentDescription = "Down",
-                            tint = MaterialTheme.colorScheme.onSurface,
-                            modifier = Modifier.size(28.dp),
-                        )
-                    }
-
-                    Box(
-                        modifier =
-                            Modifier.align(Alignment.CenterStart)
-                                .padding(start = 12.dp)
-                                .size(54.dp)
-                                .clip(CircleShape)
-                                .clickable {
-                                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                    onKeyPressed(18)
-                                },
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Icon(
-                            Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                            contentDescription = "Left",
-                            tint = MaterialTheme.colorScheme.onSurface,
-                            modifier = Modifier.size(28.dp),
-                        )
-                    }
-
-                    Box(
-                        modifier =
-                            Modifier.align(Alignment.CenterEnd)
-                                .padding(end = 12.dp)
-                                .size(54.dp)
-                                .clip(CircleShape)
-                                .clickable {
-                                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                    onKeyPressed(19)
-                                },
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Icon(
-                            Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                            contentDescription = "Right",
-                            tint = MaterialTheme.colorScheme.onSurface,
-                            modifier = Modifier.size(28.dp),
-                        )
-                    }
-                }
-            }
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-            ) {
-                Box(
-                    modifier =
-                        Modifier.size(54.dp)
-                            .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.surface)
-                            .border(
-                                1.5.dp,
-                                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
-                                CircleShape)
-                            .clickable {
-                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                onKeyPressed(4)
-                            },
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Icon(
-                        Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back",
-                        tint = MaterialTheme.colorScheme.onSurface,
-                    )
-                }
-
-                Box(
-                    modifier =
-                        Modifier.size(54.dp)
-                            .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.surface)
-                            .border(
-                                1.5.dp,
-                                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
-                                CircleShape)
-                            .clickable {
-                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                onKeyPressed(3)
-                            },
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Icon(
-                        Icons.Default.Home,
-                        contentDescription = "Home",
-                        tint = MaterialTheme.colorScheme.onSurface)
-                }
-
-                Box(
-                    modifier =
-                        Modifier.size(54.dp)
-                            .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.surface)
-                            .border(
-                                1.5.dp,
-                                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
-                                CircleShape)
-                            .clickable {
-                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                onKeyPressed(82)
-                            },
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Icon(
-                        Icons.Default.Menu,
-                        contentDescription = "Menu",
-                        tint = MaterialTheme.colorScheme.onSurface)
-                }
-            }
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(32.dp),
-            ) {
-                Column(
-                    modifier =
-                        Modifier.weight(1f)
-                            .clip(RoundedCornerShape(24.dp))
-                            .background(MaterialTheme.colorScheme.surface)
-                            .border(
-                                1.5.dp,
-                                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
-                                RoundedCornerShape(24.dp),
-                            )
-                            .padding(vertical = 12.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                ) {
-                    IconButton(
-                        onClick = {
-                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            onKeyPressed(24)
-                        }) {
-                            Icon(
-                                Icons.Default.Add,
-                                contentDescription = "Volume Up",
-                                tint = MaterialTheme.colorScheme.onSurface,
-                            )
-                        }
-                    Text(
-                        stringResource(R.string.vol),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.Bold,
-                    )
-                    IconButton(
-                        onClick = {
-                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            onKeyPressed(25)
-                        }) {
-                            Icon(
-                                Icons.Default.Remove,
-                                contentDescription = "Volume Down",
-                                tint = MaterialTheme.colorScheme.onSurface,
-                            )
-                        }
-                }
-
-                Column(
-                    modifier =
-                        Modifier.weight(1f)
-                            .clip(RoundedCornerShape(24.dp))
-                            .background(MaterialTheme.colorScheme.surface)
-                            .border(
-                                1.5.dp,
-                                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
-                                RoundedCornerShape(24.dp),
-                            )
-                            .padding(vertical = 12.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                ) {
-                    IconButton(
-                        onClick = {
-                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            onKeyPressed(26)
-                        }) {
-                            Icon(
-                                Icons.Default.KeyboardArrowUp,
-                                contentDescription = "Channel Up",
-                                tint = MaterialTheme.colorScheme.onSurface,
-                            )
-                        }
-                    Text(
-                        stringResource(R.string.ch),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.Bold,
-                    )
-                    IconButton(
-                        onClick = {
-                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            onKeyPressed(27)
-                        }) {
-                            Icon(
-                                Icons.Default.KeyboardArrowDown,
-                                contentDescription = "Channel Down",
-                                tint = MaterialTheme.colorScheme.onSurface,
-                            )
-                        }
-                }
-            }
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(32.dp)) {
+            RockerKey(
+                label = stringResource(R.string.vol),
+                upIcon = Icons.Default.Add,
+                downIcon = Icons.Default.Remove,
+                upDescription = "Volume Up",
+                downDescription = "Volume Down",
+                onUp = { onKeyPressed(RemoteKey.VOLUME_UP) },
+                onDown = { onKeyPressed(RemoteKey.VOLUME_DOWN) },
+                modifier = Modifier.weight(1f),
+            )
+            RockerKey(
+                label = stringResource(R.string.ch),
+                upIcon = Icons.Default.KeyboardArrowUp,
+                downIcon = Icons.Default.KeyboardArrowDown,
+                upDescription = "Channel Up",
+                downDescription = "Channel Down",
+                onUp = { onKeyPressed(RemoteKey.CHANNEL_UP) },
+                onDown = { onKeyPressed(RemoteKey.CHANNEL_DOWN) },
+                modifier = Modifier.weight(1f),
+            )
         }
     }
 }

@@ -8,6 +8,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,7 +20,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.anyremote.remote.R
 import com.anyremote.remote.data.RemoteDatabase
-import com.anyremote.remote.ir.IREncodingEngine
+import com.anyremote.remote.ir.AcState
+import com.anyremote.remote.ir.IrCodebook
+import com.anyremote.remote.ir.RemoteKey
 import com.anyremote.remote.ir.IRTransmitter
 import com.anyremote.remote.service.FavoriteManager
 import com.anyremote.remote.service.ShortcutHelper
@@ -27,6 +30,7 @@ import com.anyremote.remote.ui.components.*
 import com.anyremote.remote.ui.helpers.*
 import com.anyremote.remote.ui.layouts.*
 import com.anyremote.remote.ui.theme.*
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,44 +61,14 @@ fun RemoteControllerScreen(
         }
     }
 
-    var currentPulses by remember { mutableStateOf(intArrayOf()) }
-
-    LaunchedEffect(currentPulses) {
-        if (currentPulses.isNotEmpty()) {
-            val freq = if (deviceId == 3) 38000 else 38200
-            IRTransmitter.transmit(context, currentPulses, freq)
-        }
+    val scope = rememberCoroutineScope()
+    val codeset = remember(deviceId, brandId) { FavoriteManager.getCodeset(context, deviceId, brandId) }
+    fun send(pulses: IntArray) {
+        scope.launch { IRTransmitter.send(context, pulses) }
     }
+    val onKey: (RemoteKey) -> Unit = { key -> send(IrCodebook.pulses(deviceId, codeset, key)) }
 
-    var acPower by remember { mutableStateOf(true) }
-    var acTemp by remember { mutableIntStateOf(24) }
-    var acMode by remember { mutableStateOf("MC") }
-    var acSpeed by remember { mutableStateOf("SA") }
-    var acSwing by remember { mutableStateOf(true) }
-    var acTurbo by remember { mutableStateOf(false) }
-    var acLight by remember { mutableStateOf(true) }
-    var acAuxHeat by remember { mutableStateOf(false) }
-    var acHealth by remember { mutableStateOf(false) }
-    var acVentilation by remember { mutableStateOf(false) }
-    var acEco by remember { mutableStateOf(false) }
-    var acSwingH by remember { mutableStateOf(false) }
-    var acMute by remember { mutableStateOf(false) }
-    var acTempDisplay by remember { mutableStateOf(false) }
-
-    val activeGlow =
-        remember(acMode, acPower) {
-            if (!acPower) {
-                Color.DarkGray
-            } else {
-                when (acMode) {
-                    "MC" -> ElectricBlue
-                    "MH" -> WarmOrange
-                    "MD" -> AccentPurple
-                    "MV" -> AccentGreen
-                    else -> ElectricBlue
-                }
-            }
-        }
+    var ac by rememberSaveable(stateSaver = AcState.Saver) { mutableStateOf(AcState()) }
 
     val surfaceColor = MaterialTheme.colorScheme.surface
     val onSurfaceColor = MaterialTheme.colorScheme.onSurface
@@ -193,364 +167,20 @@ fun RemoteControllerScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             when (deviceId) {
-                3 -> {
-
+                3 ->
                     AcLayout(
-                        power = acPower,
-                        temp = acTemp,
-                        mode = acMode,
-                        speed = acSpeed,
-                        swing = acSwing,
-                        turbo = acTurbo,
-                        light = acLight,
-                        auxHeat = acAuxHeat,
-                        health = acHealth,
-                        ventilation = acVentilation,
-                        eco = acEco,
-                        swingH = acSwingH,
-                        mute = acMute,
-                        tempDisplay = acTempDisplay,
-                        activeGlow = activeGlow,
-                        onPowerToggle = {
-                            acPower = !acPower
-                            currentPulses =
-                                IREncodingEngine.compileGreeAc(
-                                    power = acPower,
-                                    temp = acTemp,
-                                    mode = acMode,
-                                    fanSpeed = acSpeed,
-                                    swing = acSwing,
-                                    turbo = acTurbo,
-                                    light = acLight,
-                                    auxHeat = acAuxHeat,
-                                    health = acHealth,
-                                    ventilation = acVentilation,
-                                    eco = acEco,
-                                    swingH = acSwingH,
-                                    mute = acMute,
-                                    tempDisplay = acTempDisplay,
-                                )
-                        },
-                        onTempChange = {
-                            acTemp = it
-                            currentPulses =
-                                IREncodingEngine.compileGreeAc(
-                                    power = acPower,
-                                    temp = acTemp,
-                                    mode = acMode,
-                                    fanSpeed = acSpeed,
-                                    swing = acSwing,
-                                    turbo = acTurbo,
-                                    light = acLight,
-                                    auxHeat = acAuxHeat,
-                                    health = acHealth,
-                                    ventilation = acVentilation,
-                                    eco = acEco,
-                                    swingH = acSwingH,
-                                    mute = acMute,
-                                    tempDisplay = acTempDisplay,
-                                )
-                        },
-                        onModeChange = {
-                            acMode = it
-                            currentPulses =
-                                IREncodingEngine.compileGreeAc(
-                                    power = acPower,
-                                    temp = acTemp,
-                                    mode = acMode,
-                                    fanSpeed = acSpeed,
-                                    swing = acSwing,
-                                    turbo = acTurbo,
-                                    light = acLight,
-                                    auxHeat = acAuxHeat,
-                                    health = acHealth,
-                                    ventilation = acVentilation,
-                                    eco = acEco,
-                                    swingH = acSwingH,
-                                    mute = acMute,
-                                    tempDisplay = acTempDisplay,
-                                )
-                        },
-                        onSpeedChange = {
-                            acSpeed = it
-                            currentPulses =
-                                IREncodingEngine.compileGreeAc(
-                                    power = acPower,
-                                    temp = acTemp,
-                                    mode = acMode,
-                                    fanSpeed = acSpeed,
-                                    swing = acSwing,
-                                    turbo = acTurbo,
-                                    light = acLight,
-                                    auxHeat = acAuxHeat,
-                                    health = acHealth,
-                                    ventilation = acVentilation,
-                                    eco = acEco,
-                                    swingH = acSwingH,
-                                    mute = acMute,
-                                    tempDisplay = acTempDisplay,
-                                )
-                        },
-                        onSwingToggle = {
-                            acSwing = !acSwing
-                            currentPulses =
-                                IREncodingEngine.compileGreeAc(
-                                    power = acPower,
-                                    temp = acTemp,
-                                    mode = acMode,
-                                    fanSpeed = acSpeed,
-                                    swing = acSwing,
-                                    turbo = acTurbo,
-                                    light = acLight,
-                                    auxHeat = acAuxHeat,
-                                    health = acHealth,
-                                    ventilation = acVentilation,
-                                    eco = acEco,
-                                    swingH = acSwingH,
-                                    mute = acMute,
-                                    tempDisplay = acTempDisplay,
-                                )
-                        },
-                        onTurboToggle = {
-                            acTurbo = !acTurbo
-                            currentPulses =
-                                IREncodingEngine.compileGreeAc(
-                                    power = acPower,
-                                    temp = acTemp,
-                                    mode = acMode,
-                                    fanSpeed = acSpeed,
-                                    swing = acSwing,
-                                    turbo = acTurbo,
-                                    light = acLight,
-                                    auxHeat = acAuxHeat,
-                                    health = acHealth,
-                                    ventilation = acVentilation,
-                                    eco = acEco,
-                                    swingH = acSwingH,
-                                    mute = acMute,
-                                    tempDisplay = acTempDisplay,
-                                )
-                        },
-                        onLightToggle = {
-                            acLight = !acLight
-                            currentPulses =
-                                IREncodingEngine.compileGreeAc(
-                                    power = acPower,
-                                    temp = acTemp,
-                                    mode = acMode,
-                                    fanSpeed = acSpeed,
-                                    swing = acSwing,
-                                    turbo = acTurbo,
-                                    light = acLight,
-                                    auxHeat = acAuxHeat,
-                                    health = acHealth,
-                                    ventilation = acVentilation,
-                                    eco = acEco,
-                                    swingH = acSwingH,
-                                    mute = acMute,
-                                    tempDisplay = acTempDisplay,
-                                )
-                        },
-                        onAuxHeatToggle = {
-                            acAuxHeat = !acAuxHeat
-                            currentPulses =
-                                IREncodingEngine.compileGreeAc(
-                                    power = acPower,
-                                    temp = acTemp,
-                                    mode = acMode,
-                                    fanSpeed = acSpeed,
-                                    swing = acSwing,
-                                    turbo = acTurbo,
-                                    light = acLight,
-                                    auxHeat = acAuxHeat,
-                                    health = acHealth,
-                                    ventilation = acVentilation,
-                                    eco = acEco,
-                                    swingH = acSwingH,
-                                    mute = acMute,
-                                    tempDisplay = acTempDisplay,
-                                )
-                        },
-                        onHealthToggle = {
-                            acHealth = !acHealth
-                            currentPulses =
-                                IREncodingEngine.compileGreeAc(
-                                    power = acPower,
-                                    temp = acTemp,
-                                    mode = acMode,
-                                    fanSpeed = acSpeed,
-                                    swing = acSwing,
-                                    turbo = acTurbo,
-                                    light = acLight,
-                                    auxHeat = acAuxHeat,
-                                    health = acHealth,
-                                    ventilation = acVentilation,
-                                    eco = acEco,
-                                    swingH = acSwingH,
-                                    mute = acMute,
-                                    tempDisplay = acTempDisplay,
-                                )
-                        },
-                        onVentilationToggle = {
-                            acVentilation = !acVentilation
-                            currentPulses =
-                                IREncodingEngine.compileGreeAc(
-                                    power = acPower,
-                                    temp = acTemp,
-                                    mode = acMode,
-                                    fanSpeed = acSpeed,
-                                    swing = acSwing,
-                                    turbo = acTurbo,
-                                    light = acLight,
-                                    auxHeat = acAuxHeat,
-                                    health = acHealth,
-                                    ventilation = acVentilation,
-                                    eco = acEco,
-                                    swingH = acSwingH,
-                                    mute = acMute,
-                                    tempDisplay = acTempDisplay,
-                                )
-                        },
-                        onEcoToggle = {
-                            acEco = !acEco
-                            currentPulses =
-                                IREncodingEngine.compileGreeAc(
-                                    power = acPower,
-                                    temp = acTemp,
-                                    mode = acMode,
-                                    fanSpeed = acSpeed,
-                                    swing = acSwing,
-                                    turbo = acTurbo,
-                                    light = acLight,
-                                    auxHeat = acAuxHeat,
-                                    health = acHealth,
-                                    ventilation = acVentilation,
-                                    eco = acEco,
-                                    swingH = acSwingH,
-                                    mute = acMute,
-                                    tempDisplay = acTempDisplay,
-                                )
-                        },
-                        onSwingHToggle = {
-                            acSwingH = !acSwingH
-                            currentPulses =
-                                IREncodingEngine.compileGreeAc(
-                                    power = acPower,
-                                    temp = acTemp,
-                                    mode = acMode,
-                                    fanSpeed = acSpeed,
-                                    swing = acSwing,
-                                    turbo = acTurbo,
-                                    light = acLight,
-                                    auxHeat = acAuxHeat,
-                                    health = acHealth,
-                                    ventilation = acVentilation,
-                                    eco = acEco,
-                                    swingH = acSwingH,
-                                    mute = acMute,
-                                    tempDisplay = acTempDisplay,
-                                )
-                        },
-                        onMuteToggle = {
-                            acMute = !acMute
-                            currentPulses =
-                                IREncodingEngine.compileGreeAc(
-                                    power = acPower,
-                                    temp = acTemp,
-                                    mode = acMode,
-                                    fanSpeed = acSpeed,
-                                    swing = acSwing,
-                                    turbo = acTurbo,
-                                    light = acLight,
-                                    auxHeat = acAuxHeat,
-                                    health = acHealth,
-                                    ventilation = acVentilation,
-                                    eco = acEco,
-                                    swingH = acSwingH,
-                                    mute = acMute,
-                                    tempDisplay = acTempDisplay,
-                                )
-                        },
-                        onTempDisplayToggle = {
-                            acTempDisplay = !acTempDisplay
-                            currentPulses =
-                                IREncodingEngine.compileGreeAc(
-                                    power = acPower,
-                                    temp = acTemp,
-                                    mode = acMode,
-                                    fanSpeed = acSpeed,
-                                    swing = acSwing,
-                                    turbo = acTurbo,
-                                    light = acLight,
-                                    auxHeat = acAuxHeat,
-                                    health = acHealth,
-                                    ventilation = acVentilation,
-                                    eco = acEco,
-                                    swingH = acSwingH,
-                                    mute = acMute,
-                                    tempDisplay = acTempDisplay,
-                                )
+                        state = ac,
+                        onChange = {
+                            ac = it
+                            send(it.toPulses())
                         },
                     )
-                }
-                1,
-                2,
-                4,
-                11,
-                12 -> {
-
-                    TvLayout(
-                        onKeyPressed = { cmdId ->
-                            currentPulses =
-                                IREncodingEngine.compileGenericNec(address = 1, command = cmdId)
-                        },
-                    )
-                }
-                6 -> {
-
-                    FanLayout(
-                        onKeyPressed = { cmdId ->
-                            currentPulses =
-                                IREncodingEngine.compileGenericNec(address = 6, command = cmdId)
-                        },
-                    )
-                }
-                8 -> {
-
-                    AudioLayout(
-                        onKeyPressed = { cmdId ->
-                            currentPulses =
-                                IREncodingEngine.compileGenericNec(address = 8, command = cmdId)
-                        },
-                    )
-                }
-                10 -> {
-
-                    ProjectorLayout(
-                        onKeyPressed = { cmdId ->
-                            currentPulses =
-                                IREncodingEngine.compileGenericNec(address = 10, command = cmdId)
-                        },
-                    )
-                }
-                13 -> {
-
-                    CameraLayout(
-                        onTrigger = { delay ->
-                            currentPulses =
-                                IREncodingEngine.compileGenericNec(address = 15, command = delay)
-                        },
-                    )
-                }
-                else -> {
-
-                    GenericLayout(
-                        onKeyPressed = { cmdId ->
-                            currentPulses =
-                                IREncodingEngine.compileGenericNec(address = 1, command = cmdId)
-                        },
-                    )
-                }
+                1, 2, 4, 11, 12 -> TvLayout(onKeyPressed = onKey)
+                6 -> FanLayout(onKeyPressed = onKey)
+                8 -> AudioLayout(onKeyPressed = onKey)
+                10 -> ProjectorLayout(onKeyPressed = onKey)
+                13 -> CameraLayout(onKeyPressed = onKey)
+                else -> GenericLayout(onKeyPressed = onKey)
             }
         }
     }

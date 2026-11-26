@@ -8,6 +8,7 @@ object FavoriteManager {
     private const val KEY_VIBRATION = "vibration_enabled"
     private const val KEY_THEME = "theme_mode"
     private const val KEY_IR_NOTICE_DISMISSED = "ir_notice_dismissed"
+    private const val KEY_WIDGET_AC_POWER = "widget_ac_power"
 
     var currentThemeState = androidx.compose.runtime.mutableStateOf("light")
         private set
@@ -96,6 +97,34 @@ object FavoriteManager {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         prefs.edit().putString("name_${deviceId}_$brandId", customName).apply()
     }
+
+    /** Codeset the user confirmed in the match wizard for this device/brand (1 if never matched). */
+    fun getCodeset(
+        context: Context,
+        deviceId: Int,
+        brandId: Int,
+    ): Int = prefs(context).getInt("codeset_${deviceId}_$brandId", 1)
+
+    fun setCodeset(
+        context: Context,
+        deviceId: Int,
+        brandId: Int,
+        codeset: Int,
+    ) {
+        prefs(context).edit().putInt("codeset_${deviceId}_$brandId", codeset).apply()
+    }
+
+    /** Last AC power state the home-screen widget sent, so its Power button can toggle. */
+    fun getWidgetAcPower(context: Context): Boolean = prefs(context).getBoolean(KEY_WIDGET_AC_POWER, false)
+
+    fun setWidgetAcPower(
+        context: Context,
+        on: Boolean,
+    ) {
+        prefs(context).edit().putBoolean(KEY_WIDGET_AC_POWER, on).apply()
+    }
+
+    private fun prefs(context: Context) = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
     fun isIrNoticeDismissed(context: Context): Boolean {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)

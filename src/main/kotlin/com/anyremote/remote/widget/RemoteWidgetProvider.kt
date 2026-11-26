@@ -6,115 +6,50 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
-import android.widget.Toast
 import com.anyremote.remote.MainActivity
 import com.anyremote.remote.R
-import com.anyremote.remote.ir.IREncodingEngine
-import com.anyremote.remote.ir.IRTransmitter
 
+/** Only draws the widget. Button taps go to the non-exported [WidgetActionReceiver]. */
 class RemoteWidgetProvider : AppWidgetProvider() {
-    companion object {
-        const val ACTION_WIDGET_POWER = "com.anyremote.remote.widget.ACTION_WIDGET_POWER"
-        const val ACTION_WIDGET_UP = "com.anyremote.remote.widget.ACTION_WIDGET_UP"
-    }
-
     override fun onUpdate(
         context: Context,
         appWidgetManager: AppWidgetManager,
         appWidgetIds: IntArray,
     ) {
         for (appWidgetId in appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId)
+            val views = RemoteViews(context.packageName, R.layout.remote_widget)
+            views.setOnClickPendingIntent(
+                R.id.btn_widget_power,
+                actionIntent(context, appWidgetId * 10 + 1, WidgetActionReceiver.ACTION_POWER))
+            views.setOnClickPendingIntent(
+                R.id.btn_widget_up,
+                actionIntent(context, appWidgetId * 10 + 2, WidgetActionReceiver.ACTION_UP))
+
+            val appIntent =
+                Intent(context, MainActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+            views.setOnClickPendingIntent(
+                R.id.btn_widget_open,
+                PendingIntent.getActivity(context, appWidgetId * 10 + 3, appIntent, FLAGS))
+
+            appWidgetManager.updateAppWidget(appWidgetId, views)
         }
     }
 
-    override fun onReceive(
+    private fun actionIntent(
         context: Context,
-        intent: Intent,
-    ) {
-        super.onReceive(context, intent)
+        requestCode: Int,
+        action: String,
+    ): PendingIntent =
+        PendingIntent.getBroadcast(
+            context,
+            requestCode,
+            Intent(context, WidgetActionReceiver::class.java).setAction(action),
+            FLAGS,
+        )
 
-        when (intent.action) {
-            ACTION_WIDGET_POWER -> {
-
-                val pulses =
-                    IREncodingEngine.compileGreeAc(
-                        power = true,
-                        temp = 24,
-                        mode = "MC",
-                        fanSpeed = "SA",
-                        swing = true,
-                    )
-                val pulseString = pulses.take(5).joinToString(", ") + "..."
-
-                IRTransmitter.transmit(context, pulses, 38000)
-
-                Toast.makeText(
-                        context,
-                        "Widget sent: POWER PULSE [$pulseString]",
-                        Toast.LENGTH_SHORT,
-                    )
-                    .show()
-            }
-            ACTION_WIDGET_UP -> {
-
-                val pulses = IREncodingEngine.compileGenericNec(address = 1, command = 18)
-                val pulseString = pulses.take(5).joinToString(", ") + "..."
-
-                IRTransmitter.transmit(context, pulses, 38200)
-
-                Toast.makeText(
-                        context,
-                        "Widget sent: VOLUME UP PULSE [$pulseString]",
-                        Toast.LENGTH_SHORT,
-                    )
-                    .show()
-            }
-        }
-    }
-
-    private fun updateAppWidget(
-        context: Context,
-        appWidgetManager: AppWidgetManager,
-        appWidgetId: Int,
-    ) {
-        val views = RemoteViews(context.packageName, R.layout.remote_widget)
-
-        val powerIntent =
-            Intent(context, RemoteWidgetProvider::class.java).apply { action = ACTION_WIDGET_POWER }
-        val powerPendingIntent =
-            PendingIntent.getBroadcast(
-                context,
-                appWidgetId * 10 + 1,
-                powerIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
-            )
-        views.setOnClickPendingIntent(R.id.btn_widget_power, powerPendingIntent)
-
-        val upIntent =
-            Intent(context, RemoteWidgetProvider::class.java).apply { action = ACTION_WIDGET_UP }
-        val upPendingIntent =
-            PendingIntent.getBroadcast(
-                context,
-                appWidgetId * 10 + 2,
-                upIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
-            )
-        views.setOnClickPendingIntent(R.id.btn_widget_up, upPendingIntent)
-
-        val appIntent =
-            Intent(context, MainActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            }
-        val appPendingIntent =
-            PendingIntent.getActivity(
-                context,
-                appWidgetId * 10 + 3,
-                appIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
-            )
-        views.setOnClickPendingIntent(R.id.btn_widget_open, appPendingIntent)
-
-        appWidgetManager.updateAppWidget(appWidgetId, views)
+    private companion object {
+        const val FLAGS = PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     }
 }

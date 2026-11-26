@@ -11,6 +11,7 @@ object IREncodingEngine {
         mode: String,
         fanSpeed: String,
         swing: Boolean,
+        swingPosition: Int = 0,
         turbo: Boolean = false,
         light: Boolean = true,
         auxHeat: Boolean = false,
@@ -61,7 +62,13 @@ object IREncodingEngine {
 
         state[3] = 0x50.toByte()
 
-        val swingVVal = if (swing) 1 else 0
+        // SwingV nibble: 1 = auto sweep, 2..6 = fixed vane positions, 0 = leave as is.
+        val swingVVal =
+            when {
+                swing -> 1
+                swingPosition in 1..5 -> swingPosition + 1
+                else -> 0
+            }
         val lightVal = if (power && light) 1 else 0
         val swingHVal = if (power && swingH) 1 else 0
         val auxHeatVal = if (power && auxHeat) 1 else 0
