@@ -100,12 +100,8 @@
     <string name="ac_label_turbo_on">TURBO ACTIF</string>
     <string name="ac_label_light">LUMIÈRE</string>
     <string name="ac_label_light_on">LUMIÈRE ALLUMÉE</string>
-    <string name="ac_label_aux_heat">CHAUFFAGE AUX</string>
-    <string name="ac_label_health">SANTÉ</string>
-    <string name="ac_label_ventilation">VENTILATION</string>
     <string name="ac_label_eco">ECO</string>
     <string name="ac_label_swing_h">OSCILLATION HORIZ</string>
-    <string name="ac_label_mute">MUET</string>
     <string name="ac_label_temp_display">AFFICHER TEMP</string>
     <string name="fan_speed_banner">VITESSE DU VENTILATEUR : %1$d</string>
     <string name="fan_power_off_banner">VENTILATEUR ÉTEINT</string>
@@ -151,5 +147,40 @@
     <string name="category_projector">Projecteur</string>
     <string name="category_cable_satellite_box">Décodeur câble / satellite</string>
     <string name="category_camera">Appareil photo</string>
-</resources>
 
+    <string name="cd_power">Marche/Arrêt</string>
+    <string name="cd_source">Source</string>
+    <string name="cd_mute">Muet</string>
+    <string name="cd_home">Accueil</string>
+    <string name="cd_menu">Menu</string>
+    <string name="cd_up">Haut</string>
+    <string name="cd_down">Bas</string>
+    <string name="cd_left">Gauche</string>
+    <string name="cd_right">Droite</string>
+    <string name="cd_volume_up">Volume +</string>
+    <string name="cd_volume_down">Volume -</string>
+    <string name="cd_channel_up">Chaîne suivante</string>
+    <string name="cd_channel_down">Chaîne précédente</string>
+    <string name="cd_temp_up">Augmenter la température</string>
+    <string name="cd_temp_down">Baisser la température</string>
+    <string name="cd_shutter">Déclencheur</string>
+    <string name="cd_toggle_favorite">Ajouter aux favoris</string>
+    <string name="cd_search">Rechercher</string>
+    <string name="cd_test_signal">Tester le signal IR</string>
+    <string name="cd_previous_code">Code précédent</string>
+    <string name="cd_next_code">Code suivant</string>
+    <string name="ir_no_emitter">Aucun émetteur IR trouvé sur ce téléphone</string>
+    <string name="ir_permission_denied">Autorisation IR refusée</string>
+    <string name="ir_error">Impossible d\'envoyer le signal IR</string>
+    <string name="shortcut_long_label">Télécommande %1$s %2$s</string>
+    <string name="shortcut_adding">Ajout du raccourci : %1$s</string>
+    <string name="shortcut_not_supported">Votre lanceur ne prend pas en charge les raccourcis épinglés</string>
+    <string name="shortcut_failed">Impossible d\'ajouter le raccourci</string>
+    <string name="widget_label">Widget rapide AnyRemote</string>
+    <string name="widget_title">TÉLÉCOMMANDE RAPIDE</string>
+    <string name="widget_ready">● PRÊT</string>
+    <string name="widget_power">MARCHE</string>
+    <string name="widget_volume_up">VOL +</string>
+    <string name="widget_open">OUVRIR</string>
+    <string name="db_load_error">Impossible de charger la base de télécommandes. Essayez de réinstaller l\'application.</string>
+</resources>

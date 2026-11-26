@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import java.util.Locale
 
 object LocaleManager {
-    private const val PREFS_NAME = "mi_favorites_prefs"
+    private const val PREFS_NAME = FavoriteManager.PREFS_NAME
     private const val KEY_LANG = "selected_language"
 
     var currentLanguage = mutableStateOf("system")
@@ -41,7 +41,7 @@ object LocaleManager {
     ): Context {
         if (lang == "system") return context
 
-        val locale = if (lang == "iw") Locale.forLanguageTag("iw") else Locale.forLanguageTag(lang)
+        val locale = Locale.forLanguageTag(lang)
         Locale.setDefault(locale)
 
         val config = Configuration(context.resources.configuration)

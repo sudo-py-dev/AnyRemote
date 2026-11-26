@@ -1,6 +1,7 @@
 package com.anyremote.remote.data
 
 import android.content.Context
+import android.util.Log
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.protobuf.ProtoBuf
@@ -38,16 +39,25 @@ object RemoteDatabase {
         return acOptions.keys.any { it.lowercase().replace("_", "") == normalized }
     }
 
+    /** True when remote.pb couldn't be read; the dashboard shows an error instead of an empty list. */
+    var loadFailed: Boolean = false
+        private set
+
+    private var loaded = false
+
     @OptIn(ExperimentalSerializationApi::class)
     fun init(context: Context) {
-        if (deviceTypes.isNotEmpty()) return
+        if (loaded) return
+        loaded = true
         try {
-            val bytes = context.assets.open("remote.pb").use { stream -> stream.readBytes() }
+            val bytes = context.assets.open("remote.pb").use { it.readBytes() }
             val container = ProtoBuf.decodeFromByteArray(DatabaseContainer.serializer(), bytes)
             deviceTypes = container.devices
             acOptions = container.acOptions
+            loadFailed = false
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("RemoteDatabase", "Failed to load remote.pb", e)
+            loadFailed = true
         }
     }
 }

@@ -116,7 +116,7 @@ fun BrandSelectionPanel(
                 ),
             singleLine = true,
             leadingIcon = {
-                Icon(Icons.Default.Search, contentDescription = "Search", tint = ElectricBlue)
+                Icon(Icons.Default.Search, contentDescription = stringResource(R.string.cd_search), tint = ElectricBlue)
             },
         )
 

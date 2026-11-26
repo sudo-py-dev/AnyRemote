@@ -321,6 +321,24 @@ fun MainDashboardPage(
         modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        if (RemoteDatabase.loadFailed) {
+            Card(
+                shape = RoundedCornerShape(14.dp),
+                colors = CardDefaults.cardColors(containerColor = CrimsonRed.copy(alpha = 0.08f)),
+                border = BorderStroke(1.dp, CrimsonRed.copy(alpha = 0.2f)),
+                modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp),
+            ) {
+                Row(modifier = Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Default.Warning, contentDescription = null, tint = CrimsonRed)
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Text(
+                        text = stringResource(R.string.db_load_error),
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontSize = 13.sp,
+                    )
+                }
+            }
+        }
         if (showIrNotice) {
             Card(
                 shape = RoundedCornerShape(14.dp),

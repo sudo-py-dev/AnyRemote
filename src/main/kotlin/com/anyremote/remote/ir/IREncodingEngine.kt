@@ -1,11 +1,19 @@
 package com.anyremote.remote.ir
 
-import android.util.Log
-
 object IREncodingEngine {
-    private const val TAG = "IREncodingEngine"
-
-    fun compileGreeAc(
+    /**
+     * Builds the 8-byte Gree AC state. Bit positions follow the Gree layout documented in
+     * IRremoteESP8266 (ir_Gree.h):
+     *
+     * - byte 0: mode (0-2), power (3), fan (4-5), auto swing (6), sleep (7)
+     * - byte 1: temperature - 16 (0-3)
+     * - byte 2: turbo (4), light (5)
+     * - byte 3: fixed 0b0101 in the high nibble
+     * - byte 4: vertical swing (0-3), horizontal swing (4-6)
+     * - byte 5: temperature display (0-1), fixed 0b100 in bits 3-5
+     * - byte 7: econo (2), checksum (4-7)
+     */
+    fun greeState(
         power: Boolean,
         temp: Int,
         mode: String,
@@ -14,16 +22,10 @@ object IREncodingEngine {
         swingPosition: Int = 0,
         turbo: Boolean = false,
         light: Boolean = true,
-        auxHeat: Boolean = false,
-        health: Boolean = false,
-        ventilation: Boolean = false,
         eco: Boolean = false,
         swingH: Boolean = false,
-        mute: Boolean = false,
         tempDisplay: Boolean = false,
-    ): IntArray {
-        val state = ByteArray(8)
-
+    ): ByteArray {
         val modeVal =
             when (mode) {
                 "MA" -> 0
@@ -33,122 +35,60 @@ object IREncodingEngine {
                 "MH" -> 4
                 else -> 1
             }
-        val powerVal = if (power) 1 else 0
         val fanVal =
             when (fanSpeed) {
-                "SA" -> 0
                 "SL" -> 1
                 "SM" -> 2
                 "SH" -> 3
                 else -> 0
             }
-        val swingAutoVal = if (swing) 1 else 0
-        val sleepVal = if (power && mute) 1 else 0
-
-        state[0] =
-            ((modeVal and 0x07) or
-                    ((powerVal and 0x01) shl 3) or
-                    ((fanVal and 0x03) shl 4) or
-                    ((swingAutoVal and 0x01) shl 6) or
-                    ((sleepVal and 0x01) shl 7))
-                .toByte()
-
-        val tempC = temp.coerceIn(16, 30)
-        val tempVal = tempC - 16
-        state[1] = (tempVal and 0x0F).toByte()
-
-        val turboVal = if (power && turbo) 1 else 0
-        state[2] = (0x20 or (turboVal shl 4)).toByte()
-
-        state[3] = 0x50.toByte()
-
-        // SwingV nibble: 1 = auto sweep, 2..6 = fixed vane positions, 0 = leave as is.
-        val swingVVal =
+        // SwingV: 1 = auto sweep, 2..6 = fixed vane positions, 0 = leave as is.
+        val swingV =
             when {
                 swing -> 1
                 swingPosition in 1..5 -> swingPosition + 1
                 else -> 0
             }
-        val lightVal = if (power && light) 1 else 0
-        val swingHVal = if (power && swingH) 1 else 0
-        val auxHeatVal = if (power && auxHeat) 1 else 0
-        val healthVal = if (power && health) 1 else 0
-        val ventilationVal = if (power && ventilation) 1 else 0
-        state[4] =
-            ((swingVVal and 0x0F) or
-                    (lightVal shl 6) or
-                    (swingHVal shl 3) or
-                    (auxHeatVal) or
-                    (healthVal shl 4) or
-                    (ventilationVal shl 5))
-                .toByte()
+        fun Boolean.bit(shift: Int) = if (this) 1 shl shift else 0
+        val on = power
 
-        state[5] = 0x21.toByte()
+        val state = ByteArray(8)
+        state[0] = (modeVal or power.bit(3) or (fanVal shl 4) or swing.bit(6)).toByte()
+        state[1] = ((temp.coerceIn(16, 30) - 16) and 0x0F).toByte()
+        state[2] = ((on && turbo).bit(4) or (on && light).bit(5)).toByte()
+        state[3] = 0x50
+        state[4] = (swingV or ((if (on && swingH) 1 else 0) shl 4)).toByte()
+        state[5] = (0x20 or (if (on && tempDisplay) 2 else 1)).toByte()
+        state[7] = ((on && eco).bit(2) or (greeChecksum(state) shl 4)).toByte()
+        return state
+    }
 
-        val ecoVal = if (power && eco) 1 else 0
-        val tempDisplayVal = if (power && tempDisplay) 1 else 0
-        state[6] = ((ecoVal shl 6) or (tempDisplayVal shl 2)).toByte()
-
+    /** 10 + low nibbles of bytes 0-3 + high nibbles of bytes 4-6, keeping the low 4 bits. */
+    fun greeChecksum(state: ByteArray): Int {
         var sum = 10
-        for (i in 0..3) {
-            sum += (state[i].toInt() and 0x0F)
+        for (i in 0..3) sum += state[i].toInt() and 0x0F
+        for (i in 4..6) sum += (state[i].toInt() and 0xFF) shr 4
+        return sum and 0x0F
+    }
+
+    /** Gree timing: header, 4 bytes + 3-bit footer, gap, 4 bytes, gap. Bits are sent LSB first. */
+    fun encodeGree(state: ByteArray): IntArray {
+        val pulses = mutableListOf(9000, 4500)
+        fun bit(b: Int) {
+            pulses += 620
+            pulses += if (b == 1) 1600 else 540
         }
-        for (i in 4..6) {
-            sum += ((state[i].toInt() and 0xFF) shr 4)
-        }
-        val checksumVal = sum and 0x0F
-        state[7] = (checksumVal shl 4).toByte()
-
-        val hexState = state.joinToString(" ") { "%02X".format(it) }
-        Log.i(TAG, "Compiled Gree AC 8-byte state: $hexState (Checksum nibble: $checksumVal)")
-
-        val pulses = mutableListOf<Int>()
-
-        pulses.add(9000)
-        pulses.add(4500)
-
-        for (i in 0..3) {
-            val b = state[i].toInt() and 0xFF
-            for (bitIndex in 0..7) {
-                val bit = (b shr bitIndex) and 1
-                pulses.add(620)
-                if (bit == 1) {
-                    pulses.add(1600)
-                } else {
-                    pulses.add(540)
-                }
+        fun bytes(range: IntRange) =
+            range.forEach { i ->
+                val b = state[i].toInt() and 0xFF
+                for (bitIndex in 0..7) bit((b shr bitIndex) and 1)
             }
-        }
 
-        val footerBits = intArrayOf(0, 1, 0)
-        for (bit in footerBits) {
-            pulses.add(620)
-            if (bit == 1) {
-                pulses.add(1600)
-            } else {
-                pulses.add(540)
-            }
-        }
-
-        pulses.add(620)
-        pulses.add(19980)
-
-        for (i in 4..7) {
-            val b = state[i].toInt() and 0xFF
-            for (bitIndex in 0..7) {
-                val bit = (b shr bitIndex) and 1
-                pulses.add(620)
-                if (bit == 1) {
-                    pulses.add(1600)
-                } else {
-                    pulses.add(540)
-                }
-            }
-        }
-
-        pulses.add(620)
-        pulses.add(19980)
-
+        bytes(0..3)
+        intArrayOf(0, 1, 0).forEach(::bit)
+        pulses += listOf(620, 19980)
+        bytes(4..7)
+        pulses += listOf(620, 19980)
         return pulses.toIntArray()
     }
 
@@ -156,34 +96,17 @@ object IREncodingEngine {
         address: Int,
         command: Int,
     ): IntArray {
-
-        val pulses = mutableListOf<Int>()
-
-        pulses.add(9000)
-        pulses.add(4500)
-
+        val pulses = mutableListOf(9000, 4500)
         val data =
             (address and 0xFF) or
-                (((address.inv()) and 0xFF) shl 8) or
+                ((address.inv() and 0xFF) shl 8) or
                 ((command and 0xFF) shl 16) or
-                (((command.inv()) and 0xFF) shl 24)
-
+                ((command.inv() and 0xFF) shl 24)
         for (i in 0..31) {
-            val bit = (data shr i) and 1
-            if (bit == 1) {
-
-                pulses.add(560)
-                pulses.add(1690)
-            } else {
-
-                pulses.add(560)
-                pulses.add(560)
-            }
+            pulses += 560
+            pulses += if ((data shr i) and 1 == 1) 1690 else 560
         }
-
-        pulses.add(560)
-        pulses.add(20000)
-
+        pulses += listOf(560, 20000)
         return pulses.toIntArray()
     }
 }

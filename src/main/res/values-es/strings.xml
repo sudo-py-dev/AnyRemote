@@ -100,12 +100,8 @@
     <string name="ac_label_turbo_on">TURBO ACTIVO</string>
     <string name="ac_label_light">LUZ</string>
     <string name="ac_label_light_on">LUZ ENCENDIDA</string>
-    <string name="ac_label_aux_heat">CALEFACCIÓN AUX</string>
-    <string name="ac_label_health">SALUD</string>
-    <string name="ac_label_ventilation">VENTILACIÓN</string>
     <string name="ac_label_eco">ECO</string>
     <string name="ac_label_swing_h">OSCILACIÓN HORIZ</string>
-    <string name="ac_label_mute">MUTE</string>
     <string name="ac_label_temp_display">VER TEMP</string>
     <string name="fan_speed_banner">VELOCIDAD VENTILADOR: %1$d</string>
     <string name="fan_power_off_banner">VENTILADOR APAGADO</string>
@@ -151,5 +147,40 @@
     <string name="category_projector">Proyector</string>
     <string name="category_cable_satellite_box">Decodificador de cable/satélite</string>
     <string name="category_camera">Cámara</string>
-</resources>
 
+    <string name="cd_power">Encendido</string>
+    <string name="cd_source">Fuente</string>
+    <string name="cd_mute">Silencio</string>
+    <string name="cd_home">Inicio</string>
+    <string name="cd_menu">Menú</string>
+    <string name="cd_up">Arriba</string>
+    <string name="cd_down">Abajo</string>
+    <string name="cd_left">Izquierda</string>
+    <string name="cd_right">Derecha</string>
+    <string name="cd_volume_up">Subir volumen</string>
+    <string name="cd_volume_down">Bajar volumen</string>
+    <string name="cd_channel_up">Canal siguiente</string>
+    <string name="cd_channel_down">Canal anterior</string>
+    <string name="cd_temp_up">Subir temperatura</string>
+    <string name="cd_temp_down">Bajar temperatura</string>
+    <string name="cd_shutter">Obturador</string>
+    <string name="cd_toggle_favorite">Marcar como favorito</string>
+    <string name="cd_search">Buscar</string>
+    <string name="cd_test_signal">Probar señal IR</string>
+    <string name="cd_previous_code">Código anterior</string>
+    <string name="cd_next_code">Código siguiente</string>
+    <string name="ir_no_emitter">No se encontró un emisor IR en este teléfono</string>
+    <string name="ir_permission_denied">Permiso de IR denegado</string>
+    <string name="ir_error">No se pudo enviar la señal IR</string>
+    <string name="shortcut_long_label">Control %1$s %2$s</string>
+    <string name="shortcut_adding">Añadiendo acceso directo: %1$s</string>
+    <string name="shortcut_not_supported">Tu launcher no admite accesos directos fijados</string>
+    <string name="shortcut_failed">No se pudo añadir el acceso directo</string>
+    <string name="widget_label">Widget rápido de AnyRemote</string>
+    <string name="widget_title">CONTROL RÁPIDO</string>
+    <string name="widget_ready">● LISTO</string>
+    <string name="widget_power">ENCENDER</string>
+    <string name="widget_volume_up">VOL +</string>
+    <string name="widget_open">ABRIR</string>
+    <string name="db_load_error">No se pudo cargar la base de datos de controles. Prueba a reinstalar la app.</string>
+</resources>

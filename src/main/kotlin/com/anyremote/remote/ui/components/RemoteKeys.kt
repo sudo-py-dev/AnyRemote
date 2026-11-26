@@ -103,7 +103,7 @@ fun PowerKey(
 ) {
     RoundIconKey(
         icon = Icons.Default.PowerSettingsNew,
-        contentDescription = "Power",
+        contentDescription = stringResource(R.string.cd_power),
         onClick = onClick,
         modifier = modifier,
         size = size,
@@ -219,6 +219,8 @@ fun <T> SegmentedSelector(
     }
 }
 
+private data class DPadArrow(val key: RemoteKey, val icon: ImageVector, val alignment: Alignment, val description: Int)
+
 /** Circular D-pad with OK in the middle. */
 @Composable
 fun DPad(
@@ -258,12 +260,12 @@ fun DPad(
         }
 
         listOf(
-                Triple(RemoteKey.UP, Icons.Default.KeyboardArrowUp, Alignment.TopCenter),
-                Triple(RemoteKey.DOWN, Icons.Default.KeyboardArrowDown, Alignment.BottomCenter),
-                Triple(RemoteKey.LEFT, Icons.AutoMirrored.Filled.KeyboardArrowLeft, Alignment.CenterStart),
-                Triple(RemoteKey.RIGHT, Icons.AutoMirrored.Filled.KeyboardArrowRight, Alignment.CenterEnd),
+                DPadArrow(RemoteKey.UP, Icons.Default.KeyboardArrowUp, Alignment.TopCenter, R.string.cd_up),
+                DPadArrow(RemoteKey.DOWN, Icons.Default.KeyboardArrowDown, Alignment.BottomCenter, R.string.cd_down),
+                DPadArrow(RemoteKey.LEFT, Icons.AutoMirrored.Filled.KeyboardArrowLeft, Alignment.CenterStart, R.string.cd_left),
+                DPadArrow(RemoteKey.RIGHT, Icons.AutoMirrored.Filled.KeyboardArrowRight, Alignment.CenterEnd, R.string.cd_right),
             )
-            .forEach { (key, icon, alignment) ->
+            .forEach { (key, icon, alignment, description) ->
                 IconButton(
                     onClick = {
                         haptic.performHapticFeedback(HapticFeedbackType.LongPress)
@@ -273,7 +275,7 @@ fun DPad(
                 ) {
                     Icon(
                         icon,
-                        contentDescription = key.name.lowercase().replaceFirstChar { it.uppercase() },
+                        contentDescription = stringResource(description),
                         tint = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.size(28.dp),
                     )

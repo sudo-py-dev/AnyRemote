@@ -34,6 +34,8 @@ private val numberPad =
         listOf("-", "0", "⌫"),
     )
 
+private val specialKeys = setOf("-", "⌫")
+
 private fun padKey(label: String): RemoteKey =
     when (label) {
         "⌫" -> RemoteKey.BACKSPACE
@@ -52,7 +54,7 @@ fun TvLayout(onKeyPressed: (RemoteKey) -> Unit) {
     ) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             PowerKey(onClick = { onKeyPressed(RemoteKey.POWER) }, size = 54.dp)
-            RoundIconKey(Icons.AutoMirrored.Filled.Input, "Source", { onKeyPressed(RemoteKey.SOURCE) })
+            RoundIconKey(Icons.AutoMirrored.Filled.Input, stringResource(R.string.cd_source), { onKeyPressed(RemoteKey.SOURCE) })
             RemoteButton(
                 onClick = { showNumericPad = !showNumericPad },
                 modifier = Modifier.size(54.dp),
@@ -65,7 +67,7 @@ fun TvLayout(onKeyPressed: (RemoteKey) -> Unit) {
                     fontSize = 14.sp,
                 )
             }
-            RoundIconKey(Icons.AutoMirrored.Filled.VolumeMute, "Mute", { onKeyPressed(RemoteKey.MUTE) })
+            RoundIconKey(Icons.AutoMirrored.Filled.VolumeMute, stringResource(R.string.cd_mute), { onKeyPressed(RemoteKey.MUTE) })
         }
 
         if (showNumericPad) {
@@ -79,7 +81,7 @@ fun TvLayout(onKeyPressed: (RemoteKey) -> Unit) {
                         horizontalArrangement = Arrangement.spacedBy(16.dp),
                     ) {
                         row.forEach { label ->
-                            val isSpecial = label == "-" || label == "⌫"
+                            val isSpecial = label in specialKeys
                             RemoteButton(
                                 onClick = { onKeyPressed(padKey(label)) },
                                 modifier = Modifier.weight(1f).height(58.dp),
@@ -104,9 +106,9 @@ fun TvLayout(onKeyPressed: (RemoteKey) -> Unit) {
         }
 
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-            RoundIconKey(Icons.AutoMirrored.Filled.ArrowBack, "Back", { onKeyPressed(RemoteKey.BACK) })
-            RoundIconKey(Icons.Default.Home, "Home", { onKeyPressed(RemoteKey.HOME) })
-            RoundIconKey(Icons.Default.Menu, "Menu", { onKeyPressed(RemoteKey.MENU) })
+            RoundIconKey(Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.back), { onKeyPressed(RemoteKey.BACK) })
+            RoundIconKey(Icons.Default.Home, stringResource(R.string.cd_home), { onKeyPressed(RemoteKey.HOME) })
+            RoundIconKey(Icons.Default.Menu, stringResource(R.string.cd_menu), { onKeyPressed(RemoteKey.MENU) })
         }
 
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(32.dp)) {
@@ -114,8 +116,8 @@ fun TvLayout(onKeyPressed: (RemoteKey) -> Unit) {
                 label = stringResource(R.string.vol),
                 upIcon = Icons.Default.Add,
                 downIcon = Icons.Default.Remove,
-                upDescription = "Volume Up",
-                downDescription = "Volume Down",
+                upDescription = stringResource(R.string.cd_volume_up),
+                downDescription = stringResource(R.string.cd_volume_down),
                 onUp = { onKeyPressed(RemoteKey.VOLUME_UP) },
                 onDown = { onKeyPressed(RemoteKey.VOLUME_DOWN) },
                 modifier = Modifier.weight(1f),
@@ -124,8 +126,8 @@ fun TvLayout(onKeyPressed: (RemoteKey) -> Unit) {
                 label = stringResource(R.string.ch),
                 upIcon = Icons.Default.KeyboardArrowUp,
                 downIcon = Icons.Default.KeyboardArrowDown,
-                upDescription = "Channel Up",
-                downDescription = "Channel Down",
+                upDescription = stringResource(R.string.cd_channel_up),
+                downDescription = stringResource(R.string.cd_channel_down),
                 onUp = { onKeyPressed(RemoteKey.CHANNEL_UP) },
                 onDown = { onKeyPressed(RemoteKey.CHANNEL_DOWN) },
                 modifier = Modifier.weight(1f),

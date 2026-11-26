@@ -50,7 +50,7 @@ fun EditRemoteScreen(
 
     BackHandler { onDismiss() }
 
-    val isDark = isSystemInDarkTheme()
+    val isDark = isAppDarkTheme()
     val bgColor = if (isDark) Color(0xFF121212) else Color(0xFFF7F8FA)
     val cardColor = if (isDark) Color(0xFF1E1E1E) else Color.White
     val labelColor = if (isDark) Color(0xFF90A4AE) else Color(0xFF8E9AA7)

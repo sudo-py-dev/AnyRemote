@@ -85,7 +85,7 @@ fun RemoteControllerScreen(
                 title = {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
-                            text = brand?.nameEn?.uppercase() ?: "REMOTE",
+                            text = brand?.nameEn?.uppercase() ?: stringResource(R.string.remote_fallback_title),
                             fontWeight = FontWeight.Bold,
                             color = contentColor,
                             fontSize = 15.sp,
@@ -105,7 +105,7 @@ fun RemoteControllerScreen(
                     IconButton(onClick = onBackClick) {
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
+                            contentDescription = stringResource(R.string.back),
                             tint = contentColor)
                     }
                 },
@@ -123,7 +123,7 @@ fun RemoteControllerScreen(
                             imageVector =
                                 if (isFavorite) Icons.Default.Favorite
                                 else Icons.Default.FavoriteBorder,
-                            contentDescription = "Toggle Favorite",
+                            contentDescription = stringResource(R.string.cd_toggle_favorite),
                             tint = if (isFavorite) Color(0xFFEF4444) else contentColor,
                         )
                     }
@@ -138,13 +138,13 @@ fun RemoteControllerScreen(
                                 deviceName =
                                     device?.getLocalizedName(context)
                                         ?: context.getString(R.string.controller_fallback_subtitle),
-                                brandName = brand?.nameEn ?: "Brand",
+                                brandName = brand?.nameEn ?: context.getString(R.string.remote_fallback_title),
                             )
                         },
                     ) {
                         Icon(
                             imageVector = Icons.Default.PushPin,
-                            contentDescription = "Pin to Home Screen",
+                            contentDescription = stringResource(R.string.pin_to_home),
                             tint = contentColor,
                         )
                     }

@@ -100,12 +100,8 @@
     <string name="ac_label_turbo_on">تشغيل التربو</string>
     <string name="ac_label_light">إضاءة</string>
     <string name="ac_label_light_on">تشغيل الإضاءة</string>
-    <string name="ac_label_aux_heat">تدفئة إضافية</string>
-    <string name="ac_label_health">الوضع الصحي</string>
-    <string name="ac_label_ventilation">تهوية</string>
     <string name="ac_label_eco">توفير الطاقة</string>
     <string name="ac_label_swing_h">تأرجح أفقي</string>
-    <string name="ac_label_mute">كتم الصوت</string>
     <string name="ac_label_temp_display">عرض الحرارة</string>
     <string name="fan_speed_banner">سرعة المروحة: %1$d</string>
     <string name="fan_power_off_banner">المروحة مطفأة</string>
@@ -151,5 +147,40 @@
     <string name="category_projector">جهاز عرض</string>
     <string name="category_cable_satellite_box">جهاز استقبال كابل/قمر صناعي</string>
     <string name="category_camera">كاميرا</string>
-</resources>
 
+    <string name="cd_power">تشغيل</string>
+    <string name="cd_source">المصدر</string>
+    <string name="cd_mute">كتم الصوت</string>
+    <string name="cd_home">الرئيسية</string>
+    <string name="cd_menu">القائمة</string>
+    <string name="cd_up">أعلى</string>
+    <string name="cd_down">أسفل</string>
+    <string name="cd_left">يسار</string>
+    <string name="cd_right">يمين</string>
+    <string name="cd_volume_up">رفع الصوت</string>
+    <string name="cd_volume_down">خفض الصوت</string>
+    <string name="cd_channel_up">القناة التالية</string>
+    <string name="cd_channel_down">القناة السابقة</string>
+    <string name="cd_temp_up">رفع درجة الحرارة</string>
+    <string name="cd_temp_down">خفض درجة الحرارة</string>
+    <string name="cd_shutter">الغالق</string>
+    <string name="cd_toggle_favorite">تبديل المفضلة</string>
+    <string name="cd_search">بحث</string>
+    <string name="cd_test_signal">اختبار إشارة الأشعة تحت الحمراء</string>
+    <string name="cd_previous_code">الرمز السابق</string>
+    <string name="cd_next_code">الرمز التالي</string>
+    <string name="ir_no_emitter">لا يوجد مرسل أشعة تحت حمراء في هذا الهاتف</string>
+    <string name="ir_permission_denied">تم رفض إذن الأشعة تحت الحمراء</string>
+    <string name="ir_error">تعذر إرسال إشارة الأشعة تحت الحمراء</string>
+    <string name="shortcut_long_label">جهاز تحكم %1$s %2$s</string>
+    <string name="shortcut_adding">جارٍ إضافة اختصار: %1$s</string>
+    <string name="shortcut_not_supported">المشغل لديك لا يدعم الاختصارات المثبتة</string>
+    <string name="shortcut_failed">تعذرت إضافة الاختصار</string>
+    <string name="widget_label">أداة AnyRemote السريعة</string>
+    <string name="widget_title">تحكم سريع</string>
+    <string name="widget_ready">● جاهز</string>
+    <string name="widget_power">تشغيل</string>
+    <string name="widget_volume_up">صوت +</string>
+    <string name="widget_open">فتح</string>
+    <string name="db_load_error">تعذر تحميل قاعدة بيانات أجهزة التحكم. حاول إعادة تثبيت التطبيق.</string>
+</resources>

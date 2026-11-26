@@ -62,7 +62,7 @@ fun AudioLayout(onKeyPressed: (RemoteKey) -> Unit) {
             )
             RoundIconKey(
                 Icons.AutoMirrored.Filled.VolumeMute,
-                "Mute",
+                stringResource(R.string.cd_mute),
                 { onKeyPressed(RemoteKey.MUTE) },
                 enabled = power,
             )

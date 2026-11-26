@@ -61,7 +61,7 @@ fun CameraLayout(onKeyPressed: (RemoteKey) -> Unit) {
             ) {
                 Icon(
                     imageVector = Icons.Default.CameraAlt,
-                    contentDescription = "Shutter",
+                    contentDescription = stringResource(R.string.cd_shutter),
                     tint = MaterialTheme.colorScheme.surface,
                     modifier = Modifier.size(36.dp),
                 )

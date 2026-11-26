@@ -100,12 +100,8 @@
     <string name="ac_label_turbo_on">טורבו פעיל</string>
     <string name="ac_label_light">תאורה</string>
     <string name="ac_label_light_on">תאורה פעילה</string>
-    <string name="ac_label_aux_heat">חום נוסף</string>
-    <string name="ac_label_health">מצב בריאות</string>
-    <string name="ac_label_ventilation">אוורור</string>
     <string name="ac_label_eco">eco</string>
     <string name="ac_label_swing_h">תנועה אופקית</string>
-    <string name="ac_label_mute">השתקה</string>
     <string name="ac_label_temp_display">הצג טמפרטורה</string>
     <string name="fan_speed_banner">מהירות מאוורר: %1$d</string>
     <string name="fan_power_off_banner">מאוורר כבוי</string>
@@ -151,6 +147,40 @@
     <string name="category_projector">מקרן</string>
     <string name="category_cable_satellite_box">ממיר כבלים/לוויין</string>
     <string name="category_camera">מצלמה</string>
+
+    <string name="cd_power">הפעלה</string>
+    <string name="cd_source">מקור</string>
+    <string name="cd_mute">השתקה</string>
+    <string name="cd_home">בית</string>
+    <string name="cd_menu">תפריט</string>
+    <string name="cd_up">למעלה</string>
+    <string name="cd_down">למטה</string>
+    <string name="cd_left">שמאלה</string>
+    <string name="cd_right">ימינה</string>
+    <string name="cd_volume_up">הגברת עוצמה</string>
+    <string name="cd_volume_down">הנמכת עוצמה</string>
+    <string name="cd_channel_up">ערוץ הבא</string>
+    <string name="cd_channel_down">ערוץ קודם</string>
+    <string name="cd_temp_up">העלאת טמפרטורה</string>
+    <string name="cd_temp_down">הורדת טמפרטורה</string>
+    <string name="cd_shutter">צמצם</string>
+    <string name="cd_toggle_favorite">החלפת מועדף</string>
+    <string name="cd_search">חיפוש</string>
+    <string name="cd_test_signal">בדיקת אות IR</string>
+    <string name="cd_previous_code">קוד קודם</string>
+    <string name="cd_next_code">קוד הבא</string>
+    <string name="ir_no_emitter">לא נמצא משדר IR בטלפון הזה</string>
+    <string name="ir_permission_denied">אין הרשאת IR</string>
+    <string name="ir_error">לא ניתן לשלוח את אות ה-IR</string>
+    <string name="shortcut_long_label">שלט %2$s %1$s</string>
+    <string name="shortcut_adding">מוסיף קיצור דרך: %1$s</string>
+    <string name="shortcut_not_supported">מסך הבית שלך לא תומך בקיצורי דרך מוצמדים</string>
+    <string name="shortcut_failed">לא ניתן להוסיף את קיצור הדרך</string>
+    <string name="widget_label">ווידג׳ט מהיר של AnyRemote</string>
+    <string name="widget_title">שלט מהיר</string>
+    <string name="widget_ready">● מוכן</string>
+    <string name="widget_power">הפעלה</string>
+    <string name="widget_volume_up">עוצמה +</string>
+    <string name="widget_open">פתיחה</string>
+    <string name="db_load_error">לא ניתן לטעון את מאגר השלטים. נסו להתקין את האפליקציה מחדש.</string>
 </resources>
-
-
