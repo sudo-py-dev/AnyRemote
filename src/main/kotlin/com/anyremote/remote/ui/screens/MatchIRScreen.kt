@@ -51,7 +51,11 @@ fun MatchIRScreen(
     RemoteDatabase.init(context)
     val haptic = rememberVibratingHapticFeedback()
     val scope = rememberCoroutineScope()
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val sheetState =
+        rememberBottomSheetState(
+            initialValue = SheetValue.Hidden,
+            enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
+        )
 
     val category = remember(deviceId) { RemoteDatabase.deviceTypes.firstOrNull { it.id == deviceId } }
     val brand = remember(brandId, category) { category?.brands?.firstOrNull { it.id == brandId } }

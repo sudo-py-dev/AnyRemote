@@ -200,7 +200,7 @@ fun BrandListItem(
     onClick: () -> Unit,
 ) {
     ListItem(
-        headlineContent = { Text(brand.nameEn) },
+        onClick = onClick,
         leadingContent = {
             Surface(
                 shape = CircleShape,
@@ -213,6 +213,7 @@ fun BrandListItem(
                 }
             }
         },
-        modifier = Modifier.clickable(onClick = onClick),
-    )
+    ) {
+        Text(brand.nameEn)
+    }
 }
