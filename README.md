@@ -86,3 +86,7 @@ Issues and pull requests are welcome, especially:
 - new translations or corrections
 
 Please run `./gradlew testDebugUnitTest assembleDebug` before opening a pull request.
+
+## License
+
+AnyRemote is released under the [MIT License](LICENSE).
