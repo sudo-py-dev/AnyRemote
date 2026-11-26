@@ -85,17 +85,17 @@
     <string name="ac_mode_dry">除湿</string>
     <string name="ac_mode_fan">送風</string>
     <string name="ac_mode_auto">自動</string>
-    <string name="ac_wind_auto">自動風量</string>
-    <string name="ac_wind_low">微風</string>
-    <string name="ac_wind_medium">弱風</string>
-    <string name="ac_wind_high">強風</string>
+    <string name="ac_wind_auto">自動</string>
+    <string name="ac_wind_low">弱</string>
+    <string name="ac_wind_medium">中</string>
+    <string name="ac_wind_high">強</string>
     <string name="ac_label_power">電源</string>
     <string name="ac_label_mode">モード</string>
     <string name="ac_label_temperature">温度</string>
     <string name="ac_label_speed">風速</string>
     <string name="ac_label_direction">風向</string>
     <string name="ac_label_sweep">スイング</string>
-    <string name="ac_label_sweep_on">スイングON</string>
+    <string name="ac_label_sweep_on">スイングon</string>
     <string name="ac_label_turbo">ターボ</string>
     <string name="ac_label_turbo_on">ターボオン</string>
     <string name="ac_label_light">ライト</string>
@@ -110,7 +110,7 @@
     <string name="fan_mode_natural">リズム</string>
     <string name="fan_mode_sleep">おやすみ</string>
     <string name="on_word">ON</string>
-    <string name="off_word">OFF</string>
+    <string name="off_word">Off</string>
     <string name="audio_volume_banner">音量：%1$d</string>
     <string name="audio_standby_banner">スピーカー待機</string>
     <string name="audio_source_banner">入力源：%1$s</string>
@@ -118,7 +118,7 @@
     <string name="audio_source_hdmi">HDMI</string>
     <string name="audio_source_optical">光角型</string>
     <string name="audio_source_aux">AUX</string>
-    <string name="camera_dslr_shutter">DSLRシャッターリリース</string>
+    <string name="camera_dslr_shutter">Dslrシャッターリリース</string>
     <string name="camera_delay_instant">即時快門</string>
     <string name="camera_delay_2s">2秒遅延</string>
     <string name="camera_delay_5s">5秒遅延</string>
@@ -132,8 +132,8 @@
     <string name="remote_fallback_title">リモコン</string>
     <string name="controller_fallback_subtitle">コントローラー</string>
     <string name="all_caps">すべて</string>
-    <string name="ir_sensor_missing_title">IR送信機が検出されませんでした</string>
-    <string name="ir_sensor_missing_message">お使いのデバイスには赤外線（IR）送信機が内蔵されていません。赤外線信号を介して物理的な家電製品を制御することはできません。</string>
+    <string name="ir_sensor_missing_title">Ir送信機が検出されませんでした</string>
+    <string name="ir_sensor_missing_message">お使いのデバイスには赤外線（ir）送信機が内蔵されていません。赤外線信号を介して物理的な家電製品を制御することはできません。</string>
     <string name="ir_sensor_missing_action">了解</string>
 
     <!-- Device Category Translations -->
@@ -141,9 +141,9 @@
     <string name="category_set_top_box">セットトップボックス</string>
     <string name="category_ac">エアコン</string>
     <string name="category_fan">扇風機</string>
-    <string name="category_box">TVボックス</string>
-    <string name="category_av_receiver">AVレシーバー</string>
-    <string name="category_dvd_player">DVDプレーヤー</string>
+    <string name="category_box">Tvボックス</string>
+    <string name="category_av_receiver">Avレシーバー</string>
+    <string name="category_dvd_player">Dvdプレーヤー</string>
     <string name="category_projector">プロジェクター</string>
     <string name="category_cable_satellite_box">ケーブル/衛星放送ボックス</string>
     <string name="category_camera">カメラ</string>
@@ -183,4 +183,20 @@
     <string name="widget_volume_up">音量 +</string>
     <string name="widget_open">開く</string>
     <string name="db_load_error">リモコンデータベースを読み込めませんでした。アプリを再インストールしてください。</string>
+    <string name="your_remotes">マイリモコン</string>
+    <string name="add_remote">リモコンを追加</string>
+    <string name="remote_removed">リモコンを削除しました</string>
+    <string name="undo">元に戻す</string>
+    <string name="more_options">その他のオプション</string>
+    <string name="dynamic_color">ダイナミックカラー</string>
+    <string name="dynamic_color_subtitle">壁紙の色を使用</string>
+    <string name="dpad">十字キー</string>
+    <string name="number_pad">テンキー</string>
+    <string name="code_set_of">コード %1$d / %2$d</string>
+    <string name="appearance">外観</string>
+    <string name="general">一般</string>
+    <string name="airflow">風向</string>
+    <string name="clear_search">検索をクリア</string>
+    <string name="delay">遅延</string>
+    <string name="cd_backspace">削除</string>
 </resources>

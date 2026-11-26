@@ -85,10 +85,10 @@
     <string name="ac_mode_dry">除湿</string>
     <string name="ac_mode_fan">送风</string>
     <string name="ac_mode_auto">自动</string>
-    <string name="ac_wind_auto">自动风速</string>
-    <string name="ac_wind_low">低风速</string>
-    <string name="ac_wind_medium">中风速</string>
-    <string name="ac_wind_high">高风速</string>
+    <string name="ac_wind_auto">自动</string>
+    <string name="ac_wind_low">低</string>
+    <string name="ac_wind_medium">中</string>
+    <string name="ac_wind_high">高</string>
     <string name="ac_label_power">电源</string>
     <string name="ac_label_mode">模式</string>
     <string name="ac_label_temperature">温度</string>
@@ -133,7 +133,7 @@
     <string name="controller_fallback_subtitle">控制器</string>
     <string name="all_caps">全部</string>
     <string name="ir_sensor_missing_title">未检测到红外发射器</string>
-    <string name="ir_sensor_missing_message">您的设备没有内置的红外（IR）发射器。您无法使用此设备通过红外信号控制物理家用电器。</string>
+    <string name="ir_sensor_missing_message">您的设备没有内置的红外（ir）发射器。您无法使用此设备通过红外信号控制物理家用电器。</string>
     <string name="ir_sensor_missing_action">知道了</string>
 
     <!-- Device Category Translations -->
@@ -142,8 +142,8 @@
     <string name="category_ac">空调</string>
     <string name="category_fan">电风扇</string>
     <string name="category_box">盒子</string>
-    <string name="category_av_receiver">AV接收机</string>
-    <string name="category_dvd_player">DVD播放机</string>
+    <string name="category_av_receiver">Av接收机</string>
+    <string name="category_dvd_player">Dvd播放机</string>
     <string name="category_projector">投影仪</string>
     <string name="category_cable_satellite_box">有线/卫星电视盒</string>
     <string name="category_camera">相机</string>
@@ -183,4 +183,20 @@
     <string name="widget_volume_up">音量 +</string>
     <string name="widget_open">打开</string>
     <string name="db_load_error">无法加载遥控器数据库。请尝试重新安装应用。</string>
+    <string name="your_remotes">我的遥控器</string>
+    <string name="add_remote">添加遥控器</string>
+    <string name="remote_removed">已移除遥控器</string>
+    <string name="undo">撤消</string>
+    <string name="more_options">更多选项</string>
+    <string name="dynamic_color">动态配色</string>
+    <string name="dynamic_color_subtitle">使用壁纸颜色</string>
+    <string name="dpad">方向键</string>
+    <string name="number_pad">数字键盘</string>
+    <string name="code_set_of">代码 %1$d / %2$d</string>
+    <string name="appearance">外观</string>
+    <string name="general">常规</string>
+    <string name="airflow">风向</string>
+    <string name="clear_search">清除搜索</string>
+    <string name="delay">延时</string>
+    <string name="cd_backspace">删除</string>
 </resources>

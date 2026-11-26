@@ -85,10 +85,10 @@
     <string name="ac_mode_dry">ייבוש</string>
     <string name="ac_mode_fan">אוורור</string>
     <string name="ac_mode_auto">אוטומטי</string>
-    <string name="ac_wind_auto">רוח אוטומטית</string>
-    <string name="ac_wind_low">רוח חלשה</string>
-    <string name="ac_wind_medium">רוח בינונית</string>
-    <string name="ac_wind_high">רוח חזקה</string>
+    <string name="ac_wind_auto">אוטומטי</string>
+    <string name="ac_wind_low">נמוכה</string>
+    <string name="ac_wind_medium">בינונית</string>
+    <string name="ac_wind_high">גבוהה</string>
     <string name="ac_label_power">הפעלה</string>
     <string name="ac_label_mode">מצב</string>
     <string name="ac_label_temperature">טמפרטורה</string>
@@ -171,7 +171,7 @@
     <string name="cd_next_code">קוד הבא</string>
     <string name="ir_no_emitter">לא נמצא משדר IR בטלפון הזה</string>
     <string name="ir_permission_denied">אין הרשאת IR</string>
-    <string name="ir_error">לא ניתן לשלוח את אות ה-IR</string>
+    <string name="ir_error">לא ניתן לשלוח את אות ה-ir</string>
     <string name="shortcut_long_label">שלט %2$s %1$s</string>
     <string name="shortcut_adding">מוסיף קיצור דרך: %1$s</string>
     <string name="shortcut_not_supported">מסך הבית שלך לא תומך בקיצורי דרך מוצמדים</string>
@@ -183,4 +183,20 @@
     <string name="widget_volume_up">עוצמה +</string>
     <string name="widget_open">פתיחה</string>
     <string name="db_load_error">לא ניתן לטעון את מאגר השלטים. נסו להתקין את האפליקציה מחדש.</string>
+    <string name="your_remotes">השלטים שלך</string>
+    <string name="add_remote">הוספת שלט</string>
+    <string name="remote_removed">השלט הוסר</string>
+    <string name="undo">ביטול פעולה</string>
+    <string name="more_options">אפשרויות נוספות</string>
+    <string name="dynamic_color">צבעים דינמיים</string>
+    <string name="dynamic_color_subtitle">שימוש בצבעי הטפט</string>
+    <string name="dpad">לוח כיוונים</string>
+    <string name="number_pad">לוח מספרים</string>
+    <string name="code_set_of">קוד %1$d מתוך %2$d</string>
+    <string name="appearance">מראה</string>
+    <string name="general">כללי</string>
+    <string name="airflow">זרימת אוויר</string>
+    <string name="clear_search">ניקוי החיפוש</string>
+    <string name="delay">השהיה</string>
+    <string name="cd_backspace">מחיקה</string>
 </resources>

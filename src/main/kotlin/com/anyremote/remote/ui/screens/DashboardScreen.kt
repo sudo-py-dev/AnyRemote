@@ -1,41 +1,63 @@
 package com.anyremote.remote.ui.screens
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.PushPin
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.anyremote.remote.R
 import com.anyremote.remote.data.RemoteDatabase
 import com.anyremote.remote.data.RemoteDatabase.Brand
 import com.anyremote.remote.data.RemoteDatabase.DeviceType
 import com.anyremote.remote.service.FavoriteManager
+import com.anyremote.remote.service.ShortcutHelper
 import com.anyremote.remote.ui.components.*
 import com.anyremote.remote.ui.helpers.*
-import com.anyremote.remote.ui.layouts.*
-import com.anyremote.remote.ui.theme.*
+import kotlinx.coroutines.launch
+
+/** A remote saved on the dashboard. */
+data class SavedRemote(val device: DeviceType, val brand: Brand, val name: String)
+
+private fun loadSavedRemotes(context: android.content.Context): List<SavedRemote> =
+    FavoriteManager.getFavorites(context)
+        .mapNotNull { key ->
+            val parts = key.split("_")
+            if (parts.size != 2) return@mapNotNull null
+            val deviceId = parts[0].toIntOrNull() ?: return@mapNotNull null
+            val brandId = parts[1].toIntOrNull() ?: return@mapNotNull null
+            val device = RemoteDatabase.deviceTypes.firstOrNull { it.id == deviceId } ?: return@mapNotNull null
+            val brand = device.brands.firstOrNull { it.id == brandId } ?: return@mapNotNull null
+            SavedRemote(
+                device,
+                brand,
+                FavoriteManager.getCustomName(context, device.id, brand.id, defaultRemoteName(context, device, brand)),
+            )
+        }
+        // Favorites are stored as a set; sort so tiles don't shuffle between launches.
+        .sortedBy { it.name.lowercase() }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,13 +66,16 @@ fun DashboardScreen(
     onFavoriteSelected: (deviceId: Int, brandId: Int) -> Unit,
     onSettingsClick: () -> Unit,
 ) {
-    var selectedDevice by remember { mutableStateOf<DeviceType?>(null) }
-    var forceShowCategories by remember { mutableStateOf(false) }
     val context = LocalContext.current
     RemoteDatabase.init(context)
 
-    var favoriteKeys by remember { mutableStateOf(emptySet<String>()) }
-    LaunchedEffect(Unit) { favoriteKeys = FavoriteManager.getFavorites(context) }
+    var selectedDevice by remember { mutableStateOf<DeviceType?>(null) }
+    var addingRemote by remember { mutableStateOf(false) }
+    var remotes by remember { mutableStateOf(emptyList<SavedRemote>()) }
+    LaunchedEffect(Unit) { remotes = loadSavedRemotes(context) }
+    fun reload() {
+        remotes = loadSavedRemotes(context)
+    }
 
     val hasIr = remember {
         try {
@@ -62,550 +87,363 @@ fun DashboardScreen(
             false
         }
     }
-    var showIrNotice by remember {
-        mutableStateOf(!hasIr && !FavoriteManager.isIrNoticeDismissed(context))
+    var showIrNotice by remember { mutableStateOf(!hasIr && !FavoriteManager.isIrNoticeDismissed(context)) }
+
+    var optionsFor by remember { mutableStateOf<SavedRemote?>(null) }
+    var editing by remember { mutableStateOf<SavedRemote?>(null) }
+
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    val removedMessage = stringResource(R.string.remote_removed)
+    val undoLabel = stringResource(R.string.undo)
+
+    BackHandler(enabled = editing == null && (selectedDevice != null || addingRemote)) {
+        if (selectedDevice != null) selectedDevice = null else addingRemote = false
     }
 
-    var selectedItemForOptions by remember {
-        mutableStateOf<Triple<DeviceType, Brand, String>?>(null)
-    }
-    var selectedItemForEditing by remember {
-        mutableStateOf<Triple<DeviceType, Brand, String>?>(null)
-    }
-    var renameTrigger by remember { mutableStateOf(0) }
-
-    if (selectedItemForEditing != null) {
-        BackHandler { selectedItemForEditing = null }
-    } else if (selectedItemForOptions != null) {
-        BackHandler { selectedItemForOptions = null }
-    } else if (selectedDevice != null) {
-        BackHandler { selectedDevice = null }
-    } else if (forceShowCategories) {
-        BackHandler { forceShowCategories = false }
-    }
-
-    val editingItem = selectedItemForEditing
-    if (editingItem != null) {
-        val (device, brand, _) = editingItem
+    val editingRemote = editing
+    if (editingRemote != null) {
         EditRemoteScreen(
-            device = device,
-            brand = brand,
-            onDismiss = { selectedItemForEditing = null },
+            device = editingRemote.device,
+            brand = editingRemote.brand,
+            onDismiss = { editing = null },
             onSave = { newName ->
-                FavoriteManager.setCustomName(context, device.id, brand.id, newName)
-                favoriteKeys = FavoriteManager.getFavorites(context)
-                renameTrigger++
-                selectedItemForEditing = null
-            })
-    } else {
-        Scaffold(
-            topBar = {
-                CenterAlignedTopAppBar(
-                    title = {
-                        Text(
-                            text =
-                                selectedDevice?.localizedName()?.uppercase()
-                                    ?: if (forceShowCategories) {
-                                        stringResource(R.string.select_device_type)
-                                    } else {
-                                        stringResource(R.string.app_name).uppercase()
-                                    },
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 18.sp,
-                            letterSpacing = 1.sp,
-                        )
-                    },
-                    navigationIcon = {
-                        if (selectedDevice != null) {
-                            IconButton(onClick = { selectedDevice = null }) {
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                    contentDescription = stringResource(R.string.back),
-                                    tint = MaterialTheme.colorScheme.onBackground,
-                                )
-                            }
-                        } else if (forceShowCategories) {
-                            IconButton(onClick = { forceShowCategories = false }) {
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                    contentDescription = stringResource(R.string.back),
-                                    tint = MaterialTheme.colorScheme.onBackground,
-                                )
-                            }
-                        }
-                    },
-                    colors =
-                        TopAppBarDefaults.topAppBarColors(
-                            containerColor = MaterialTheme.colorScheme.background,
-                        ),
-                )
+                FavoriteManager.setCustomName(context, editingRemote.device.id, editingRemote.brand.id, newName)
+                reload()
+                editing = null
             },
-            containerColor = MaterialTheme.colorScheme.background,
-        ) { innerPadding ->
-            Box(
-                modifier = Modifier.fillMaxSize().padding(innerPadding),
-            ) {
-                if (!forceShowCategories) {
+        )
+        return
+    }
 
-                    MainDashboardPage(
-                        favoriteKeys = favoriteKeys,
-                        renameTrigger = renameTrigger,
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        selectedDevice?.localizedName()
+                            ?: if (addingRemote) stringResource(R.string.select_device_type)
+                            else stringResource(R.string.app_name),
+                    )
+                },
+                navigationIcon = {
+                    if (selectedDevice != null || addingRemote) {
+                        IconButton(onClick = { if (selectedDevice != null) selectedDevice = null else addingRemote = false }) {
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
+                        }
+                    }
+                },
+                actions = {
+                    if (!addingRemote) {
+                        IconButton(onClick = onSettingsClick) {
+                            Icon(Icons.Outlined.Settings, contentDescription = stringResource(R.string.settings))
+                        }
+                    }
+                },
+            )
+        },
+        floatingActionButton = {
+            if (!addingRemote && remotes.isNotEmpty()) {
+                ExtendedFloatingActionButton(
+                    onClick = { addingRemote = true },
+                    icon = { Icon(Icons.Default.Add, contentDescription = null) },
+                    text = { Text(stringResource(R.string.add_remote)) },
+                )
+            }
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+    ) { innerPadding ->
+        Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
+            val device = selectedDevice
+            when {
+                !addingRemote ->
+                    RemotesHome(
+                        remotes = remotes,
                         showIrNotice = showIrNotice,
                         onDismissIrNotice = {
                             FavoriteManager.setIrNoticeDismissed(context, true)
                             showIrNotice = false
                         },
-                        onRemoteClick = onFavoriteSelected,
-                        onFavoritesChanged = {
-                            favoriteKeys = FavoriteManager.getFavorites(context)
-                        },
-                        onAddNewClick = { forceShowCategories = true },
-                        onSettingsClick = onSettingsClick,
-                        onLongClick = { selectedItemForOptions = it })
-                } else if (selectedDevice == null) {
-
-                    CategorySelectionGrid(
-                        onCategoryClick = { selectedDevice = it },
+                        onRemoteClick = { onFavoriteSelected(it.device.id, it.brand.id) },
+                        onRemoteOptions = { optionsFor = it },
+                        onAddClick = { addingRemote = true },
                     )
-                } else {
-
-                    val dev = selectedDevice
-                    if (dev != null) {
-                        BrandSelectionPanel(
-                            device = dev,
-                            onBrandClick = { brand -> onDeviceSelected(dev.id, brand.id) },
-                        )
-                    }
-                }
+                device == null -> CategorySelectionGrid(onCategoryClick = { selectedDevice = it })
+                else -> BrandSelectionPanel(device = device, onBrandClick = { onDeviceSelected(device.id, it.id) })
             }
         }
+    }
 
-        val optionsItem = selectedItemForOptions
-        if (optionsItem != null) {
-            val (device, brand, key) = optionsItem
-            val defaultName =
-                "${brand.nameEn} ${device.getLocalizedName(context).substringBefore(" ")}"
-            val currentCustomName =
-                FavoriteManager.getCustomName(context, device.id, brand.id, defaultName)
-
-            AlertDialog(
-                onDismissRequest = { selectedItemForOptions = null },
-                title = {
-                    Text(
-                        text = currentCustomName.uppercase(),
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        fontSize = 16.sp,
-                    )
-                },
-                text = {
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(12.dp),
-                    ) {
-                        Row(
-                            modifier =
-                                Modifier.fillMaxWidth()
-                                    .clickable {
-                                        selectedItemForEditing = selectedItemForOptions
-                                        selectedItemForOptions = null
-                                    }
-                                    .padding(vertical = 12.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Edit,
-                                contentDescription = stringResource(R.string.edit_remote),
-                                tint = ElectricBlue,
-                                modifier = Modifier.size(20.dp),
-                            )
-                            Spacer(modifier = Modifier.width(16.dp))
-                            Text(
-                                text = stringResource(R.string.edit_remote),
-                                color = MaterialTheme.colorScheme.onSurface,
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Bold,
-                            )
-                        }
-
-                        Row(
-                            modifier =
-                                Modifier.fillMaxWidth()
-                                    .clickable {
-                                        selectedItemForOptions = null
-                                        com.anyremote.remote.service.ShortcutHelper
-                                            .pinRemoteShortcut(
-                                                context = context,
-                                                deviceId = device.id,
-                                                brandId = brand.id,
-                                                deviceName = device.getLocalizedName(context),
-                                                brandName = brand.nameEn,
-                                            )
-                                    }
-                                    .padding(vertical = 12.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.PushPin,
-                                contentDescription = stringResource(R.string.pin_to_home),
-                                tint = ElectricBlue,
-                                modifier = Modifier.size(20.dp),
-                            )
-                            Spacer(modifier = Modifier.width(16.dp))
-                            Text(
-                                text = stringResource(R.string.pin_to_home),
-                                color = MaterialTheme.colorScheme.onSurface,
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Bold,
-                            )
-                        }
-
-                        Row(
-                            modifier =
-                                Modifier.fillMaxWidth()
-                                    .clickable {
-                                        selectedItemForOptions = null
-                                        FavoriteManager.toggleFavorite(context, device.id, brand.id)
-                                        favoriteKeys = FavoriteManager.getFavorites(context)
-                                    }
-                                    .padding(vertical = 12.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Delete,
-                                contentDescription = stringResource(R.string.remove_remote),
-                                tint = CrimsonRed,
-                                modifier = Modifier.size(20.dp),
-                            )
-                            Spacer(modifier = Modifier.width(16.dp))
-                            Text(
-                                text = stringResource(R.string.remove_remote),
-                                color = CrimsonRed,
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Bold,
-                            )
-                        }
+    val options = optionsFor
+    if (options != null) {
+        RemoteOptionsSheet(
+            remote = options,
+            onDismiss = { optionsFor = null },
+            onRename = {
+                optionsFor = null
+                editing = options
+            },
+            onPin = {
+                optionsFor = null
+                ShortcutHelper.pinRemoteShortcut(
+                    context = context,
+                    deviceId = options.device.id,
+                    brandId = options.brand.id,
+                    deviceName = options.device.getLocalizedName(context),
+                    brandName = options.brand.nameEn,
+                )
+            },
+            onRemove = {
+                optionsFor = null
+                FavoriteManager.toggleFavorite(context, options.device.id, options.brand.id)
+                reload()
+                scope.launch {
+                    val result =
+                        snackbarHostState.showSnackbar(
+                            removedMessage,
+                            actionLabel = undoLabel,
+                            duration = SnackbarDuration.Short,
+                        )
+                    if (result == SnackbarResult.ActionPerformed &&
+                        !FavoriteManager.isFavorite(context, options.device.id, options.brand.id)) {
+                        FavoriteManager.toggleFavorite(context, options.device.id, options.brand.id)
+                        reload()
                     }
-                },
-                confirmButton = {
-                    TextButton(onClick = { selectedItemForOptions = null }) {
-                        Text(
-                            text = stringResource(R.string.cancel),
-                            color = Color.Gray,
-                            fontWeight = FontWeight.Bold)
-                    }
-                },
-                containerColor = MaterialTheme.colorScheme.surface,
-                shape = RoundedCornerShape(16.dp),
-            )
-        }
+                }
+            },
+        )
     }
 }
 
 @Composable
-fun MainDashboardPage(
-    favoriteKeys: Set<String>,
-    renameTrigger: Int,
+private fun RemotesHome(
+    remotes: List<SavedRemote>,
     showIrNotice: Boolean,
     onDismissIrNotice: () -> Unit,
-    onRemoteClick: (deviceId: Int, brandId: Int) -> Unit,
-    onFavoritesChanged: () -> Unit,
-    onAddNewClick: () -> Unit,
-    onSettingsClick: () -> Unit,
-    onLongClick: (Triple<DeviceType, Brand, String>) -> Unit,
+    onRemoteClick: (SavedRemote) -> Unit,
+    onRemoteOptions: (SavedRemote) -> Unit,
+    onAddClick: () -> Unit,
 ) {
-    val context = LocalContext.current
-
-    Column(
-        modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(minSize = 160.dp),
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 96.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         if (RemoteDatabase.loadFailed) {
-            Card(
-                shape = RoundedCornerShape(14.dp),
-                colors = CardDefaults.cardColors(containerColor = CrimsonRed.copy(alpha = 0.08f)),
-                border = BorderStroke(1.dp, CrimsonRed.copy(alpha = 0.2f)),
-                modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp),
-            ) {
-                Row(modifier = Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Default.Warning, contentDescription = null, tint = CrimsonRed)
-                    Spacer(modifier = Modifier.width(12.dp))
-                    Text(
-                        text = stringResource(R.string.db_load_error),
-                        color = MaterialTheme.colorScheme.onSurface,
-                        fontSize = 13.sp,
-                    )
-                }
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                NoticeCard(
+                    title = null,
+                    message = stringResource(R.string.db_load_error),
+                    onDismiss = null,
+                )
             }
         }
         if (showIrNotice) {
-            Card(
-                shape = RoundedCornerShape(14.dp),
-                colors = CardDefaults.cardColors(containerColor = CrimsonRed.copy(alpha = 0.08f)),
-                border = BorderStroke(1.dp, CrimsonRed.copy(alpha = 0.2f)),
-                modifier = Modifier.fillMaxWidth()) {
-                    Row(
-                        modifier = Modifier.padding(14.dp),
-                        verticalAlignment = Alignment.CenterVertically) {
-                            Box(
-                                modifier =
-                                    Modifier.size(36.dp)
-                                        .background(CrimsonRed.copy(alpha = 0.1f), CircleShape),
-                                contentAlignment = Alignment.Center) {
-                                    Icon(
-                                        imageVector = Icons.Default.Warning,
-                                        contentDescription = null,
-                                        tint = CrimsonRed,
-                                        modifier = Modifier.size(20.dp))
-                                }
-
-                            Spacer(modifier = Modifier.width(12.dp))
-
-                            Column(modifier = Modifier.weight(1f)) {
-                                Text(
-                                    text =
-                                        stringResource(R.string.ir_sensor_missing_title)
-                                            .uppercase(),
-                                    color = CrimsonRed,
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 12.sp,
-                                    letterSpacing = 0.5.sp)
-                                Spacer(modifier = Modifier.height(2.dp))
-                                Text(
-                                    text = stringResource(R.string.ir_sensor_missing_message),
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    fontSize = 11.sp,
-                                    fontWeight = FontWeight.Medium,
-                                    lineHeight = 15.sp)
-                            }
-
-                            Spacer(modifier = Modifier.width(8.dp))
-
-                            IconButton(
-                                onClick = onDismissIrNotice, modifier = Modifier.size(28.dp)) {
-                                    Icon(
-                                        imageVector = Icons.Default.Close,
-                                        contentDescription = stringResource(R.string.cancel),
-                                        tint =
-                                            MaterialTheme.colorScheme.onSurfaceVariant.copy(
-                                                alpha = 0.7f),
-                                        modifier = Modifier.size(16.dp))
-                                }
-                        }
-                }
-            Spacer(modifier = Modifier.height(12.dp))
-        }
-
-        if (favoriteKeys.isEmpty()) {
-
-            Box(
-                modifier = Modifier.weight(1f).fillMaxWidth(),
-                contentAlignment = Alignment.Center,
-            ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
-                    modifier = Modifier.padding(24.dp),
-                ) {
-                    Box(
-                        modifier =
-                            Modifier.size(108.dp)
-                                .clip(CircleShape)
-                                .background(MaterialTheme.colorScheme.surfaceVariant)
-                                .border(1.dp, MaterialTheme.colorScheme.outline, CircleShape),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.SettingsRemote,
-                            contentDescription = null,
-                            tint = ElectricBlue.copy(alpha = 0.6f),
-                            modifier = Modifier.size(50.dp),
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(28.dp))
-
-                    Text(
-                        text = stringResource(R.string.main_page_empty),
-                        color = MaterialTheme.colorScheme.onSurface,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp,
-                        textAlign = TextAlign.Center,
-                    )
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Text(
-                        text = stringResource(R.string.main_page_empty_subtitle),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontSize = 13.sp,
-                        textAlign = TextAlign.Center,
-                        lineHeight = 18.sp,
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                    )
-                }
-            }
-        } else {
-
-            Text(
-                text = stringResource(R.string.paired_remotes_title),
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                fontSize = 11.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = 1.5.sp,
-                modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp, top = 8.dp),
-            )
-
-            val favoritesList =
-                remember(favoriteKeys) {
-                    favoriteKeys.mapNotNull { key ->
-                        val parts = key.split("_")
-                        if (parts.size == 2) {
-                            val deviceId = parts[0].toIntOrNull() ?: return@mapNotNull null
-                            val brandId = parts[1].toIntOrNull() ?: return@mapNotNull null
-                            val device =
-                                RemoteDatabase.deviceTypes.firstOrNull { it.id == deviceId }
-                                    ?: return@mapNotNull null
-                            val brand =
-                                device.brands.firstOrNull { it.id == brandId }
-                                    ?: return@mapNotNull null
-                            Triple(device, brand, key)
-                        } else {
-                            null
-                        }
-                    }
-                }
-
-            LazyColumn(
-                modifier = Modifier.weight(1f).fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-            ) {
-                items(favoritesList) { (device, brand, key) ->
-                    val defaultName =
-                        "${brand.nameEn} ${device.getLocalizedName(context).substringBefore(" ")}"
-                    val displayName =
-                        remember(device, brand, renameTrigger) {
-                            FavoriteManager.getCustomName(context, device.id, brand.id, defaultName)
-                        }
-                    FavoriteRemoteListItem(
-                        device = device,
-                        brand = brand,
-                        displayName = displayName,
-                        onClick = { onRemoteClick(device.id, brand.id) },
-                        onLongClick = { onLongClick(Triple(device, brand, key)) },
-                    )
-                }
-            }
-        }
-
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            OutlinedButton(
-                onClick = onSettingsClick,
-                shape = RoundedCornerShape(12.dp),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-                colors =
-                    ButtonDefaults.outlinedButtonColors(
-                        contentColor = MaterialTheme.colorScheme.onSurface),
-                modifier = Modifier.weight(1f).height(48.dp),
-            ) {
-                Icon(
-                    Icons.Default.Settings,
-                    contentDescription = stringResource(R.string.settings),
-                    tint = MaterialTheme.colorScheme.onSurface,
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                NoticeCard(
+                    title = stringResource(R.string.ir_sensor_missing_title),
+                    message = stringResource(R.string.ir_sensor_missing_message),
+                    onDismiss = onDismissIrNotice,
                 )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    stringResource(R.string.settings),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 12.sp)
             }
+        }
 
-            Button(
-                onClick = onAddNewClick,
-                shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = ElectricBlue),
-                modifier = Modifier.weight(1.2f).height(48.dp),
-            ) {
-                Icon(
-                    Icons.Default.Add,
-                    contentDescription = stringResource(R.string.add_new),
-                    tint = Color.White)
-                Spacer(modifier = Modifier.width(8.dp))
+        if (remotes.isEmpty()) {
+            item(span = { GridItemSpan(maxLineSpan) }) { EmptyRemotes(onAddClick) }
+        } else {
+            item(span = { GridItemSpan(maxLineSpan) }) {
                 Text(
-                    stringResource(R.string.add_new),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 12.sp,
-                    color = Color.White,
+                    stringResource(R.string.your_remotes),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(start = 4.dp, top = 8.dp, bottom = 4.dp),
+                )
+            }
+            items(remotes, key = { "${it.device.id}_${it.brand.id}" }) { remote ->
+                RemoteTile(
+                    remote = remote,
+                    onClick = { onRemoteClick(remote) },
+                    onOptions = { onRemoteOptions(remote) },
                 )
             }
         }
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun FavoriteRemoteListItem(
-    device: DeviceType,
-    brand: Brand,
-    displayName: String,
-    onClick: () -> Unit,
-    onLongClick: () -> Unit,
+private fun NoticeCard(
+    title: String?,
+    message: String,
+    onDismiss: (() -> Unit)?,
 ) {
-    val context = LocalContext.current
-
-    Box(
-        modifier =
-            Modifier.fillMaxWidth()
-                .clip(RoundedCornerShape(14.dp))
-                .background(MaterialTheme.colorScheme.surface)
-                .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(14.dp))
-                .combinedClickable(
-                    onClick = onClick,
-                    onLongClick = onLongClick,
-                )
-                .padding(14.dp),
+    Surface(
+        shape = MaterialTheme.shapes.large,
+        color = MaterialTheme.colorScheme.errorContainer,
+        contentColor = MaterialTheme.colorScheme.onErrorContainer,
+        modifier = Modifier.fillMaxWidth(),
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 16.dp, end = 4.dp),
+            verticalAlignment = Alignment.Top,
         ) {
-            Box(
-                modifier =
-                    Modifier.size(40.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.surfaceVariant)
-                        .border(1.dp, MaterialTheme.colorScheme.outline, CircleShape),
-                contentAlignment = Alignment.Center,
-            ) {
-                Icon(
-                    imageVector = getDeviceIcon(device.id),
-                    contentDescription = device.localizedName(),
-                    tint = ElectricBlue,
-                    modifier = Modifier.size(20.dp),
-                )
+            Icon(Icons.Default.WarningAmber, contentDescription = null)
+            Spacer(Modifier.width(16.dp))
+            Column(modifier = Modifier.weight(1f).padding(end = 8.dp)) {
+                if (title != null) {
+                    Text(title, style = MaterialTheme.typography.titleSmall)
+                    Spacer(Modifier.height(4.dp))
+                }
+                Text(message, style = MaterialTheme.typography.bodyMedium)
             }
-
-            Spacer(modifier = Modifier.width(14.dp))
-
-            Column {
-                Text(
-                    text = displayName.uppercase(),
-                    color = MaterialTheme.colorScheme.onSurface,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 13.sp,
-                    maxLines = 1,
-                )
-                Text(
-                    text = device.localizedName().uppercase(),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 10.sp,
-                    letterSpacing = 0.5.sp,
-                )
+            if (onDismiss != null) {
+                IconButton(onClick = onDismiss, modifier = Modifier.offset(y = (-12).dp)) {
+                    Icon(Icons.Default.Close, contentDescription = stringResource(R.string.ir_sensor_missing_action))
+                }
             }
         }
     }
+}
+
+@Composable
+private fun EmptyRemotes(onAddClick: () -> Unit) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 64.dp),
+    ) {
+        Surface(
+            shape = CircleShape,
+            color = MaterialTheme.colorScheme.primaryContainer,
+            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            modifier = Modifier.size(112.dp),
+        ) {
+            Box(contentAlignment = Alignment.Center) {
+                Icon(Icons.Default.SettingsRemote, contentDescription = null, modifier = Modifier.size(52.dp))
+            }
+        }
+        Spacer(Modifier.height(24.dp))
+        Text(
+            stringResource(R.string.main_page_empty),
+            style = MaterialTheme.typography.headlineSmall,
+            textAlign = TextAlign.Center,
+        )
+        Spacer(Modifier.height(8.dp))
+        Text(
+            stringResource(R.string.main_page_empty_subtitle),
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+        )
+        Spacer(Modifier.height(24.dp))
+        Button(onClick = onAddClick, contentPadding = ButtonDefaults.ButtonWithIconContentPadding) {
+            Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(ButtonDefaults.IconSize))
+            Spacer(Modifier.width(ButtonDefaults.IconSpacing))
+            Text(stringResource(R.string.add_remote))
+        }
+    }
+}
+
+/** Google Home–style device tile. Long-press or the ⋮ button opens its options. */
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun RemoteTile(
+    remote: SavedRemote,
+    onClick: () -> Unit,
+    onOptions: () -> Unit,
+) {
+    val haptic = rememberVibratingHapticFeedback()
+    Surface(
+        shape = MaterialTheme.shapes.large,
+        color = MaterialTheme.colorScheme.surfaceContainer,
+        modifier =
+            Modifier.fillMaxWidth()
+                .clip(MaterialTheme.shapes.large)
+                .combinedClickable(
+                    onClick = onClick,
+                    onLongClick = {
+                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                        onOptions()
+                    },
+                ),
+    ) {
+        Column(modifier = Modifier.padding(start = 16.dp, top = 12.dp, bottom = 16.dp, end = 4.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Surface(
+                    shape = CircleShape,
+                    color = MaterialTheme.colorScheme.secondaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                    modifier = Modifier.size(44.dp),
+                ) {
+                    Box(contentAlignment = Alignment.Center) {
+                        Icon(getDeviceIcon(remote.device.id), contentDescription = null)
+                    }
+                }
+                Spacer(Modifier.weight(1f))
+                IconButton(onClick = onOptions) {
+                    Icon(Icons.Default.MoreVert, contentDescription = stringResource(R.string.more_options))
+                }
+            }
+            Spacer(Modifier.height(16.dp))
+            Text(
+                remote.name,
+                style = MaterialTheme.typography.titleMedium,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.padding(end = 12.dp),
+            )
+            Text(
+                remote.device.localizedName(),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun RemoteOptionsSheet(
+    remote: SavedRemote,
+    onDismiss: () -> Unit,
+    onRename: () -> Unit,
+    onPin: () -> Unit,
+    onRemove: () -> Unit,
+) {
+    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)) {
+        Column(modifier = Modifier.padding(bottom = 24.dp)) {
+            ListItem(
+                headlineContent = { Text(remote.name, style = MaterialTheme.typography.titleLarge) },
+                supportingContent = { Text(remote.device.localizedName()) },
+                leadingContent = { Icon(getDeviceIcon(remote.device.id), contentDescription = null) },
+                colors = ListItemDefaults.colors(containerColor = androidx.compose.ui.graphics.Color.Transparent),
+            )
+            HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+            SheetAction(Icons.Outlined.Edit, stringResource(R.string.rename_remote), onRename)
+            SheetAction(Icons.Outlined.PushPin, stringResource(R.string.pin_to_home), onPin)
+            SheetAction(
+                Icons.Outlined.Delete,
+                stringResource(R.string.remove_remote),
+                onRemove,
+                tint = MaterialTheme.colorScheme.error,
+            )
+        }
+    }
+}
+
+@Composable
+private fun SheetAction(
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    label: String,
+    onClick: () -> Unit,
+    tint: androidx.compose.ui.graphics.Color = MaterialTheme.colorScheme.onSurface,
+) {
+    ListItem(
+        headlineContent = { Text(label, color = tint) },
+        leadingContent = { Icon(icon, contentDescription = null, tint = tint) },
+        colors = ListItemDefaults.colors(containerColor = androidx.compose.ui.graphics.Color.Transparent),
+        modifier = Modifier.clickable(onClick = onClick).padding(horizontal = 8.dp),
+    )
 }

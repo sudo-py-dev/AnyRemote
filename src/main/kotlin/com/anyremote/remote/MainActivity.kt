@@ -79,7 +79,10 @@ class MainActivity : ComponentActivity() {
                 onDispose {}
             }
 
-            AnyRemoteTheme(darkTheme = darkTheme) {
+            AnyRemoteTheme(
+                darkTheme = darkTheme,
+                dynamicColor = FavoriteManager.currentDynamicColorState.value,
+            ) {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     val controller = rememberNavController()
                     navController = controller

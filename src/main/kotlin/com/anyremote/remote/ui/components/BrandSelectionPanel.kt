@@ -1,17 +1,19 @@
 package com.anyremote.remote.ui.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.SearchOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -19,215 +21,176 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.anyremote.remote.R
 import com.anyremote.remote.data.RemoteDatabase.Brand
 import com.anyremote.remote.data.RemoteDatabase.DeviceType
-import com.anyremote.remote.service.FavoriteManager
-import com.anyremote.remote.ui.helpers.*
-import com.anyremote.remote.ui.theme.*
-import com.anyremote.remote.ui.theme.ElectricBlue
+import com.anyremote.remote.ui.helpers.rememberVibratingHapticFeedback
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BrandSelectionPanel(
     device: DeviceType,
     onBrandClick: (Brand) -> Unit,
 ) {
     var searchQuery by remember { mutableStateOf("") }
-    var selectedLetter by remember { mutableStateOf<Char?>(null) }
+    val query = searchQuery.trim()
 
     val filteredBrands =
-        remember(searchQuery, selectedLetter, device.brands) {
-            val filtered =
-                device.brands.filter { brand ->
-                    val matchesSearch =
-                        if (searchQuery.isEmpty()) {
-                            true
-                        } else {
-                            brand.nameEn.contains(searchQuery, ignoreCase = true)
-                        }
-
-                    val letter = selectedLetter
-                    val matchesLetter =
-                        if (letter == null || searchQuery.isNotEmpty()) {
-                            true
-                        } else {
-                            brand.nameEn.startsWith(letter, ignoreCase = true)
-                        }
-
-                    matchesSearch && matchesLetter
-                }
-
-            if (searchQuery.isEmpty()) {
-                filtered.sortedBy { it.nameEn }
+        remember(query, device.brands) {
+            if (query.isEmpty()) {
+                device.brands.sortedBy { it.nameEn.lowercase() }
             } else {
-                filtered.sortedWith(
-                    compareBy<Brand> { brand ->
-                            if (brand.nameEn.startsWith(searchQuery, ignoreCase = true)) 0 else 1
-                        }
-                        .thenBy { brand -> if (brand.category == "popular") 0 else 1 }
-                        .thenBy { brand -> brand.nameEn.lowercase() })
+                device.brands
+                    .filter { it.nameEn.contains(query, ignoreCase = true) }
+                    .sortedWith(
+                        compareBy<Brand> { if (it.nameEn.startsWith(query, ignoreCase = true)) 0 else 1 }
+                            .thenBy { if (it.category == "popular") 0 else 1 }
+                            .thenBy { it.nameEn.lowercase() })
             }
         }
 
-    val alphabet =
-        remember(device.brands) {
-            ('A'..'Z').filter { ch ->
-                device.brands.any { it.nameEn.startsWith(ch, ignoreCase = true) }
-            }
+    // Group by initial only when browsing; search results are ranked, not alphabetical.
+    val groupedBrands =
+        remember(filteredBrands, query) {
+            if (query.isEmpty()) filteredBrands.groupBy { it.nameEn.take(1).uppercase() } else emptyMap()
+        }
+    val headerIndices =
+        remember(groupedBrands) {
+            var index = 0
+            groupedBrands.mapValues { (_, brands) -> index.also { index += 1 + brands.size } }
         }
 
-    val haptic = LocalHapticFeedback.current
-    val context = LocalContext.current
+    val haptic = rememberVibratingHapticFeedback()
+    val focusManager = LocalFocusManager.current
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
 
-    Column(
-        modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
-    ) {
+    // Letter whose section is at the top of the list, highlighted in the index.
+    val currentLetter by remember(headerIndices) {
+        derivedStateOf {
+            val first = listState.firstVisibleItemIndex
+            headerIndices.entries.lastOrNull { it.value <= first }?.key
+        }
+    }
+
+    Column(modifier = Modifier.fillMaxSize()) {
         TextField(
             value = searchQuery,
             onValueChange = { searchQuery = it },
-            placeholder = {
-                Text(
-                    stringResource(R.string.search_placeholder),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
+            placeholder = { Text(stringResource(R.string.search_placeholder)) },
+            leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+            trailingIcon = {
+                if (searchQuery.isNotEmpty()) {
+                    IconButton(onClick = { searchQuery = "" }) {
+                        Icon(Icons.Default.Close, contentDescription = stringResource(R.string.clear_search))
+                    }
+                }
             },
-            modifier =
-                Modifier.fillMaxWidth()
-                    .padding(top = 12.dp, bottom = 12.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(10.dp)),
+            singleLine = true,
+            shape = CircleShape,
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+            keyboardActions = KeyboardActions(onSearch = { focusManager.clearFocus() }),
             colors =
                 TextFieldDefaults.colors(
-                    focusedContainerColor = MaterialTheme.colorScheme.surface,
-                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
-                    focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                    unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
                 ),
-            singleLine = true,
-            leadingIcon = {
-                Icon(Icons.Default.Search, contentDescription = stringResource(R.string.cd_search), tint = ElectricBlue)
-            },
+            modifier =
+                Modifier.fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
         )
 
-        val groupedBrands =
-            remember(filteredBrands) { filteredBrands.groupBy { it.nameEn.take(1).uppercase() } }
-
-        val headerIndices =
-            remember(groupedBrands) {
-                val indices = mutableMapOf<String, Int>()
-                var currentIndex = 0
-                groupedBrands.forEach { (initial, brandsInGroup) ->
-                    indices[initial] = currentIndex
-                    currentIndex += 1
-                    currentIndex += brandsInGroup.size
-                }
-                indices
+        if (filteredBrands.isEmpty()) {
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(top = 64.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Icon(
+                    Icons.Default.SearchOff,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(48.dp),
+                )
+                Spacer(Modifier.height(16.dp))
+                Text(
+                    stringResource(R.string.no_brands_found),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
             }
+            return@Column
+        }
 
-        Row(
-            modifier = Modifier.fillMaxWidth().weight(1f),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                LazyColumn(
-                    state = listState,
-                    modifier = Modifier.weight(1f).fillMaxHeight(),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    contentPadding = PaddingValues(bottom = 24.dp)) {
-                        if (filteredBrands.isEmpty()) {
-                            item {
-                                Box(
-                                    modifier = Modifier.fillMaxWidth().padding(40.dp),
-                                    contentAlignment = Alignment.Center,
-                                ) {
-                                    Text(
-                                        text = stringResource(R.string.no_brands_found),
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                        fontSize = 13.sp,
-                                        fontWeight = FontWeight.Medium,
-                                    )
-                                }
-                            }
-                        } else {
-                            groupedBrands.forEach { (initial, brandsInGroup) ->
-                                item(key = "header_$initial") {
-                                    Box(
-                                        modifier =
-                                            Modifier.fillMaxWidth()
-                                                .padding(top = 12.dp, bottom = 4.dp),
-                                    ) {
-                                        Text(
-                                            text = initial,
-                                            color = ElectricBlue,
-                                            fontWeight = FontWeight.ExtraBold,
-                                            fontSize = 15.sp,
-                                        )
-                                    }
-                                }
-
-                                items(brandsInGroup) { brand ->
-                                    BrandListItem(
-                                        brand = brand,
-                                        onClick = { onBrandClick(brand) },
-                                    )
-                                }
-                            }
+        Row(modifier = Modifier.fillMaxWidth().weight(1f)) {
+            LazyColumn(
+                state = listState,
+                modifier = Modifier.weight(1f).fillMaxHeight(),
+                contentPadding = PaddingValues(bottom = 24.dp),
+            ) {
+                if (query.isNotEmpty()) {
+                    items(filteredBrands) { brand ->
+                        BrandListItem(brand = brand, onClick = { onBrandClick(brand) })
+                    }
+                } else {
+                    groupedBrands.forEach { (initial, brandsInGroup) ->
+                        stickyHeader(key = "header_$initial") {
+                            Text(
+                                text = initial,
+                                style = MaterialTheme.typography.titleSmall,
+                                color = MaterialTheme.colorScheme.primary,
+                                modifier =
+                                    Modifier.fillMaxWidth()
+                                        .background(MaterialTheme.colorScheme.surface)
+                                        .padding(start = 16.dp, top = 12.dp, bottom = 4.dp),
+                            )
+                        }
+                        items(brandsInGroup) { brand ->
+                            BrandListItem(brand = brand, onClick = { onBrandClick(brand) })
                         }
                     }
-
-                if (filteredBrands.isNotEmpty() && searchQuery.isEmpty()) {
-                    Column(
-                        modifier = Modifier.width(28.dp).fillMaxHeight().padding(vertical = 12.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center) {
-                            alphabet.forEach { ch ->
-                                val isSelected = selectedLetter == ch
-                                Box(
-                                    modifier =
-                                        Modifier.size(22.dp)
-                                            .clip(CircleShape)
-                                            .background(
-                                                if (isSelected) ElectricBlue else Color.Transparent)
-                                            .clickable {
-                                                if (FavoriteManager.isVibrationEnabled(context)) {
-                                                    haptic.performHapticFeedback(
-                                                        HapticFeedbackType.LongPress)
-                                                }
-                                                selectedLetter = if (isSelected) null else ch
-                                                val headerIndex = headerIndices[ch.toString()]
-                                                if (headerIndex != null) {
-                                                    coroutineScope.launch {
-                                                        listState.animateScrollToItem(headerIndex)
-                                                    }
-                                                }
-                                            },
-                                    contentAlignment = Alignment.Center) {
-                                        Text(
-                                            text = ch.toString(),
-                                            color =
-                                                if (isSelected) Color.White
-                                                else
-                                                    MaterialTheme.colorScheme.onSurfaceVariant.copy(
-                                                        alpha = 0.8f),
-                                            fontWeight =
-                                                if (isSelected) FontWeight.Bold
-                                                else FontWeight.SemiBold,
-                                            fontSize = 10.sp,
-                                        )
-                                    }
-                            }
-                        }
                 }
             }
+
+            if (query.isEmpty() && groupedBrands.size > 1) {
+                Column(
+                    modifier = Modifier.width(32.dp).fillMaxHeight().padding(vertical = 8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.SpaceEvenly,
+                ) {
+                    groupedBrands.keys.forEach { letter ->
+                        val isCurrent = letter == currentLetter
+                        Box(
+                            modifier =
+                                Modifier.size(24.dp)
+                                    .clip(CircleShape)
+                                    .background(if (isCurrent) MaterialTheme.colorScheme.primary else Color.Transparent)
+                                    .clickable {
+                                        haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
+                                        headerIndices[letter]?.let { index ->
+                                            coroutineScope.launch { listState.scrollToItem(index) }
+                                        }
+                                    },
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Text(
+                                text = letter,
+                                style = MaterialTheme.typography.labelSmall,
+                                color =
+                                    if (isCurrent) MaterialTheme.colorScheme.onPrimary
+                                    else MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -236,30 +199,20 @@ fun BrandListItem(
     brand: Brand,
     onClick: () -> Unit,
 ) {
-    Box(
-        modifier =
-            Modifier.fillMaxWidth()
-                .clip(RoundedCornerShape(10.dp))
-                .background(MaterialTheme.colorScheme.surface)
-                .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(10.dp))
-                .clickable(onClick = onClick)
-                .padding(horizontal = 16.dp, vertical = 14.dp),
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    text = brand.nameEn,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp,
-                )
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
-                    modifier = Modifier.size(18.dp))
+    ListItem(
+        headlineContent = { Text(brand.nameEn) },
+        leadingContent = {
+            Surface(
+                shape = CircleShape,
+                color = MaterialTheme.colorScheme.secondaryContainer,
+                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                modifier = Modifier.size(40.dp),
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                    Text(brand.nameEn.take(1).uppercase(), style = MaterialTheme.typography.titleMedium)
+                }
             }
-    }
+        },
+        modifier = Modifier.clickable(onClick = onClick),
+    )
 }
