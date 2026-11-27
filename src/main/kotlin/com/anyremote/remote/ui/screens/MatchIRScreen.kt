@@ -95,11 +95,13 @@ fun MatchIRScreen(
         }
 
     // Same codebook as RemoteControllerScreen, so the code set that works here is the one the remote uses.
-    fun transmitTestPulse() {
+    var sendingTest by remember { mutableStateOf(false) }
+
+    suspend fun transmitTestPulse(): Boolean {
         val pulses =
             if (deviceId == 3) AcState(power = true, swing = false).toPulses(profile?.acProtocol ?: AcProtocol.GREE)
             else commands?.pulses(testKey) ?: IrCodebook.pulses(deviceId, codeset, testKey)
-        scope.launch { IRTransmitter.send(context, pulses) }
+        return IRTransmitter.send(context, pulses)
     }
 
     if (showEditRemote && category != null && brand != null) {
@@ -176,10 +178,17 @@ fun MatchIRScreen(
 
                 RemoteButton(
                     onClick = {
-                        transmitTestPulse()
-                        showResponseSheet = true
+                        sendingTest = true
+                        scope.launch {
+                            try {
+                                showResponseSheet = transmitTestPulse()
+                            } finally {
+                                sendingTest = false
+                            }
+                        }
                     },
                     modifier = Modifier.size(168.dp),
+                    enabled = !sendingTest,
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.onPrimary,
                 ) {
@@ -193,6 +202,7 @@ fun MatchIRScreen(
                 // Only offer cycling when another distinct signal is available.
                 if (totalCodesets > 1) Row(verticalAlignment = Alignment.CenterVertically) {
                     FilledTonalIconButton(
+                        enabled = !sendingTest,
                         onClick = {
                             haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
                             previousCodeset()
@@ -213,6 +223,7 @@ fun MatchIRScreen(
                             },
                     )
                     FilledTonalIconButton(
+                        enabled = !sendingTest,
                         onClick = {
                             haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
                             nextCodeset()

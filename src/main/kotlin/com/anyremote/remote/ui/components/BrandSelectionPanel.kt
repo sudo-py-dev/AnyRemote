@@ -59,7 +59,16 @@ fun BrandSelectionPanel(
 
     val haptic = rememberVibratingHapticFeedback()
     val focusManager = LocalFocusManager.current
-    val listState = rememberLazyListState()
+    fun selectBrand(brand: Brand) {
+        focusManager.clearFocus()
+        onBrandClick(brand)
+    }
+    val browseState = rememberLazyListState()
+    val searchState = rememberLazyListState()
+    val listState = if (query.isEmpty()) browseState else searchState
+    LaunchedEffect(query) {
+        if (query.isNotEmpty()) searchState.scrollToItem(0)
+    }
     val coroutineScope = rememberCoroutineScope()
 
     // Letter whose section is at the top of the list, highlighted in the index.
@@ -70,7 +79,7 @@ fun BrandSelectionPanel(
         }
     }
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier.fillMaxSize().imePadding()) {
         TextField(
             value = searchQuery,
             onValueChange = { searchQuery = it },
@@ -128,7 +137,7 @@ fun BrandSelectionPanel(
             ) {
                 if (query.isNotEmpty()) {
                     items(filteredBrands) { brand ->
-                        BrandListItem(brand = brand, onClick = { onBrandClick(brand) })
+                        BrandListItem(brand = brand, onClick = { selectBrand(brand) })
                     }
                 } else {
                     groupedBrands.forEach { (initial, brandsInGroup) ->
@@ -144,7 +153,7 @@ fun BrandSelectionPanel(
                             )
                         }
                         items(brandsInGroup) { brand ->
-                            BrandListItem(brand = brand, onClick = { onBrandClick(brand) })
+                            BrandListItem(brand = brand, onClick = { selectBrand(brand) })
                         }
                     }
                 }

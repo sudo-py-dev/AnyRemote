@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -36,7 +37,7 @@ fun EditRemoteScreen(
         remember(device, brand) {
             FavoriteManager.getCustomName(context, device.id, brand.id, defaultRemoteName(context, device, brand))
         }
-    var nameInput by remember { mutableStateOf(currentName) }
+    var nameInput by rememberSaveable(device.id, brand.id) { mutableStateOf(currentName) }
     val canSave = nameInput.isNotBlank()
     fun save() {
         if (canSave) onSave(nameInput.trim())
@@ -65,6 +66,7 @@ fun EditRemoteScreen(
             modifier =
                 Modifier.fillMaxSize()
                     .padding(innerPadding)
+                    .imePadding()
                     .verticalScroll(rememberScrollState())
                     .padding(horizontal = 16.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp),

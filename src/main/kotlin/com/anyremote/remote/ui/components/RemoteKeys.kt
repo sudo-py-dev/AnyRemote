@@ -6,6 +6,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
@@ -74,6 +75,15 @@ private fun Modifier.remoteKeyClick(
     val pressed by interactionSource.collectIsPressedAsState()
     var repeated by remember { mutableStateOf(false) }
 
+    LaunchedEffect(interactionSource, repeatOnHold, enabled) {
+        repeated = false
+        if (repeatOnHold && enabled) {
+            interactionSource.interactions.collect { interaction ->
+                if (interaction is PressInteraction.Cancel) repeated = false
+            }
+        }
+    }
+
     if (repeatOnHold && enabled) {
         LaunchedEffect(pressed) {
             if (pressed) {
@@ -105,8 +115,7 @@ private fun Modifier.remoteKeyClick(
 }
 
 /**
- * Base for every remote key: a borderless tonal surface. While pressed the corners tighten and
- * the key dips slightly, the Material 3 expressive press response.
+ * Base for every remote key: a borderless tonal surface. The key scales down slightly while pressed.
  *
  * [cornerPercent] is the resting corner radius as a percent of the shorter side (50 = circle).
  */
