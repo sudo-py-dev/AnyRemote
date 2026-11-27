@@ -3,6 +3,7 @@ package com.anyremote.remote.update
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
 import androidx.compose.material3.AlertDialog
@@ -56,11 +57,17 @@ internal fun UpdatePrompt() {
                 return
             }
             val uri = FileProvider.getUriForFile(context, "${context.packageName}.updates", apk)
-            context.startActivity(
-                Intent(Intent.ACTION_VIEW)
-                    .setDataAndType(uri, "application/vnd.android.package-archive")
-                    .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION),
-            )
+            val installIntent = Intent(Intent.ACTION_VIEW)
+                .setDataAndType(uri, "application/vnd.android.package-archive")
+            @Suppress("DEPRECATION")
+            val installer = context.packageManager.queryIntentActivities(
+                installIntent,
+                PackageManager.MATCH_DEFAULT_ONLY or PackageManager.MATCH_SYSTEM_ONLY,
+            ).firstOrNull { it.activityInfo.exported }?.activityInfo
+                ?: throw ActivityNotFoundException("No system APK installer found")
+            installIntent.setClassName(installer.packageName, installer.name)
+            installIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            context.startActivity(installIntent)
             release = null
         } catch (_: ActivityNotFoundException) {
             failed = true
