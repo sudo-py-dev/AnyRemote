@@ -22,7 +22,12 @@ import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -124,13 +129,23 @@ fun AppNavigation(
 ) {
     var startHandled by rememberSaveable { mutableStateOf(false) }
 
+    val forward = if (LocalLayoutDirection.current == LayoutDirection.Ltr) 1 else -1
+
     NavHost(
         navController = navController,
         startDestination = DashboardRoute,
-        enterTransition = { fadeIn(tween(180)) },
-        exitTransition = { fadeOut(tween(120)) },
-        popEnterTransition = { fadeIn(tween(160)) },
-        popExitTransition = { fadeOut(tween(100)) },
+        enterTransition = {
+            fadeIn(tween(220)) + slideInHorizontally(tween(280, easing = FastOutSlowInEasing)) { forward * it / 8 }
+        },
+        exitTransition = {
+            fadeOut(tween(180)) + slideOutHorizontally(tween(220)) { -forward * it / 16 }
+        },
+        popEnterTransition = {
+            fadeIn(tween(220)) + slideInHorizontally(tween(250, easing = FastOutSlowInEasing)) { -forward * it / 16 }
+        },
+        popExitTransition = {
+            fadeOut(tween(180)) + slideOutHorizontally(tween(220)) { forward * it / 8 }
+        },
     ) {
         composable<DashboardRoute> {
             LaunchedEffect(Unit) {

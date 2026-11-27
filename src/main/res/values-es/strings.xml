@@ -199,4 +199,9 @@
     <string name="clear_search">Borrar búsqueda</string>
     <string name="delay">Retardo</string>
     <string name="cd_backspace">Borrar</string>
+    <string name="media_play">Reproducir</string>
+    <string name="media_pause">Pausar</string>
+    <string name="media_stop">Detener</string>
+    <string name="media_previous">Anterior</string>
+    <string name="media_next">Siguiente</string>
 </resources>

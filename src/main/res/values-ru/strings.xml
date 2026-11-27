@@ -199,4 +199,9 @@
     <string name="clear_search">Очистить поиск</string>
     <string name="delay">Задержка</string>
     <string name="cd_backspace">Удалить</string>
+    <string name="media_play">Воспроизвести</string>
+    <string name="media_pause">Пауза</string>
+    <string name="media_stop">Стоп</string>
+    <string name="media_previous">Предыдущий</string>
+    <string name="media_next">Следующий</string>
 </resources>

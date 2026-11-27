@@ -46,7 +46,6 @@
     <string name="remove_remote">إزالة جهاز التحكم</string>
     <string name="cancel">إلغاء</string>
     <string name="save">حفظ</string>
-    <string name="remote_name_count">%1$d / %2$d</string>
     <string name="remote_name_label">اسم جهاز التحكم</string>
     <string name="search_placeholder">ابحث بالعلامة التجارية أو الطراز أو رقم جهاز التحكم</string>
     <string name="device_name_label">اسم الجهاز</string>
@@ -200,4 +199,9 @@
     <string name="clear_search">مسح البحث</string>
     <string name="delay">تأخير</string>
     <string name="cd_backspace">حذف</string>
+    <string name="media_play">تشغيل</string>
+    <string name="media_pause">إيقاف مؤقت</string>
+    <string name="media_stop">إيقاف</string>
+    <string name="media_previous">السابق</string>
+    <string name="media_next">التالي</string>
 </resources>

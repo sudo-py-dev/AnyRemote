@@ -80,8 +80,6 @@ object FavoriteManager {
         return prefs.getStringSet(KEY_FAVORITES, emptySet()) ?: emptySet()
     }
 
-    fun isVibrationEnabled(context: Context): Boolean = currentVibrationState.value
-
     fun setVibrationEnabled(
         context: Context,
         enabled: Boolean,

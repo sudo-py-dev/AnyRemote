@@ -1,7 +1,6 @@
 package com.anyremote.remote.ui.components
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
@@ -31,12 +30,15 @@ import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -44,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import com.anyremote.remote.R
 import com.anyremote.remote.ir.RemoteKey
 import com.anyremote.remote.ui.helpers.rememberVibratingHapticFeedback
+import com.anyremote.remote.ui.helpers.pressScale
 import kotlinx.coroutines.delay
 
 /** Sizes shared by every remote layout, so keys line up across device types. */
@@ -131,8 +134,6 @@ fun RemoteButton(
     content: @Composable BoxScope.() -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
-    val pressed by interactionSource.collectIsPressedAsState()
-    val scale by animateFloatAsState(if (pressed) 0.97f else 1f, tween(if (pressed) 70 else 140), label = "keyScale")
     val container by
         animateColorAsState(
             if (enabled) containerColor
@@ -145,10 +146,7 @@ fun RemoteButton(
     Box(
         modifier =
             modifier
-                .graphicsLayer {
-                    scaleX = scale
-                    scaleY = scale
-                 }
+                .pressScale(interactionSource, pressedScale = 0.94f)
                 .clip(shape)
                 .background(container)
                 .remoteKeyClick(onClick, enabled, repeatOnHold, interactionSource),
@@ -263,16 +261,19 @@ fun OptionKey(
     ) {
         RemoteButton(
             onClick = onClick,
-            modifier = Modifier.size(RemoteDefaults.KeySize),
+            modifier = Modifier.size(RemoteDefaults.KeySize).semantics {
+                contentDescription = label
+                this.selected = selected
+            },
             enabled = enabled,
             containerColor = if (selected) scheme.primary else scheme.surfaceContainerHighest,
             contentColor = if (selected) scheme.onPrimary else scheme.onSurfaceVariant,
         ) {
-            // The caption below carries the name; the icon is decorative.
             Icon(icon, contentDescription = null, modifier = Modifier.size(RemoteDefaults.IconSize))
         }
         Text(
             label,
+            modifier = Modifier.clearAndSetSemantics {},
             style = MaterialTheme.typography.labelMedium,
             color =
                 when {

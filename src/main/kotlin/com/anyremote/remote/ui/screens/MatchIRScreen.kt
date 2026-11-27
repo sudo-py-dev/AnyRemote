@@ -1,5 +1,12 @@
 package com.anyremote.remote.ui.screens
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -11,6 +18,7 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.automirrored.filled.VolumeOff
 import androidx.compose.material.icons.filled.Air
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.PowerSettingsNew
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.*
@@ -67,7 +75,8 @@ fun MatchIRScreen(
     val commands = (profile as? RemoteProfile.Nec)?.commands
     val totalCodesets = if (profile != null || deviceId == 3) 1 else IrCodebook.CODESET_COUNT
     var codeset by rememberSaveable { mutableIntStateOf(1) }
-    var showResponseSheet by rememberSaveable { mutableStateOf(false) }
+    var testedCodeset by rememberSaveable { mutableStateOf<Int?>(null) }
+    var closingResponse by remember { mutableStateOf(false) }
     var showSuccessDialog by rememberSaveable { mutableStateOf(false) }
     var showEditRemote by rememberSaveable { mutableStateOf(false) }
 
@@ -78,27 +87,26 @@ fun MatchIRScreen(
         codeset = if (codeset > 1) codeset - 1 else totalCodesets
     }
 
-    val (testLabelRes, testIcon) =
-        when {
-            (profile as? RemoteProfile.Nec)?.testKey == RemoteKey.HOME -> R.string.cd_home to Icons.Default.Home
-            deviceId == 6 -> R.string.button_fan_speed to Icons.Default.Air
-            deviceId == 8 -> R.string.button_mute to Icons.AutoMirrored.Filled.VolumeOff
-            else -> R.string.button_power to Icons.Default.PowerSettingsNew
-        }
-    val testKey = (profile as? RemoteProfile.Nec)?.testKey ?:
-        when {
-            deviceId == 6 -> RemoteKey.SPEED_UP
-            deviceId == 8 -> RemoteKey.MUTE
-            else -> RemoteKey.POWER
-        }
+    val testKey = (profile as? RemoteProfile.Nec)?.testKey ?: when (deviceId) {
+        6 -> RemoteKey.SPEED_UP
+        8 -> RemoteKey.MUTE
+        else -> RemoteKey.POWER
+    }
+    val (testLabelRes, testIcon) = when (testKey) {
+        RemoteKey.HOME -> R.string.cd_home to Icons.Default.Home
+        RemoteKey.SPEED_UP -> R.string.button_fan_speed to Icons.Default.Air
+        RemoteKey.MUTE -> R.string.button_mute to Icons.AutoMirrored.Filled.VolumeOff
+        RemoteKey.SHUTTER -> R.string.cd_shutter to Icons.Default.CameraAlt
+        else -> R.string.button_power to Icons.Default.PowerSettingsNew
+    }
 
     // Same codebook as RemoteControllerScreen, so the code set that works here is the one the remote uses.
     var sendingTest by remember { mutableStateOf(false) }
 
-    suspend fun transmitTestPulse(): Boolean {
+    suspend fun transmitTestPulse(selected: Int): Boolean {
         val pulses =
             if (deviceId == 3) AcState(power = true, swing = false).toPulses((profile as? RemoteProfile.AirConditioner)?.protocol ?: AcProtocol.GREE)
-            else commands?.pulses(testKey) ?: IrCodebook.pulses(deviceId, codeset, testKey)
+            else commands?.pulses(testKey) ?: IrCodebook.pulses(deviceId, selected, testKey)
         return IRTransmitter.send(context, pulses)
     }
 
@@ -176,22 +184,37 @@ fun MatchIRScreen(
 
                 RemoteButton(
                     onClick = {
-                        sendingTest = true
-                        scope.launch {
-                            try {
-                                showResponseSheet = transmitTestPulse()
-                            } finally {
-                                sendingTest = false
+                        if (!sendingTest && testedCodeset == null) {
+                            val selected = codeset
+                            sendingTest = true
+                            scope.launch {
+                                try {
+                                    if (transmitTestPulse(selected)) testedCodeset = selected
+                                } finally {
+                                    sendingTest = false
+                                }
                             }
                         }
                     },
                     modifier = Modifier.size(168.dp),
-                    enabled = !sendingTest,
+                    enabled = !sendingTest && testedCodeset == null,
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.onPrimary,
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Icon(testIcon, contentDescription = stringResource(R.string.cd_test_signal), modifier = Modifier.size(48.dp))
+                        AnimatedContent(
+                            targetState = sendingTest,
+                            transitionSpec = { fadeIn(tween(130)) togetherWith fadeOut(tween(90)) },
+                            label = "IR test status",
+                        ) { sending ->
+                            Box(Modifier.size(48.dp), contentAlignment = Alignment.Center) {
+                                if (sending) {
+                                    CircularProgressIndicator(Modifier.size(32.dp), strokeWidth = 3.dp)
+                                } else {
+                                    Icon(testIcon, contentDescription = null, modifier = Modifier.fillMaxSize())
+                                }
+                            }
+                        }
                         Spacer(Modifier.height(8.dp))
                         Text(stringResource(testLabelRes), style = MaterialTheme.typography.titleMedium)
                     }
@@ -200,7 +223,7 @@ fun MatchIRScreen(
                 // Only offer cycling when another distinct signal is available.
                 if (totalCodesets > 1) Row(verticalAlignment = Alignment.CenterVertically) {
                     FilledTonalIconButton(
-                        enabled = !sendingTest,
+                        enabled = !sendingTest && testedCodeset == null,
                         onClick = {
                             haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
                             previousCodeset()
@@ -211,17 +234,27 @@ fun MatchIRScreen(
                             contentDescription = stringResource(R.string.cd_previous_code),
                         )
                     }
-                    Text(
-                        stringResource(R.string.code_set_of, codeset, totalCodesets),
-                        style = MaterialTheme.typography.titleMedium,
-                        textAlign = TextAlign.Center,
-                        modifier =
-                            Modifier.widthIn(min = 160.dp).padding(horizontal = 16.dp).semantics {
-                                liveRegion = LiveRegionMode.Polite
-                            },
-                    )
+                    AnimatedContent(
+                        targetState = codeset,
+                        modifier = Modifier.widthIn(min = 160.dp).padding(horizontal = 16.dp).semantics {
+                            liveRegion = LiveRegionMode.Polite
+                        },
+                        contentAlignment = Alignment.Center,
+                        transitionSpec = {
+                            val direction = if (targetState > initialState) 1 else -1
+                            (fadeIn(tween(170)) + slideInVertically(tween(200)) { direction * it / 2 }) togetherWith
+                                (fadeOut(tween(110)) + slideOutVertically(tween(170)) { -direction * it / 2 })
+                        },
+                        label = "Selected IR code",
+                    ) { selected ->
+                        Text(
+                            stringResource(R.string.code_set_of, selected, totalCodesets),
+                            style = MaterialTheme.typography.titleMedium,
+                            textAlign = TextAlign.Center,
+                        )
+                    }
                     FilledTonalIconButton(
-                        enabled = !sendingTest,
+                        enabled = !sendingTest && testedCodeset == null,
                         onClick = {
                             haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
                             nextCodeset()
@@ -257,8 +290,25 @@ fun MatchIRScreen(
         }
     }
 
-    if (showResponseSheet) {
-        ModalBottomSheet(onDismissRequest = { showResponseSheet = false }, sheetState = sheetState) {
+    testedCodeset?.let { tested ->
+        fun closeResponse(onClosed: () -> Unit) {
+            if (closingResponse) return
+            closingResponse = true
+            scope.launch {
+                try {
+                    sheetState.hide()
+                    testedCodeset = null
+                    onClosed()
+                } finally {
+                    closingResponse = false
+                }
+            }
+        }
+
+        ModalBottomSheet(
+            onDismissRequest = { if (!closingResponse) testedCodeset = null },
+            sheetState = sheetState,
+        ) {
             Column(
                 modifier = Modifier.fillMaxWidth().padding(start = 24.dp, end = 24.dp, bottom = 32.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -280,7 +330,7 @@ fun MatchIRScreen(
                 )
                 Spacer(Modifier.height(24.dp))
                 Text(
-                    stringResource(R.string.code_set_of, codeset, totalCodesets),
+                    stringResource(R.string.code_set_of, tested, totalCodesets),
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.primary,
                 )
@@ -289,9 +339,9 @@ fun MatchIRScreen(
                     OutlinedButton(
                         onClick = {
                             haptic.performHapticFeedback(HapticFeedbackType.Reject)
-                            scope.launch { sheetState.hide() }.invokeOnCompletion { showResponseSheet = false }
-                            nextCodeset()
+                            closeResponse { nextCodeset() }
                         },
+                        enabled = !closingResponse,
                         modifier = Modifier.weight(1f).heightIn(min = 48.dp),
                     ) {
                         Text(stringResource(if (totalCodesets == 1) R.string.back else R.string.no_try_next), textAlign = TextAlign.Center)
@@ -299,12 +349,12 @@ fun MatchIRScreen(
                     Button(
                         onClick = {
                             haptic.performHapticFeedback(HapticFeedbackType.Confirm)
-                            FavoriteManager.setCodeset(context, deviceId, brandId, codeset)
-                            scope.launch { sheetState.hide() }.invokeOnCompletion {
-                                showResponseSheet = false
+                            closeResponse {
+                                FavoriteManager.setCodeset(context, deviceId, brandId, tested)
                                 showSuccessDialog = true
                             }
                         },
+                        enabled = !closingResponse,
                         modifier = Modifier.weight(1f).heightIn(min = 48.dp),
                     ) {
                         Text(stringResource(R.string.yes_it_works), textAlign = TextAlign.Center)

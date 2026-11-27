@@ -170,7 +170,9 @@ fun RemoteControllerScreen(
                             },
                         )
                     1, 2, 4, 11, 12 -> TvLayout(onKeyPressed = onKey)
-                    6 -> FanLayout(onKeyPressed = onKey)
+                    6 -> FanLayout { key ->
+                          IRTransmitter.send(context, IrCodebook.pulses(deviceId, codeset, key))
+                      }
                     8 -> AudioLayout(onKeyPressed = onKey)
                     10 -> ProjectorLayout(onKeyPressed = onKey)
                     13 -> CameraLayout(onKeyPressed = onKey)

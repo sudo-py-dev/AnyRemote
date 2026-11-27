@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -30,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import com.anyremote.remote.R
 import com.anyremote.remote.service.FavoriteManager
 import com.anyremote.remote.service.LocaleManager
+import com.anyremote.remote.ui.helpers.rememberVibratingHapticFeedback
 
 private val languages =
     listOf(
@@ -66,6 +68,7 @@ private fun languageIcon(code: String): ImageVector =
 @Composable
 fun SettingsScreen(onBackClick: () -> Unit) {
     val context = LocalContext.current
+    val haptic = rememberVibratingHapticFeedback()
 
     val themeMode by FavoriteManager.currentThemeState
     val dynamicColor by FavoriteManager.currentDynamicColorState
@@ -129,7 +132,10 @@ fun SettingsScreen(onBackClick: () -> Unit) {
                     title = stringResource(R.string.vibration_toggle),
                     summary = stringResource(R.string.vibration_subtitle),
                     checked = vibration,
-                    onCheckedChange = { FavoriteManager.setVibrationEnabled(context, it) },
+                    onCheckedChange = { enabled ->
+                        FavoriteManager.setVibrationEnabled(context, enabled)
+                        if (enabled) haptic.performHapticFeedback(HapticFeedbackType.ToggleOn)
+                    },
                 )
             }
         }

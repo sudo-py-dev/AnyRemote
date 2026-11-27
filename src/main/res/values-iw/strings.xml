@@ -46,7 +46,6 @@
     <string name="remove_remote">הסר שלט</string>
     <string name="cancel">ביטול</string>
     <string name="save">שמור</string>
-    <string name="remote_name_count">%1$d / %2$d</string>
     <string name="remote_name_label">שם השלט</string>
     <string name="search_placeholder">חיפוש לפי מותג, דגם או מספר שלט</string>
     <string name="device_name_label">שם המכשיר</string>
@@ -200,4 +199,9 @@
     <string name="clear_search">ניקוי החיפוש</string>
     <string name="delay">השהיה</string>
     <string name="cd_backspace">מחיקה</string>
+    <string name="media_play">נגן</string>
+    <string name="media_pause">השהה</string>
+    <string name="media_stop">עצור</string>
+    <string name="media_previous">הקודם</string>
+    <string name="media_next">הבא</string>
 </resources>

@@ -3,6 +3,7 @@
 
     <!-- Permission to transmit IR signals via physical blaster -->
     <uses-permission android:name="android.permission.TRANSMIT_IR" />
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-feature android:name="android.hardware.consumerir" android:required="false" />
 
     <application

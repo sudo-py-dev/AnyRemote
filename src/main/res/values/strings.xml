@@ -46,7 +46,7 @@
     <string name="remove_remote">Remove Remote</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
-    <string name="remote_name_count">%1$d / %2$d</string>
+    <string name="remote_name_count" translatable="false">%1$d / %2$d</string>
     <string name="remote_name_label">Remote Name</string>
     <string name="search_placeholder">Search by brand, model or remote number</string>
     <string name="device_name_label">Device Name</string>
@@ -200,4 +200,9 @@
     <string name="clear_search">Clear search</string>
     <string name="delay">Delay</string>
     <string name="cd_backspace">Delete</string>
+    <string name="media_play">Play</string>
+    <string name="media_pause">Pause</string>
+    <string name="media_stop">Stop</string>
+    <string name="media_previous">Previous</string>
+    <string name="media_next">Next</string>
 </resources>

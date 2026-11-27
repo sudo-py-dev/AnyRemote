@@ -7,45 +7,150 @@ Brand matching ignores case, accents, spacing, and punctuation and accounts for 
 - [Flipper-IRDB snapshot](https://github.com/Lucaslhm/Flipper-IRDB/tree/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d)
 - [irdb snapshot](https://github.com/probonopd/irdb/tree/a3e34000f952795aa86a7a26fac7d463cc0eeccd)
 
-## TVs (103)
+## Imported model profiles
+
+These profiles use model-specific buttons from the linked Flipper-IRDB captures, distributed under [CC0 1.0](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/LICENSE). The catalog stores one NEC address per profile and only includes commands it can represent and label. The listed models have not been verified on appliances.
+
+The remaining inventory includes raw timings, other protocols, captures with incomplete controls, and AC captures that require model-specific state handling.
+
+| Category | Profile | Capture |
+| --- | --- | --- |
+| TVs | Amazon FireTV Omni Series 4K | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Amazon/FireTV_Omni_Series_4K.ir) |
+| TVs | AmazonBasics TV Remote | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/AmazonBasics/AmazonBasics_TV_Remote.ir) |
+| TVs | APEX LE4643T | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Apex/APEX_LE4643T.ir) |
+| TVs | AWA MSDV3268O5D0 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/AWA/AWA_MSDV3268O5D0.ir) |
+| TVs | BAIRD T15011DLEDDS RC-6 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Baird/BAIRD_T15011DLEDDS_RC-6.ir) |
+| TVs | Bauhn ATV 50FHD4 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Bauhn/Bauhn_ATV_50FHD4.ir) |
+| TVs | BGH BLE2814D | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/BGH/BGH_BLE2814D.ir) |
+| TVs | Blitzwolf BWPCM2 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Blitzwolf/Blitzwolf_BWPCM2.ir) |
+| TVs | Bolva TV | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Bolva/Bolva_TV.ir) |
+| TVs | CCE RC512 Remote | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/CCE/CCE_RC512_Remote.ir) |
+| TVs | Denver LED-3271 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Denver/Denver_LED-3271.ir) |
+| TVs | Dual DL-32HD-002 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Dual/Dual_DL-32HD-002.ir) |
+| TVs | DYON Movie Smart 32 XT | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/DYON/DYON_Movie_Smart_32_XT.ir) |
+| TVs | Element 100-Series TV | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Element/Element_100-Series_TV.ir) |
+| TVs | Elements TV | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Elements/Elements_TV.ir) |
+| TVs | Elitelux L32HD1000 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Elitelux/Elitelux_L32HD1000.ir) |
+| TVs | Erisson AL52D B | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Erisson/Erisson_AL52D_B.ir) |
+| TVs | GVA GVA32M7D | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/GVA/GVA_GVA32M7D.ir) |
+| TVs | Kogan KALED50XU9210STB | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Kogan/Kogan_KALED50XU9210STB.ir) |
+| TVs | KRAFT KTV | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Kraft/KRAFT_KTV.ir) |
+| TVs | Mivar LCD TV | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Mivar/Mivar_LCD_TV.ir) |
+| TVs | NEVIR NVR-7409-39HD-N | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Nevir/NEVIR_NVR-7409-39HD-N.ir) |
+| TVs | Oky TV | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Oky/Oky_TV.ir) |
+| TVs | Onn Roku TV | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Onn/Onn_Roku_TV.ir) |
+| TVs | Platinum PT2020LED | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Platinum/Platinum_PT2020LED.ir) |
+| TVs | RCA 24 Roku | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/RCA/RCA_24_Roku.ir) |
+| TVs | Roku Standalone | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Roku/Roku_Standalone.ir) |
+| TVs | Sankey TV | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Sankey/Sankey_TV.ir) |
+| TVs | Sencor 25801 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Sencor/Sencor_25801.ir) |
+| TVs | Silver LE410004 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Silver/Silver_LE410004.ir) |
+| TVs | SKYVUE 03SI-RI | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/SkyVue/SKYVUE_03SI-RI.ir) |
+| TVs | Soniq E32W13B | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Soniq/Soniq_E32W13B.ir) |
+| TVs | Supra STV LC32T880WL 1 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Supra/Supra_STV_LC32T880WL_1.ir) |
+| TVs | Syntax-Brillian SyntaxBrillian Olevia232T | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Syntax-Brillian/SyntaxBrillian_Olevia232T.ir) |
+| TVs | Tevion 3221TS | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Tevion/Tevion_3221TS.ir) |
+| TVs | United tv | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/United/United_tv.ir) |
+| TVs | Viano STV65UHD4K | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Viano/Viano_STV65UHD4K.ir) |
+| TVs | Vitec Exterity IPTV | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Vitec/Vitec_Exterity_IPTV.ir) |
+| TVs | Wbox TV | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Wbox/Wbox_TV.ir) |
+| Fans | Acoolir AC-018 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Acoolir/Acoolir_AC-018.ir) |
+| Fans | Atomberg fan | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Atomberg/Atomberg_fan.ir) |
+| Fans | Cascade Tower Fan | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Cascade/Cascade_Tower_Fan.ir) |
+| Fans | Co/Tech Tower Fan | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Co_Tech/CO_TECH_towerfan.ir) |
+| Fans | Costco OmniBreeze | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Costco/OmniBreeze.ir) |
+| Fans | Daewoo DDV200 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Daewoo/Daewoo_DDV200.ir) |
+| Fans | Eton NDY-DT2-Portable-Evaporative-Tower-Fan | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Eton/Eton_NDY-DT2-Portable-Evaporative-Tower-Fan.ir) |
+| Fans | Hatari L1 Fan | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Hatari/HatariL1Fan.ir) |
+| Fans | Kinzo LQ-AC02S Fan | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Kinzo/Kinzo_LQ-AC02S_Fan.ir) |
+| Fans | MeacoFan 1056 P | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Meaco/MeacoFan_1056_P.ir) |
+| Fans | Mycarbon Fan | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Mycarbon/Mycarbon_Fan.ir) |
+| Fans | OmniBreeze DC2018 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/OmniBreeze/OmniBreeze_DC2018.ir) |
+| Fans | Quads QS303 Fan | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Quads/Quads_QS303_Fan.ir) |
+| Fans | Shark FlexBreeze-FA22X | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Shark/Shark_FlexBreeze-FA22X.ir) |
+| Fans | SilverCrest Fan | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Silver_Crest/SilverCrest_Fan.ir) |
+| Fans | Toshiba FWSA20 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Toshiba/Toshiba_FWSA20.ir) |
+| Fans | UFESA-TW1700-OSLO-WIFI | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Ufesa/UFESA-TW1700-OSLO-WIFI.ir) |
+| Fans | Xpelair XPA360CF Fan | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Xpelair/Xpelair_XPA360CF_Fan.ir) |
+| Streaming boxes | Bqeel R1-Plus | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Streaming_Devices/Bqeel/Bqeel_R1-Plus.ir) |
+| Streaming boxes | Formuler Z8 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Streaming_Devices/Formuler/Formuler_Z8.ir) |
+| Streaming boxes | Kaleidescape Strato V | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Streaming_Devices/Kaleidescape/Kaleidescape_Strato_V.ir) |
+| Streaming boxes | Mecool KM6 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Streaming_Devices/Mecool/Mecool_KM6.ir) |
+| A/V receivers | Adastra WA215 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Audio_and_Video_Receivers/Adastra/Adastra_WA215.ir) |
+| A/V receivers | Auna AV2 CD508 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Audio_and_Video_Receivers/Auna/Auna_AV2_CD508.ir) |
+| A/V receivers | Elac EA101EQ-G | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Audio_and_Video_Receivers/Elac/Elac_EA101EQ-G.ir) |
+| A/V receivers | Emotiva PT100 TA100 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Audio_and_Video_Receivers/Emotiva/Emotiva_PT100_TA100.ir) |
+| A/V receivers | Fosi Audio ZD3 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Audio_and_Video_Receivers/Fosi_Audio/Fosi_Audio_ZD3.ir) |
+| A/V receivers | Fossi Audio ZH3 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Audio_and_Video_Receivers/Fossi%20Audio/Fossi_Audio_ZH3.ir) |
+| A/V receivers | Grundig CMS 5000 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Audio_and_Video_Receivers/Grundig/Grundig_CMS_5000.ir) |
+| A/V receivers | Pyle P2203ABTU | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Audio_and_Video_Receivers/Pyle/Pyle_P2203ABTU.ir) |
+| A/V receivers | Revo Superconnect BZAWDFB0315H2 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Audio_and_Video_Receivers/Revo/Revo_Superconnect_BZAWDFB0315H2.ir) |
+| A/V receivers | Rio Sonic Blue 059PXC | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Audio_and_Video_Receivers/Rio/Rio_Sonic_Blue_059PXC.ir) |
+| A/V receivers | SMSL RC-8A | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Audio_and_Video_Receivers/SMSL/SMSL_RC-8A.ir) |
+| DVD players | GPX D2816 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/DVD_Players/GPX/GPX_D2816.ir) |
+| DVD players | Magnavox MDV3300 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/DVD_Players/Magnavox/Magnavox_MDV3300.ir) |
+| Projectors | Abox T22 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/ABOX/Abox_T22.ir) |
+| Projectors | Anker Nebula Mars Lite | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/Anker/NebulaMarsLite.ir) |
+| Projectors | Apeman LC650 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/Apeman/Apeman_LC650_.ir) |
+| Projectors | Artlii YG300 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/Artlii/Artlii_YG300.ir) |
+| Projectors | Byintek P10 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/Byintek/Byintek_P10.ir) |
+| Projectors | Gateway 210 projextor | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/Gateway/Gateway_210_projextor.ir) |
+| Projectors | Jinhoo M10 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/Jinhoo/Jinhoo_M10.ir) |
+| Projectors | Maxell MC-EU5001 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/Maxell/Maxell_MC-EU5001.ir) |
+| Projectors | Minolta MN674 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/Minolta/Minolta_MN674.ir) |
+| Projectors | NexiGo-PJ20 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/NexiGo/NexiGo-PJ20.ir) |
+| Projectors | ONOAYO Portable Projector | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/ONOAYO/ONOAYO_Portable_Projector.ir) |
+| Projectors | Promethean PRM 35 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/Promethean/Promethean_PRM_35.ir) |
+| Projectors | PVO YG300Pro | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/PVO/PVO_YG300Pro.ir) |
+| Projectors | Rayfoto Projector | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/Rayfoto/Rayfoto_Projector.ir) |
+| Projectors | SMART Projector Remote | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/SMART/SMART_Projectors.ir) |
+| Projectors | Stereoboomm MMP-250 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/StereoBoomm/Stereoboomm_MMP-250.ir) |
+| Projectors | Thunrlge X1BQ | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/Thunrlge/Thunrlge_X1BQ.ir) |
+| Projectors | TOPTRO TR25 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/TOPTRO/TOPTRO_TR25.ir) |
+| Projectors | TopVisionTec TopVision | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/TopVisionTec/TopVision.ir) |
+| Projectors | Vankyo V630W | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/Vankyo/Vankyo_V630W.ir) |
+| Projectors | Wanbo T6 Max | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/Wanbo/Wanbo_T6_Max.ir) |
+| Projectors | WiMiUS s25 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/WiMiUS/WiMiUS_s25.ir) |
+| Projectors | Yoton Y3 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/Yoton/Yoton%20Y3.ir) |
+| Set-top and cable/satellite boxes | BOUYGUES Bbox 4K | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/BOUYGUES/Bbox_4K.ir) |
+| Set-top and cable/satellite boxes | Claro Fujian Newland TV Box | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/Claro/Claro_Fujian_Newland_TV_Box.ir) |
+| Set-top and cable/satellite boxes | Cox Cisco DTA250HD | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/Cox/Cox_Cisco_DTA250HD.ir) |
+| Set-top and cable/satellite boxes | Elisa Viihde | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/Elisa_Viihde/Elisa_viihde.ir) |
+| Set-top and cable/satellite boxes | EVO4 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/EVO/EVO4.ir) |
+| Set-top and cable/satellite boxes | Fransat NewSat Maestro | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/DVB-T/FranSat/Fransat_NewSat_Maestro.ir) |
+| Set-top and cable/satellite boxes | Huawei DN300 MGTS | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/Huawei/Huawei_dn300_mgts%28mts%29.ir) |
+| Set-top and cable/satellite boxes | Lenson LD2500 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/Lenson/Lenson_LD2500.ir) |
+| Set-top and cable/satellite boxes | MANHATTAN SX FREESAT | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/DVB-T/Manhattan/MANHATTAN_SX_FREESAT.ir) |
+| Set-top and cable/satellite boxes | Mediasonic Homeworx HW180STB | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TV_Tuner/Mediasonic/Mediasonic_Homeworx_HW180STB.ir) |
+| Set-top and cable/satellite boxes | Micca SpeckG2 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/Micca/Micca_SpeckG2.ir) |
+| Set-top and cable/satellite boxes | Mirage DR5-PVR | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/Mirage/DR5-PVR.ir) |
+| Set-top and cable/satellite boxes | Orange Cable Box | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/Orange/Orange_Cable_Box.ir) |
+| Set-top and cable/satellite boxes | Quasar 41101445 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/Quasar/Quasar_41101445.ir) |
+| Set-top and cable/satellite boxes | Rostelecom Wink STB | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/Rostelecom/Rostelecom_Wink_STB.ir) |
+| Set-top and cable/satellite boxes | Starcom 9947 HD | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/Starcom/Starcom_9947_HD.ir) |
+
+## TVs (64)
 
 | Brand | Example IR data |
 | --- | --- |
 | ADLER | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/ADLER/TV/2%2C-1.csv) |
-| Amazon | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Amazon/FireTV_Omni_Series_4K.ir) |
-| AmazonBasics | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/AmazonBasics/AmazonBasics_TV_Remote.ir) |
 | Android | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Android/Android_TV_MXQ.ir) |
 | ANITECH | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/ANITECH/TV/0%2C-1.csv) |
-| Apex | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Apex/APEX_LE4643T.ir) |
-| AWA | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/AWA/AWA_MSDV3268O5D0.ir) |
-| Baird | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Baird/BAIRD_T15011DLEDDS_RC-6.ir) |
-| Bauhn | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Bauhn/Bauhn_ATV_50FHD4.ir) |
-| BGH | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/BGH/BGH_BLE2814D.ir) |
-| Blitzwolf | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Blitzwolf/Blitzwolf_BWPCM2.ir) |
-| Bolva | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Bolva/Bolva_TV.ir) |
 | Bose | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Bose/Bose_TV.ir) |
 | Boulanger | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Boulanger/Essentiel_B_TV.ir) |
 | Brandt | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Brandt/Brandt_B3228HD.ir) |
 | Bush | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Bush/BUSH_TV_DLED32287HDCNTDFVP.ir) |
 | ByDesign | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/ByDesign/LCD/71%2C-1.csv) |
 | Cadillac | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Cadillac/Escalade_TV.ir) |
-| CCE | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/CCE/CCE_RC512_Remote.ir) |
 | CIS BOX | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/CIS%20BOX/Plasma/1%2C-1.csv) |
 | ContinentalEdison | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/ContinentalEdison/ContinentalEdison.ir) |
 | Cranker | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Cranker/Cranker_generic.ir) |
 | Crown | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Crown/Crown_22111.ir) |
-| Denver | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Denver/Denver_LED-3271.ir) |
 | Devant | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Devant/Devant_Unknown_Model.ir) |
 | Digihome | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Digihome/Butlins.ir) |
-| Dual | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Dual/Dual_DL-32HD-002.ir) |
 | Dwin | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Dwin/Plasma/15%2C-1.csv) |
-| DYON | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/DYON/DYON_Movie_Smart_32_XT.ir) |
 | EdenWood | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/EdenWood/EdenWood_TV.ir) |
-| Element | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Element/Element_100-Series_TV.ir) |
-| Elements | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Elements/Elements_TV.ir) |
-| Elitelux | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Elitelux/Elitelux_L32HD1000.ir) |
 | Enseo | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Enseo/Enseo.ir) |
-| Erisson | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Erisson/Erisson_AL52D_B.ir) |
 | EssentielB | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/EssentielB/EssentielB.ir) |
 | Fast | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Fast/TV/28%2C-1.csv) |
 | Fetch | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Fetch/Fetch_TV_Box_AUS.ir) |
@@ -59,12 +164,9 @@ Brand matching ignores case, accents, spacing, and punctuation and accounts for 
 | GPX | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/GPX/Gpx.ir) |
 | Grandin | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Grandin/Grandin.ir) |
 | GuestTek | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/GuestTek/GuestTek_Marriot_Hotel.ir) |
-| GVA | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/GVA/GVA_GVA32M7D.ir) |
 | Hotels | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Hotels/Hilton_Connected_Room_Remote.ir) |
 | InFocus | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/InFocus/Plasma/7%2C-1.csv) |
 | Kendo | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Kendo/Kendo_CP20M36VT.ir) |
-| Kogan | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Kogan/Kogan_KALED50XU9210STB.ir) |
-| Kraft | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Kraft/KRAFT_KTV.ir) |
 | LodgeNet | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/LodgeNet/lodgenet_lrc3220.ir) |
 | Loewe | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Loewe/LOEWE_TV.ir) · [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Loewe/TV/0%2C-1.csv) |
 | LXI | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/LXI/TV/4%2C-1.csv) |
@@ -73,45 +175,26 @@ Brand matching ignores case, accents, spacing, and punctuation and accounts for 
 | Maxx | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Maxx/Plasma/32%2C64.csv) |
 | Medion | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Medion/Medion.ir) |
 | Memorex | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Memorex/TV/4%2C-1.csv) |
-| Mivar | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Mivar/Mivar_LCD_TV.ir) |
 | Neo | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Neo/Neo_TV.ir) |
 | NET TV | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/NET%20TV/TV/2%2C-1.csv) |
-| Nevir | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Nevir/NEVIR_NVR-7409-39HD-N.ir) |
-| Oky | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Oky/Oky_TV.ir) |
-| Onn | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Onn/Onn_Roku_TV.ir) |
 | PDi | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/PDi/PD108-420.ir) |
-| Platinum | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Platinum/Platinum_PT2020LED.ir) |
 | PrismPlus | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/PrismPlus/PrismPlus.ir) |
 | Proscan | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Proscan/TV/15%2C-1.csv) |
-| RCA | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/RCA/RCA_24_Roku.ir) · [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/RCA/TV/14%2C-1.csv) |
-| Roku | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Roku/Roku_Standalone.ir) |
-| Sankey | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Sankey/Sankey_TV.ir) |
 | SEG | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/SEG/SEG_MALTA.ir) |
 | Seiki | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Seiki/Seiki_SE40FYP1T_TV.ir) |
 | Seleco | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Seleco/TV/0%2C-1.csv) |
-| Sencor | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Sencor/Sencor_25801.ir) |
-| Silver | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Silver/Silver_LE410004.ir) |
-| SkyVue | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/SkyVue/SKYVUE_03SI-RI.ir) |
-| Soniq | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Soniq/Soniq_E32W13B.ir) |
 | Strong | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Strong/Strong_32HX4003.ir) |
 | Sunbrite | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Sunbrite/Sunbrite.ir) |
-| Supra | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Supra/Supra_STV_LC32T880WL_1.ir) |
 | Sweex | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Sweex/SWEEX_Generic_Monitor.ir) |
 | Symphonic | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Symphonic/Symphonic_ST424FF.ir) · [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Symphonic/TV/41%2C-1.csv) |
-| Syntax-Brillian | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Syntax-Brillian/SyntaxBrillian_Olevia232T.ir) |
 | Technika | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Technika/TECHNIKA_22880.ir) |
 | Telecontrole | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Telecontrole/TC_33_VNS2000.ir) |
 | Telefunken | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Telefunken/Telefunken_D40F294R4CW.ir) |
 | Telekom | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Telekom/Telekom_Entertain.ir) |
-| Tevion | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Tevion/Tevion_3221TS.ir) |
-| United | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/United/United_tv.ir) |
-| Viano | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Viano/Viano_STV65UHD4K.ir) |
 | Viore | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Viore/Viore_TV_LC37VF72.ir) |
-| Vitec | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Vitec/Vitec_Exterity_IPTV.ir) |
 | Vivax | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Vivax/TV/2%2C-1.csv) |
 | Waltham | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Waltham/Waltham_WTHD3214B.ir) |
 | Watson | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Watson/WATSON_FA3627T.ir) |
-| Wbox | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Wbox/Wbox_TV.ir) |
 | Xiaomi | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Xiaomi/Xiaomi_TV.ir) |
 | Zenith | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TVs/Zenith/Zenith_SC3492Z.ir) · [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Zenith/TV/5%2C1.csv) |
 
@@ -197,28 +280,22 @@ Brand matching ignores case, accents, spacing, and punctuation and accounts for 
 | Zenith | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/ACs/Zenith/Zenith_AC.ir) |
 | Zephir | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/ACs/Zephir/Zephir_ZPO9001H_AC.ir) |
 
-## Fans (87)
+## Fans (69)
 
 | Brand | Example IR data |
 | --- | --- |
-| Acoolir | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Acoolir/Acoolir_AC-018.ir) |
 | AlohaBreeze | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/AlohaBreeze/AlohaBreeze_84001.ir) |
 | Amazon | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Amazon/Amazon_Basics_Fan.ir) |
 | Ansio | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Ansio/Ansio_Fan_30inch_Tower.ir) |
 | Anslut | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Anslut/Anslut_Tower_Fan_95cm.ir) |
-| Atomberg | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Atomberg/Atomberg_fan.ir) |
 | Bell+Howell | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Bell%2BHowell/Socket_Fan_Light_8563.ir) |
 | Better_Homes_and_Gardens | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Better_Homes_and_Gardens/Better_Homes_and_Gardens_Fan.ir) |
 | Big_Ass_Fans | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Big_Ass_Fans/Big_Ass_Fans_Haiku.ir) |
 | Bionaire | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Bionaire/BASF1016GRC.ir) |
 | Black_and_Decker | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Black_and_Decker/Black_and_Decker_BFSR16W.ir) |
 | Brandson | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Brandson/Brandson_Fan_304997.ir) |
-| Cascade | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Cascade/Cascade_Tower_Fan.ir) |
 | Cecotec | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Cecotec/CECOTEC_1010_EXTREMECONNECT.ir) |
-| Co_Tech | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Co_Tech/CO_TECH_towerfan.ir) |
 | ComfortZone | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/ComfortZone/ComfortZone_CZ106.ir) |
-| Costco | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Costco/OmniBreeze.ir) |
-| Daewoo | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Daewoo/Daewoo_DDV200.ir) |
 | Deka | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Deka/Deka_G3_Fan.ir) |
 | Dimplex | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Dimplex/Dimplex_Mont_Blanc_dxmbcf.ir) |
 | Domo | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Domo/DOMO_DO8149.ir) |
@@ -226,27 +303,21 @@ Brand matching ignores case, accents, spacing, and punctuation and accounts for 
 | EasyHome | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/EasyHome/EasyHome_PFR40RT.ir) |
 | Elmark | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Elmark/Elmark_LMD-24.ir) |
 | Equatlon | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Equatlon/Equatlon_Fan.ir) |
-| Eton | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Eton/Eton_NDY-DT2-Portable-Evaporative-Tower-Fan.ir) |
 | Fakir | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Fakir/Fakir_VC60_DC_2019.ir) |
 | Fust | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Fust/Fust_Primotecq_Tower_Fan_TF4201TR-L.ir) |
-| Hatari | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Hatari/HatariL1Fan.ir) |
 | Hitachi | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Hitachi/Hitachi_HEF_RM1_Fan.ir) |
 | Holmes | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Holmes/Holmes_Fan_HTF3610AR.ir) |
 | Homezest | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Homezest/Homezest_LWTF-04.ir) |
 | Igenix | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Igenix/Igenix_DF0035TBL.ir) |
 | iLukodu | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/iLukodu/iLukodu_TFS-20RH.ir) |
-| Kinzo | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Kinzo/Kinzo_LQ-AC02S_Fan.ir) |
 | Klarstein | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Klarstein/Klarstein_Sommwerwind.ir) |
 | KOENIC | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/KOENIC/KOENIC_KSFW_40322_TRC.ir) |
 | LeaderPro | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/LeaderPro/LeaderPro_DC_Motor_Floor_Fan.ir) |
 | Lutron | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Lutron/Lutron_Maestro_Fan.ir) |
 | MainStays | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/MainStays/MainStays_Fan_FZ10-19JR.ir) |
 | MaxxAir | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/MaxxAir/MaxxAir_Airxcel.ir) |
-| Meaco | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Meaco/MeacoFan_1056_P.ir) |
 | Mistral | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Mistral/Mistral_MTFYG07R.ir) |
 | Mitsubishi | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Mitsubishi/Mitsubishi_R30J-HRV.ir) |
-| Mycarbon | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Mycarbon/Mycarbon_Fan.ir) |
-| OmniBreeze | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/OmniBreeze/OmniBreeze_DC2018.ir) |
 | oneConcept | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/oneConcept/oneConcept_Hightower-2G.ir) |
 | Orbrgozo | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Orbrgozo/Orbegozo_SF0243.ir) |
 | Ozeri | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Ozeri/Ozeri_UltraWind_OZF1.ir) |
@@ -255,7 +326,6 @@ Brand matching ignores case, accents, spacing, and punctuation and accounts for 
 | Platinum | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Platinum/Platinum_Home_Fan.ir) |
 | ProBreeze | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/ProBreeze/ProBreeze_PBF04.ir) |
 | Profi_Care | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Profi_Care/Profi_Care_PC-VL_3069.ir) |
-| Quads | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Quads/Quads_QS303_Fan.ir) |
 | Rowenta | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Rowenta/Rowenta%20VU5670.ir) |
 | Rubine | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Rubine/Rubine_RCF-FORZA45-5BL-GM.ir) |
 | Satellite_Electronics | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Satellite_Electronics/Fan.ir) |
@@ -264,11 +334,9 @@ Brand matching ignores case, accents, spacing, and punctuation and accounts for 
 | ServilleClassics | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/ServilleClassics/SC-UltraSlimLine-Oscillating-Tower-Fan.ir) |
 | Seville_Classics | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Seville_Classics/SC-UltraSlimLine-Oscillating-Tower-Fan-5-Buttons-EHF10119PB.ir) |
 | Shami | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Shami/Shami_Fan-4333E.ir) |
-| Shark | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Shark/Shark_FlexBreeze-FA22X.ir) |
 | SHE | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/SHE/SHE_Fan_SHE40ST1801F.ir) |
 | Shinic | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Shinic/shinic_BP69D.ir) |
 | Siguro | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Siguro/Siguro_fn_v750w.ir) |
-| Silver_Crest | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Silver_Crest/SilverCrest_Fan.ir) |
 | Solida | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Solida/Solida_IFan14.ir) |
 | Solis | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Solis/Solis_Easy_Breezy.ir) |
 | Somela | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Somela/Wind_Breeze_2_in_1.ir) |
@@ -279,66 +347,48 @@ Brand matching ignores case, accents, spacing, and punctuation and accounts for 
 | TECHNIC | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/TECHNIC/TECHNIC_YH-32RA.ir) |
 | Tefal | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Tefal/Tefal_Essential_VF3910F0.ir) |
 | Thomson | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Thomson/Thomson_Fan_THEVL484K.ir) |
-| Toshiba | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Toshiba/Toshiba_FWSA20.ir) |
 | U-Ultty | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/U-Ultty/U-Ultty_SKJ-CR021.ir) |
-| Ufesa | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Ufesa/UFESA-TW1700-OSLO-WIFI.ir) |
 | Utilitech | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Utilitech/Utilitech_Fan_FZ10-19JR.ir) |
 | Vitek | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Vitek/Vitek_VT1907.ir) |
 | Vornado | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Vornado/Vornado.ir) |
 | Westinghouse | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Westinghouse/Westinghouse_78095.ir) |
 | Woozoo | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Woozoo/WooZoo.ir) |
-| Xpelair | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Fans/Xpelair/Xpelair_XPA360CF_Fan.ir) |
 
-## Streaming boxes (10)
+## Streaming boxes (6)
 
 | Brand | Example IR data |
 | --- | --- |
 | Amazon | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Streaming_Devices/Amazon/Alexa_Voice_2ndGen.ir) |
 | Apple | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Streaming_Devices/Apple/Apple_TV.ir) |
-| Bqeel | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Streaming_Devices/Bqeel/Bqeel_R1-Plus.ir) |
-| Formuler | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Streaming_Devices/Formuler/Formuler_Z8.ir) |
-| Kaleidescape | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Streaming_Devices/Kaleidescape/Kaleidescape_Strato_V.ir) |
 | MAG | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Streaming_Devices/MAG/MAG_TV_Box.ir) |
-| Mecool | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Streaming_Devices/Mecool/Mecool_KM6.ir) |
 | onn | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Streaming_Devices/onn/onn_4K_Pro.ir) |
 | Roku | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Streaming_Devices/Roku/Roku.ir) |
 | Xiaomi | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Streaming_Devices/Xiaomi/Xiaomi_MiBox1.ir) |
 
-## A/V receivers (29)
+## A/V receivers (18)
 
 | Brand | Example IR data |
 | --- | --- |
-| Adastra | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Audio_and_Video_Receivers/Adastra/Adastra_WA215.ir) |
 | ASR | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Audio_and_Video_Receivers/ASR/ASR_EMITTER1HD.ir) |
 | Audio Control | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Audio%20Control/Receiver/16%2C-1.csv) |
-| Auna | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Audio_and_Video_Receivers/Auna/Auna_AV2_CD508.ir) |
 | BnK Components | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/BnK%20Components/Receiver/139%2C71.csv) |
 | CambridgeAudio | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Audio_and_Video_Receivers/CambridgeAudio/CambridgeAudio_650A.ir) · [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Cambridge%20Audio/Receiver/16%2C-1.csv) |
 | Cary Audio Design | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Cary%20Audio%20Design/Receiver/19%2C-1.csv) |
 | CIS BOX | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/CIS%20BOX/Receiver/121%2C-1.csv) |
 | Douk_Audio | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Audio_and_Video_Receivers/Douk_Audio/Douk_ST-01_Pro.ir) |
-| Elac | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Audio_and_Video_Receivers/Elac/Elac_EA101EQ-G.ir) |
-| Emotiva | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Audio_and_Video_Receivers/Emotiva/Emotiva_PT100_TA100.ir) |
-| Fosi_Audio | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Audio_and_Video_Receivers/Fosi_Audio/Fosi_Audio_ZD3.ir) |
-| Fossi Audio | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Audio_and_Video_Receivers/Fossi%20Audio/Fossi_Audio_ZH3.ir) |
 | GPX | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Audio_and_Video_Receivers/GPX/Gpx_hc221b.ir) |
-| Grundig | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Audio_and_Video_Receivers/Grundig/Grundig_CMS_5000.ir) |
 | Madrigal | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Madrigal/Receiver/5%2C-1.csv) |
 | MCM_Custom_Audio | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Audio_and_Video_Receivers/MCM_Custom_Audio/MCM_Volume_Control_50-8394.ir) |
 | Myryad | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Myryad/Receiver/0%2C-1.csv) |
 | NEC | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/NEC/Receiver/25%2C-1.csv) |
 | Onkyo Integra | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Onkyo%20Integra/Receiver/210%2C108.csv) |
 | Portta | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Audio_and_Video_Receivers/Portta/Portta_Toslink_Audio_Switcher.ir) |
-| Pyle | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Audio_and_Video_Receivers/Pyle/Pyle_P2203ABTU.ir) |
 | Rega | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Audio_and_Video_Receivers/Rega/Rega_IO.ir) · [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Rega/Receiver/110%2C-1.csv) |
-| Revo | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Audio_and_Video_Receivers/Revo/Revo_Superconnect_BZAWDFB0315H2.ir) |
-| Rio | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Audio_and_Video_Receivers/Rio/Rio_Sonic_Blue_059PXC.ir) |
 | SiriusXM | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Audio_and_Video_Receivers/SiriusXM/SiriusXM_Onyx_EZR.ir) |
-| SMSL | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Audio_and_Video_Receivers/SMSL/SMSL_RC-8A.ir) |
 | Terratec | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Audio_and_Video_Receivers/Terratec/terratec_m3po.ir) |
 | X4TECH | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Audio_and_Video_Receivers/X4TECH/X4_TECH_TU-1200.ir) |
 
-## DVD players (31)
+## DVD players (29)
 
 | Brand | Example IR data |
 | --- | --- |
@@ -355,12 +405,10 @@ Brand matching ignores case, accents, spacing, and punctuation and accounts for 
 | E Max | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/E%20Max/DVD%20Player/0%2C223.csv) |
 | Esoteric Audio | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Esoteric%20Audio/DVD%20Player/133%2C32.csv) |
 | FSC | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/FSC/DVD%20Player/4%2C15.csv) |
-| GPX | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/DVD_Players/GPX/GPX_D2816.ir) |
 | Hiteker | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Hiteker/DVD%20Player/0%2C-1.csv) |
 | I-O Data | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/I-O%20Data/DVD%20Player/8%2C230.csv) |
 | Kaleidescape | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Kaleidescape/DVD%20Player/69%2C-1.csv) |
 | Loewe | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Loewe/DVD%20Player/0%2C-1.csv) |
-| Magnavox | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/DVD_Players/Magnavox/Magnavox_MDV3300.ir) · [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Magnavox/DVD%20Player/1%2C-1.csv) |
 | McIntosh | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/McIntosh/DVD%20Player/128%2C80.csv) |
 | Memorex | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Memorex/DVD%20Player/0%2C-1.csv) |
 | Micromega | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Micromega/DVD%20Player/4%2C-1.csv) |
@@ -374,16 +422,11 @@ Brand matching ignores case, accents, spacing, and punctuation and accounts for 
 | Unknown_Brand | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/DVD_Players/Unknown_Brand/Dvd_tv_player.ir) |
 | Yamakawa | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Yamakawa/DVD%20Player/32%2C-1.csv) |
 
-## Projectors (38)
+## Projectors (15)
 
 | Brand | Example IR data |
 | --- | --- |
-| ABOX | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/ABOX/Abox_T22.ir) |
-| Anker | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/Anker/NebulaMarsLite.ir) |
-| Apeman | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/Apeman/Apeman_LC650_.ir) |
-| Artlii | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/Artlii/Artlii_YG300.ir) · [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Artlii/Projector/3%2C-1.csv) |
 | BrandUnknown | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/BrandUnknown/Generic_Projector.ir) |
-| Byintek | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/Byintek/Byintek_P10.ir) |
 | Da-Lite | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/Da-Lite/Da-Lite_ProjectorScreen.ir) |
 | Denon | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/Denon/Denon_Projector.ir) |
 | Dragonfly | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/Dragonfly/Dragonfly_Screen.ir) |
@@ -391,33 +434,15 @@ Brand matching ignores case, accents, spacing, and punctuation and accounts for 
 | EliteScreens | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/EliteScreens/EliteScreens_100H.ir) |
 | Elmo | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Elmo/Video%20Projector/132%2C132.csv) |
 | Faroudja | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Faroudja/Video%20Projector/0%2C-1.csv) |
-| Gateway | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/Gateway/Gateway_210_projextor.ir) |
 | Groview | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/Groview/Groview.ir) |
 | Harman Video | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Harman%20Video/Video%20Projector/1%2C-1.csv) |
-| Jinhoo | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/Jinhoo/Jinhoo_M10.ir) |
-| Maxell | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/Maxell/Maxell_MC-EU5001.ir) |
-| Minolta | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/Minolta/Minolta_MN674.ir) |
-| NexiGo | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/NexiGo/NexiGo-PJ20.ir) |
-| ONOAYO | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/ONOAYO/ONOAYO_Portable_Projector.ir) |
-| Promethean | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/Promethean/Promethean_PRM_35.ir) |
-| PVO | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/PVO/PVO_YG300Pro.ir) |
-| Rayfoto | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/Rayfoto/Rayfoto_Projector.ir) |
 | RIF6 | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/RIF6/RIF6-cube-projector-raw.ir) |
 | SAKAWA | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/SAKAWA/SAKAWA_Projector.ir) |
-| SMART | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/SMART/SMART_Projectors.ir) |
-| StereoBoomm | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/StereoBoomm/Stereoboomm_MMP-250.ir) |
-| Thunrlge | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/Thunrlge/Thunrlge_X1BQ.ir) |
-| TOPTRO | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/TOPTRO/TOPTRO_TR25.ir) |
-| TopVisionTec | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/TopVisionTec/TopVision.ir) |
 | Vamvo | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/Vamvo/Vamvo_YG300_Pro_Mini.ir) |
-| Vankyo | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/Vankyo/Vankyo_V630W.ir) |
-| Wanbo | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/Wanbo/Wanbo_T6_Max.ir) |
 | WeWatch | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/WeWatch/WeWatch_v10_Projector.ir) |
-| WiMiUS | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/WiMiUS/WiMiUS_s25.ir) |
-| Yoton | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Projectors/Yoton/Yoton%20Y3.ir) |
 | Zenith | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Zenith/Video%20Projector/5%2C1.csv) |
 
-## Set-top and cable/satellite boxes (80)
+## Set-top and cable/satellite boxes (64)
 
 | Brand | Example IR data |
 | --- | --- |
@@ -430,17 +455,14 @@ Brand matching ignores case, accents, spacing, and punctuation and accounts for 
 | Austar | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Austar/Cable%20Box/32%2C224.csv) |
 | Bell | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/Bell/Bell_Sat_CAN.ir) · [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Bell/Satellite/0%2C0.csv) |
 | Bell ExpressVu | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Bell%20ExpressVu/Satellite/0%2C0.csv) |
-| BOUYGUES | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/BOUYGUES/Bbox_4K.ir) |
 | Bulsatcom | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/DVB-T/Bulsatcom/Bulsatcom_DVBTV.ir) |
 | Cahors | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/Cahors/Cahors_TVS_7900HD_TNT_Sat.ir) |
 | Canalsat | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Canalsat/Satellite/10%2C-1.csv) |
 | Channel Master | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Channel%20Master/Satellite/132%2C99.csv) |
 | CIS BOX | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/CIS%20BOX/DSS/183%2C-1.csv) |
-| Claro | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/Claro/Claro_Fujian_Newland_TV_Box.ir) |
 | Cogeco | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/Cogeco/Cogeco_Cable_Box_CAN.ir) |
 | Comcast | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/Comcast/Xfinity_XiOneSC-b.ir) · [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Comcast/Cable%20Box/0%2C-1.csv) |
 | Cool Sat | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Cool%20Sat/Satellite/64%2C64.csv) |
-| Cox | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/Cox/Cox_Cisco_DTA250HD.ir) |
 | Cyfrowy_Polsat | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/DVB-T/Cyfrowy_Polsat/Cyfrowy_polsat.ir) |
 | Digital Stream | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Digital%20Stream/HDTV%20Tuner/4%2C2.csv) |
 | DigitalView | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/DigitalView/HDTV%20Tuner/128%2C-1.csv) |
@@ -449,13 +471,10 @@ Brand matching ignores case, accents, spacing, and punctuation and accounts for 
 | Dream | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Dream/Satellite/0%2C-1.csv) |
 | DSTV | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/DSTV/DSTV_EXPLORER.ir) |
 | Echostar | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Echostar/DSS/0%2C0.csv) |
-| Elisa_Viihde | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/Elisa_Viihde/Elisa_viihde.ir) |
 | elWron | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TV_Tuner/elWron/elWron.ir) |
 | Eurolan | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/Eurolan/Eurolan_TH100.ir) |
-| EVO | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/EVO/EVO4.ir) |
 | Evolution | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/Evolution/Evolution_DTA-Cable_DM8-1002-CA.ir) |
 | FOXTEL | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/FOXTEL/Foxtel_IQ2-IQ3.ir) |
-| FranSat | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/DVB-T/FranSat/Fransat_NewSat_Maestro.ir) |
 | Galaxis | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Galaxis/Satellite/13%2C80.csv) |
 | General Instrument | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/General%20Instrument/Cable%20Box/0%2C-1.csv) |
 | Get | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/Get/Get_Mini.ir) |
@@ -464,37 +483,27 @@ Brand matching ignores case, accents, spacing, and punctuation and accounts for 
 | Hauppauge | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TV_Tuner/Hauppauge/Hauppauge_R-005.ir) |
 | Hirschmann | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Hirschmann/Satellite/32%2C255.csv) |
 | Hitachi | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Hitachi/Cable%20Box/80%2C-1.csv) |
-| Huawei | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/Huawei/Huawei_dn300_mgts%28mts%29.ir) |
 | Hughes | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Hughes/DSS/1%2C-1.csv) |
 | Jerrold | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Jerrold/Cable%20Box/0%2C-1.csv) |
 | JVC | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/JVC/Satellite/0%2C0.csv) |
 | Kathrein | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Kathrein/Satellite/0%2C-1.csv) |
-| Lenson | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/Lenson/Lenson_LD2500.ir) |
 | LG | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/LG/HDTV%20Tuner/247%2C-1.csv) |
 | Mag | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/Mag/Mag_TVbox_Remote.ir) |
 | Magnavox | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Magnavox/DSS/128%2C63.csv) |
-| Manhattan | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/DVB-T/Manhattan/MANHATTAN_SX_FREESAT.ir) |
-| Mediasonic | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/TV_Tuner/Mediasonic/Mediasonic_Homeworx_HW180STB.ir) |
 | Meo | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/Meo/Meo_Cable_Box.ir) |
-| Micca | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/Micca/Micca_SpeckG2.ir) |
-| Mirage | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/Mirage/DR5-PVR.ir) |
 | Mitsubishi | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Mitsubishi/Cable%20Box/0%2C-1.csv) |
 | Motorola | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Motorola/Cable%20Box/0%2C-1.csv) |
 | MSI | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/DVB-T/MSI/DigiVox_MiniII.ir) |
 | Netgem | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/Netgem/Netgem_7700_Cable_Box.ir) |
 | Nokia | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Nokia/Satellite/24%2C-1.csv) |
 | Novaplex | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Novaplex/Cable%20Box/27%2C-1.csv) |
-| Orange | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/Orange/Orange_Cable_Box.ir) |
 | Panasonic | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Panasonic/HDTV%20Tuner/128%2C2.csv) |
 | Philips | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Philips/DSS/133%2C48.csv) |
 | Pioneer | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Pioneer/Cable%20Box/168%2C40.csv) |
-| Quasar | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/Quasar/Quasar_41101445.ir) |
 | RCA | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/RCA/DSS/15%2C-1.csv) |
-| Rostelecom | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/Rostelecom/Rostelecom_Wink_STB.ir) |
 | Scientific Atlanta | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Scientific%20Atlanta/Cable%20Box/27%2C-1.csv) |
 | SkyQ | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/SkyQ/SkyQ.ir) |
 | Sony | [irdb](https://github.com/probonopd/irdb/blob/a3e34000f952795aa86a7a26fac7d463cc0eeccd/codes/Sony/DSS/1%2C-1.csv) |
-| Starcom | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/Starcom/Starcom_9947_HD.ir) |
 | TechniSat | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/TechniSat/TechniSat_SAT1.ir) |
 | Telenet | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/Telenet/telenet.ir) |
 | Telus | [Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB/blob/d126fb1b6f1e114c52b4a8c19839ea65e3a9c24d/Cable_Boxes/Telus/Telus_OptikTV.ir) |

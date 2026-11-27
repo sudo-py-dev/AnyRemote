@@ -199,4 +199,9 @@
     <string name="clear_search">清除搜索</string>
     <string name="delay">延时</string>
     <string name="cd_backspace">删除</string>
+    <string name="media_play">播放</string>
+    <string name="media_pause">暂停</string>
+    <string name="media_stop">停止</string>
+    <string name="media_previous">上一个</string>
+    <string name="media_next">下一个</string>
 </resources>

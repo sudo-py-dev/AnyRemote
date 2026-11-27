@@ -34,6 +34,7 @@ enum class RemoteKey(val command: Int) {
     OSCILLATE(0x22),
     MODE(0x23),
     TIMER(0x24),
+    FAN_SPEED(0x25),
     SOURCE_BLUETOOTH(0x28),
     SOURCE_HDMI(0x29),
     SOURCE_OPTICAL(0x2A),
@@ -43,7 +44,12 @@ enum class RemoteKey(val command: Int) {
     SHUTTER(0x38),
     SHUTTER_2S(0x39),
     SHUTTER_5S(0x3A),
-    SHUTTER_10S(0x3B);
+    SHUTTER_10S(0x3B),
+    PLAY(0x40),
+    PAUSE(0x41),
+    STOP(0x42),
+    PREVIOUS(0x43),
+    NEXT(0x44);
 
     companion object {
         fun digit(n: Int): RemoteKey {

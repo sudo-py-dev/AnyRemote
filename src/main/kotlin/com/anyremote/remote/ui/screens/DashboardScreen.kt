@@ -10,14 +10,11 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
@@ -258,12 +255,6 @@ fun DashboardScreen(
 @Composable
 private fun AddRemoteButton(onClick: () -> Unit) {
     val interaction = remember { MutableInteractionSource() }
-    val pressed by interaction.collectIsPressedAsState()
-    val scale by animateFloatAsState(
-        targetValue = if (pressed) 0.93f else 1f,
-        animationSpec = tween(if (pressed) 75 else 160),
-        label = "Add remote press",
-    )
     ExtendedFloatingActionButton(
         onClick = onClick,
         icon = { Icon(Icons.Default.Add, contentDescription = null) },
@@ -271,10 +262,7 @@ private fun AddRemoteButton(onClick: () -> Unit) {
         interactionSource = interaction,
         containerColor = MaterialTheme.colorScheme.primary,
         contentColor = MaterialTheme.colorScheme.onPrimary,
-        modifier = Modifier.graphicsLayer {
-            scaleX = scale
-            scaleY = scale
-        },
+        modifier = Modifier.pressScale(interaction, pressedScale = 0.94f),
     )
 }
 
@@ -327,6 +315,7 @@ internal fun RemotesHome(
             items(remotes, key = { "${it.device.id}_${it.brand.id}" }) { remote ->
                 RemoteTile(
                     remote = remote,
+                    modifier = Modifier.animateItem(),
                     onClick = { onRemoteClick(remote) },
                     onOptions = { onRemoteOptions(remote) },
                 )
@@ -414,15 +403,19 @@ private fun RemoteTile(
     remote: SavedRemote,
     onClick: () -> Unit,
     onOptions: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val haptic = rememberVibratingHapticFeedback()
+    val interaction = remember { MutableInteractionSource() }
     Surface(
         shape = MaterialTheme.shapes.large,
         color = MaterialTheme.colorScheme.surfaceContainer,
         modifier =
-            Modifier.fillMaxWidth()
+            modifier.fillMaxWidth()
+                .pressScale(interaction, pressedScale = 0.97f)
                 .clip(MaterialTheme.shapes.large)
                 .combinedClickable(
+                    interactionSource = interaction,
                     onClick = onClick,
                     onLongClick = {
                         haptic.performHapticFeedback(HapticFeedbackType.LongPress)
