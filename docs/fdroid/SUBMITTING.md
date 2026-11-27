@@ -27,6 +27,6 @@ The build uses JDK 25 (`jvmToolchain(25)`), which F-Droid's Debian build server 
 
 ## Things to know
 
-- **Different signing keys.** F-Droid signs with its own key, so a GitHub build can't be updated with an F-Droid build, or the other way round. Users have to uninstall first, which deletes their saved remotes. To share one key, you'd need [reproducible builds](https://f-droid.org/docs/Reproducible_Builds/) and the expected signature added to the recipe. That's a later step.
-- **Category.** The recipe uses `Connectivity`. Check F-Droid's current [category list](https://gitlab.com/fdroid/fdroiddata/-/blob/master/config/categories.yml) for a closer match. A reviewer may also suggest one.
+- **Reproducible builds, one signing key.** Each GitHub release also publishes `AnyRemote-<version>-fdroid.apk`, the fdroid flavor signed with the release key. F-Droid builds the same commit from source, checks that its APK matches that file apart from the signature, and then publishes the signed copy (`binary:` and `AllowedAPKSigningKeys:` in the recipe). Users can switch between the GitHub and F-Droid versions without uninstalling. If a release doesn't reproduce, F-Droid won't publish it, so keep builds deterministic: no timestamps or machine-specific paths in the APK, and the same JDK major version as the recipe installs.
+- **Category.** The recipe uses `Remote Controller` from F-Droid's [category list](https://gitlab.com/fdroid/fdroiddata/-/blob/master/config/categories.yml).
 - **Updates after inclusion.** With `AutoUpdateMode: Version` and `UpdateCheckMode: Tags`, every new `vX.Y.Z` tag with a higher `versionCode` gets built and published automatically. Add `fastlane/metadata/android/en-US/changelogs/<versionCode>.txt` for each release.
