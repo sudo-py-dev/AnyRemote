@@ -72,11 +72,13 @@ fun BrandSelectionPanel(
     }
     val coroutineScope = rememberCoroutineScope()
 
-    // Letter whose section is at the top of the list, highlighted in the index.
+    // The last section may be too short to reach the top of the viewport.
     val currentLetter by remember(headerIndices) {
         derivedStateOf {
-            val first = listState.firstVisibleItemIndex
-            headerIndices.entries.lastOrNull { it.value <= first }?.key
+            when {
+                browseState.canScrollBackward && !browseState.canScrollForward -> headerIndices.keys.lastOrNull()
+                else -> headerIndices.entries.lastOrNull { it.value <= browseState.firstVisibleItemIndex }?.key
+            }
         }
     }
 
@@ -165,9 +167,12 @@ fun BrandSelectionPanel(
                 val railState = rememberLazyListState()
                 LaunchedEffect(currentLetter) {
                     val index = letters.indexOf(currentLetter)
-                    if (index >= 0 && railState.layoutInfo.visibleItemsInfo.none { it.index == index }) {
-                        railState.scrollToItem(index)
+                    val layout = railState.layoutInfo
+                    val fullyVisible = layout.visibleItemsInfo.any {
+                        it.index == index && it.offset >= layout.viewportStartOffset &&
+                            it.offset + it.size <= layout.viewportEndOffset
                     }
+                    if (index >= 0 && !fullyVisible) railState.scrollToItem(index)
                 }
 
                 LazyColumn(
