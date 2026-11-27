@@ -123,7 +123,7 @@ fun TvLayout(onKeyPressed: (RemoteKey) -> Unit) {
 }
 
 @Composable
-private fun NumberPad(onKeyPressed: (RemoteKey) -> Unit) {
+internal fun NumberPad(onKeyPressed: (RemoteKey) -> Unit, keys: Set<RemoteKey>? = null) {
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp),
         modifier = Modifier.fillMaxWidth(),
@@ -131,12 +131,17 @@ private fun NumberPad(onKeyPressed: (RemoteKey) -> Unit) {
         numberPad.forEach { row ->
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 // Physical keypad order stays 1–2–3 from left to right in every locale.
-                val keys = if (LocalLayoutDirection.current == LayoutDirection.Rtl) row.reversed() else row
-                keys.forEach { label ->
+                val orderedLabels = if (LocalLayoutDirection.current == LayoutDirection.Rtl) row.reversed() else row
+                orderedLabels.forEach keyLoop@{ label ->
                     val scheme = MaterialTheme.colorScheme
                     val special = label == "-" || label == "⌫"
+                    val key = padKey(label)
+                    if (keys != null && key !in keys) {
+                        Spacer(Modifier.weight(1f))
+                        return@keyLoop
+                    }
                     RemoteButton(
-                        onClick = { onKeyPressed(padKey(label)) },
+                        onClick = { onKeyPressed(key) },
                         modifier = Modifier.weight(1f).height(58.dp),
                         containerColor = if (special) scheme.secondaryContainer else scheme.surfaceContainerHighest,
                         contentColor = if (special) scheme.onSecondaryContainer else scheme.onSurface,

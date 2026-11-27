@@ -19,6 +19,9 @@ internal enum class RemoteProfile(
     LG(1, 100005, "LG TV · NEC", "אל ג׳י", "LG infrared"),
     AMCOR(3, 100007, "Amcor ADR-853H", "אמקור", "TAC-444", "TAC-495"),
     GREE(3, 100008, "Gree", "גרי", "גריי", "Gree Electric"),
+    APEX_DT250(2, 100011, "Apex Digital DT250", "DT-250", "TV converter", "ATSC", "אייפקס"),
+    TILVIEW(2, 100012, "Tilview DVB-T2", "TV converter", "digital terrestrial"),
+    TESLA_TE300(2, 100013, "Tesla TE-300", "TV converter", "DVB-T2"),
     HUMAX(2, 100009, "Humax", "יומקס", "הומקס"),
     OCTAGON(2, 100010, "Octagon", "אוקטגון"),
     ONN(12, 100006, "onn. 4K Pro", "Google TV", "גוגל טיוי");

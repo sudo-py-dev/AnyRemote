@@ -14,7 +14,11 @@ import com.anyremote.remote.ir.RemoteKey.*
 import com.anyremote.remote.ui.components.DPad
 import com.anyremote.remote.ui.components.PowerKey
 
-private val labels = mapOf(HOME to R.string.cd_home, BACK to R.string.back, MUTE to R.string.cd_mute,
+private val directions = listOf(UP, LEFT, OK, RIGHT, DOWN)
+
+private val labels = mapOf(UP to R.string.cd_up, DOWN to R.string.cd_down, LEFT to R.string.cd_left,
+    RIGHT to R.string.cd_right, OK to R.string.ok, MENU to R.string.cd_menu,
+    HOME to R.string.cd_home, BACK to R.string.back, MUTE to R.string.cd_mute,
     VOLUME_DOWN to R.string.cd_volume_down, VOLUME_UP to R.string.cd_volume_up,
     CHANNEL_DOWN to R.string.cd_channel_down, CHANNEL_UP to R.string.cd_channel_up)
 
@@ -22,8 +26,15 @@ private val labels = mapOf(HOME to R.string.cd_home, BACK to R.string.back, MUTE
 internal fun ModelRemoteLayout(keys: Set<RemoteKey>, onKey: (RemoteKey) -> Unit) {
     Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(16.dp)) {
         if (POWER in keys) PowerKey(onClick = { onKey(POWER) })
-        if (OK in keys) DPad(onKey = onKey)
-        for (group in listOf(listOf(HOME, BACK, MUTE), listOf(VOLUME_DOWN, VOLUME_UP), listOf(CHANNEL_DOWN, CHANNEL_UP))) {
+        val fullDpad = keys.containsAll(directions)
+        if (fullDpad) DPad(onKey = onKey)
+        val groups = listOf(
+            if (fullDpad) emptyList() else directions,
+            listOf(HOME, BACK, MENU, MUTE),
+            listOf(VOLUME_DOWN, VOLUME_UP),
+            listOf(CHANNEL_DOWN, CHANNEL_UP),
+        )
+        for (group in groups) {
             val available = group.filter { it in keys }
             if (available.isEmpty()) continue
             FlowRow(
@@ -35,5 +46,6 @@ internal fun ModelRemoteLayout(keys: Set<RemoteKey>, onKey: (RemoteKey) -> Unit)
                 }
             }
         }
+        if (DIGIT_0 in keys) NumberPad(onKey, keys)
     }
 }
