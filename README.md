@@ -49,7 +49,7 @@ Find these profiles under **Set-top box**. Pairing sends a model-specific power 
 
 ## Building
 
-You need JDK 17 and the Android SDK with platform 37.2 installed.
+You need JDK 27 and the Android SDK with platform 37.2 installed. The app targets Java 17 bytecode for Android compatibility.
 
 ```bash
 git clone https://github.com/sudo-py-dev/AnyRemote.git
