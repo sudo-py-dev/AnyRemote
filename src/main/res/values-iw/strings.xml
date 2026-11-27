@@ -138,7 +138,7 @@
 
     <!-- Device Category Translations -->
     <string name="category_tv">טלוויזיה</string>
-    <string name="category_set_top_box">ממיר</string>
+    <string name="category_set_top_box">ממירים</string>
     <string name="category_ac">מזגן</string>
     <string name="category_fan">מאוורר</string>
     <string name="category_box">סטרימר</string>

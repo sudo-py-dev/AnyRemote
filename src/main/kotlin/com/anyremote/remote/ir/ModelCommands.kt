@@ -14,10 +14,16 @@ internal data class ModelCommands(val address: Int, val secondAddress: Int, val 
             VOLUME_DOWN to 0x03, CHANNEL_UP to 0x00, CHANNEL_DOWN to 0x01))
         private val onn = ModelCommands(0x88, 0x77, mapOf(HOME to 0x47, BACK to 0x48, OK to 0x19, UP to 0x15,
             DOWN to 0x16, LEFT to 0x17, RIGHT to 0x18, CHANNEL_UP to 0x33, CHANNEL_DOWN to 0x34))
+        // Captured commands from Flipper-IRDB Cable_Boxes/Humax and Cable_Boxes/Octagon.
+        private val humax = ModelCommands(0x00, 0x10, mapOf(POWER to 0x00,
+            VOLUME_UP to 0x1f, VOLUME_DOWN to 0x40, CHANNEL_UP to 0x10, CHANNEL_DOWN to 0x0f))
+        private val octagon = ModelCommands(0x01, 0x04, mapOf(POWER to 0x0a, MUTE to 0x0c))
         fun forProfile(profile: RemoteProfile?) = when (profile) {
             RemoteProfile.TCL -> tcl
             RemoteProfile.LG -> lg
             RemoteProfile.ONN -> onn
+            RemoteProfile.HUMAX -> humax
+            RemoteProfile.OCTAGON -> octagon
             else -> null
         }
     }
