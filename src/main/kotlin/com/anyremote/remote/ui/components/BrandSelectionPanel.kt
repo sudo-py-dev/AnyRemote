@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -16,6 +18,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.SearchOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,7 +40,7 @@ fun BrandSelectionPanel(
     device: DeviceType,
     onBrandClick: (Brand) -> Unit,
 ) {
-    var searchQuery by remember { mutableStateOf("") }
+    var searchQuery by rememberSaveable(device.id) { mutableStateOf("") }
     val query = searchQuery.trim()
 
     val filteredBrands =
@@ -160,7 +163,7 @@ fun BrandSelectionPanel(
 
             if (query.isEmpty() && groupedBrands.size > 1) {
                 Column(
-                    modifier = Modifier.width(32.dp).fillMaxHeight().padding(vertical = 8.dp),
+                    modifier = Modifier.width(48.dp).fillMaxHeight().verticalScroll(rememberScrollState()).padding(vertical = 8.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.SpaceEvenly,
                 ) {
@@ -168,7 +171,7 @@ fun BrandSelectionPanel(
                         val isCurrent = letter == currentLetter
                         Box(
                             modifier =
-                                Modifier.size(24.dp)
+                                Modifier.sizeIn(minWidth = 48.dp, minHeight = 48.dp)
                                     .clip(CircleShape)
                                     .background(if (isCurrent) MaterialTheme.colorScheme.primary else Color.Transparent)
                                     .clickable {
