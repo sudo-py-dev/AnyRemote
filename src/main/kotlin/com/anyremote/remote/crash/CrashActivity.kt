@@ -1,14 +1,16 @@
 package com.anyremote.remote.crash
 
-import android.content.ActivityNotFoundException
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.horizontalScroll
@@ -37,16 +39,22 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.anyremote.remote.MainActivity
 import com.anyremote.remote.R
+import com.anyremote.remote.service.FavoriteManager
 import com.anyremote.remote.service.LocaleManager
 import com.anyremote.remote.ui.theme.AnyRemoteTheme
 
@@ -64,9 +72,13 @@ class CrashActivity : ComponentActivity() {
             finish()
             return
         }
-        enableEdgeToEdge()
+        val theme = screenTheme()
+        val barStyle =
+            if (theme.dark) SystemBarStyle.dark(Color.TRANSPARENT)
+            else SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)
+        enableEdgeToEdge(statusBarStyle = barStyle, navigationBarStyle = barStyle)
         setContent {
-            AnyRemoteTheme {
+            AnyRemoteTheme(darkTheme = theme.dark, dynamicColor = theme.dynamicColor) {
                 CrashScreen(
                     report = report,
                     onReport = { report(report) },
@@ -77,6 +89,41 @@ class CrashActivity : ComponentActivity() {
             }
         }
     }
+
+    private class ScreenTheme(val dark: Boolean, val dynamicColor: Boolean)
+
+    /**
+     * The theme chosen in Settings, so this screen looks like the rest of the app. This process
+     * starts fresh after a crash, so the settings are read here. If they can't be read, or the
+     * device's dynamic colors fail, it falls back to the device's own dark mode and the app's
+     * built-in colors, so a broken setting can't break the crash screen too.
+     */
+    private fun screenTheme(): ScreenTheme {
+        val systemDark =
+            (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) ==
+                Configuration.UI_MODE_NIGHT_YES
+        val (dark, wantsDynamic) =
+            runCatching {
+                    FavoriteManager.init(this)
+                    val dark =
+                        when (FavoriteManager.currentThemeState.value) {
+                            "light" -> false
+                            "dark" -> true
+                            else -> systemDark
+                        }
+                    dark to FavoriteManager.currentDynamicColorState.value
+                }
+                .getOrDefault(systemDark to true)
+        return ScreenTheme(dark, dynamicColor = wantsDynamic && dynamicColorsWork(dark))
+    }
+
+    /** Some devices fail to build a dynamic color scheme; check before the screen uses it. */
+    private fun dynamicColorsWork(dark: Boolean): Boolean =
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+            runCatching {
+                    if (dark) dynamicDarkColorScheme(this) else dynamicLightColorScheme(this)
+                }
+                .isSuccess
 
     override fun onDestroy() {
         // Leaving the screen any way (including Back) means the report has been seen.
@@ -96,11 +143,20 @@ class CrashActivity : ComponentActivity() {
     private fun report(report: String) {
         // Long traces are shortened to fit the link, so the full report goes on the clipboard.
         copy(report, announce = false)
-        try {
-            startActivity(Intent(Intent.ACTION_VIEW, CrashReport.issueUrl(report).toUri()))
-        } catch (_: ActivityNotFoundException) {
-            Toast.makeText(this, R.string.crash_no_browser, Toast.LENGTH_LONG).show()
-        }
+        // Only a browser fills in the report field; the GitHub app fills in just the title.
+        // Any failure here (no browser, a browser that refuses, a bad link) must not crash the
+        // crash screen, so it falls back to the message below.
+        val opened =
+            try {
+                val url = CrashReport.issueUrl(report).toUri()
+                val intent = Browsers.intentFor(this, url, getString(R.string.crash_report_github))
+                if (intent != null) startActivity(intent)
+                intent != null
+            } catch (_: RuntimeException) {
+                false
+            }
+        // No browser: the report is already on the clipboard to paste into a new issue.
+        if (!opened) Toast.makeText(this, R.string.crash_no_browser, Toast.LENGTH_LONG).show()
     }
 
     private fun restart() {
@@ -163,15 +219,20 @@ private fun CrashScreen(
                     color = MaterialTheme.colorScheme.surfaceContainer,
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    SelectionContainer {
-                        Text(
-                            report,
-                            style = MaterialTheme.typography.bodySmall,
-                            fontFamily = FontFamily.Monospace,
-                            softWrap = false,
-                            modifier =
-                                Modifier.horizontalScroll(rememberScrollState()).padding(16.dp),
-                        )
+                    // The report is English code, so it reads left to right even in Hebrew or
+                    // Arabic. Otherwise each line is right-aligned and its start scrolled off.
+                    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                        SelectionContainer {
+                            Text(
+                                report,
+                                style = MaterialTheme.typography.bodySmall,
+                                fontFamily = FontFamily.Monospace,
+                                softWrap = false,
+                                modifier =
+                                    Modifier.horizontalScroll(rememberScrollState())
+                                        .padding(16.dp),
+                            )
+                        }
                     }
                 }
             }
