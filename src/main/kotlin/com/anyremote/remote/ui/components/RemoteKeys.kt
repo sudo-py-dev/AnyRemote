@@ -12,9 +12,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.PowerSettingsNew
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,6 +33,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -42,6 +43,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.anyremote.remote.R
 import com.anyremote.remote.ir.RemoteKey
@@ -413,13 +415,13 @@ fun DPad(
                 ),
                 DPadArrow(
                     RemoteKey.LEFT,
-                    Icons.Default.KeyboardArrowLeft,
+                    Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                     AbsoluteAlignment.CenterLeft,
                     R.string.cd_left,
                 ),
                 DPadArrow(
                     RemoteKey.RIGHT,
-                    Icons.Default.KeyboardArrowRight,
+                    Icons.AutoMirrored.Filled.KeyboardArrowRight,
                     AbsoluteAlignment.CenterRight,
                     R.string.cd_right,
                 ),
@@ -432,11 +434,14 @@ fun DPad(
                     contentColor = scheme.onSurfaceVariant,
                     repeatOnHold = true,
                 ) {
-                    Icon(
-                        icon,
-                        contentDescription = stringResource(description),
-                        modifier = Modifier.size(32.dp),
-                    )
+                    // Physical left and right stay fixed when the UI is mirrored.
+                    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                        Icon(
+                            icon,
+                            contentDescription = stringResource(description),
+                            modifier = Modifier.size(32.dp),
+                        )
+                    }
                 }
             }
 

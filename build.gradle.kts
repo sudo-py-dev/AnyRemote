@@ -1,3 +1,19 @@
+buildscript {
+    configurations.classpath {
+        // Keep AGP's build-only transitive dependencies above the advisory ranges.
+        resolutionStrategy.force(
+            "com.google.guava:guava:33.7.2-jre",
+            "org.bouncycastle:bcprov-jdk18on:1.85",
+            "org.bouncycastle:bcpkix-jdk18on:1.85",
+            "org.bouncycastle:bcutil-jdk18on:1.85",
+            "org.bitbucket.b_c:jose4j:0.9.6",
+            "org.jdom:jdom2:2.0.6.1",
+            "org.apache.commons:commons-lang3:3.18.0",
+            "org.apache.httpcomponents:httpclient:4.5.14",
+        )
+    }
+}
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -47,16 +63,22 @@ android {
         compose = true
     }
 
-    // Renders the @PreviewTest previews in src/screenshotTest to PNGs (CI uploads them for UI
-    // review).
-    testOptions {
-        screenshotTests.create("screenshotTest") {
-            engineVersion = libs.versions.screenshot.get()
-            targetVariants.add("debug")
+    bundle {
+        language {
+            enableSplit = false
+        }
+    }
 
-            dependencies {
-                implementation(libs.androidx.compose.ui.tooling)
-                implementation(libs.screenshot.validation.api)
+    if (providers.gradleProperty("android.experimental.enableScreenshotTest").orNull == "true") {
+        testOptions {
+            screenshotTests.create("screenshotTest") {
+                engineVersion = libs.versions.screenshot.get()
+                targetVariants.add("debug")
+
+                dependencies {
+                    implementation(libs.androidx.compose.ui.tooling)
+                    implementation(libs.screenshot.validation.api)
+                }
             }
         }
     }
@@ -78,9 +100,22 @@ android {
     }
 
     packaging {
+        // This prebuilt AndroidX library is packaged as supplied.
+        jniLibs.keepDebugSymbols += "**/libandroidx.graphics.path.so"
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+    }
+}
+
+// Lint launches with its own tooling classpath, separate from the Gradle plugins.
+configurations.configureEach {
+    if (name == "androidLintTool") {
+        val patchedModules =
+            buildscript.configurations.getByName("classpath").resolutionStrategy.forcedModules.map {
+                "${it.group}:${it.name}:${it.version}"
+            }
+        resolutionStrategy.force(*patchedModules.toTypedArray())
     }
 }
 
