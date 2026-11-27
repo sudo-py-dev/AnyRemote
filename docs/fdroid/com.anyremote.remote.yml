@@ -10,19 +10,23 @@ AutoName: AnyRemote
 
 RepoType: git
 Repo: https://github.com/sudo-py-dev/AnyRemote.git
+Binaries: https://github.com/sudo-py-dev/AnyRemote/releases/download/v%v/AnyRemote-%v-fdroid.apk
 
 Builds:
-  - versionName: 0.0.5
-    versionCode: 5
-    commit: 1eb23a498c4876ed1717c865b003da0bb98c6b82
+  - versionName: 0.0.6
+    versionCode: 6
+    commit: 86b9952baa0007c09866d480225ac67e47698711
     sudo:
       - apt-get update
       - apt-get install -y openjdk-25-jdk-headless
       - update-java-alternatives -a
     gradle:
       - fdroid
+    binary: https://github.com/sudo-py-dev/AnyRemote/releases/download/v%v/AnyRemote-%v-fdroid.apk
+
+AllowedAPKSigningKeys: 55bc0e3b9672d3f609caf5574cefbc4a71a01c1fc818d388d625b8e0c895914e
 
 AutoUpdateMode: Version
 UpdateCheckMode: Tags
-CurrentVersion: 0.0.5
-CurrentVersionCode: 5
+CurrentVersion: 0.0.6
+CurrentVersionCode: 6
