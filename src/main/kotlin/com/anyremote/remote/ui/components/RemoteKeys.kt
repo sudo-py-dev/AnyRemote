@@ -2,7 +2,6 @@ package com.anyremote.remote.ui.components
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
@@ -31,7 +30,7 @@ import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -124,25 +123,23 @@ fun RemoteButton(
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val pressed by interactionSource.collectIsPressedAsState()
-    val corner by
-        animateIntAsState(
-            if (pressed) (cornerPercent * 0.55f).toInt() else cornerPercent,
-            tween(150),
-            label = "keyCorner",
-        )
-    val scale by animateFloatAsState(if (pressed) 0.96f else 1f, tween(100), label = "keyScale")
+    val scale by animateFloatAsState(if (pressed) 0.97f else 1f, tween(if (pressed) 70 else 140), label = "keyScale")
     val container by
         animateColorAsState(
             if (enabled) containerColor
             else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
+            animationSpec = tween(120),
             label = "keyContainer",
         )
-    val shape = RoundedCornerShape(corner)
+    val shape = RoundedCornerShape(cornerPercent)
 
     Box(
         modifier =
             modifier
-                .scale(scale)
+                .graphicsLayer {
+                    scaleX = scale
+                    scaleY = scale
+                 }
                 .clip(shape)
                 .background(container)
                 .remoteKeyClick(onClick, enabled, repeatOnHold, interactionSource),

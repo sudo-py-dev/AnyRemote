@@ -20,6 +20,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.core.tween
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -119,7 +122,14 @@ fun AppNavigation(
 ) {
     var startHandled by rememberSaveable { mutableStateOf(false) }
 
-    NavHost(navController = navController, startDestination = DashboardRoute) {
+    NavHost(
+        navController = navController,
+        startDestination = DashboardRoute,
+        enterTransition = { fadeIn(tween(180)) },
+        exitTransition = { fadeOut(tween(120)) },
+        popEnterTransition = { fadeIn(tween(160)) },
+        popExitTransition = { fadeOut(tween(100)) },
+    ) {
         composable<DashboardRoute> {
             LaunchedEffect(Unit) {
                 if (!startHandled && startRemote != null) {

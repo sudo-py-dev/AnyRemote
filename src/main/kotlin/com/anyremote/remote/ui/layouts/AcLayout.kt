@@ -1,6 +1,7 @@
 package com.anyremote.remote.ui.layouts
 
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -203,6 +204,7 @@ private fun ThermostatDial(state: AcState, minTemp: Int, maxTemp: Int) {
     val fraction by
         animateFloatAsState(
             (state.temp - minTemp).toFloat() / (maxTemp - minTemp),
+            animationSpec = tween(180),
             label = "dialFraction",
         )
     val trackColor = scheme.surfaceContainerHighest
@@ -214,14 +216,14 @@ private fun ThermostatDial(state: AcState, minTemp: Int, maxTemp: Int) {
 
     Box(
         modifier =
-            Modifier.size(256.dp).clearAndSetSemantics {
+            Modifier.widthIn(max = 208.dp).fillMaxWidth().aspectRatio(1f).clearAndSetSemantics {
                 contentDescription = spoken
                 liveRegion = LiveRegionMode.Polite
             },
         contentAlignment = Alignment.Center,
     ) {
         Canvas(modifier = Modifier.fillMaxSize().padding(12.dp)) {
-            val stroke = 18.dp.toPx()
+            val stroke = 14.dp.toPx()
             val inset = stroke / 2
             val arcSize = Size(size.width - stroke, size.height - stroke)
             val topLeft = Offset(inset, inset)

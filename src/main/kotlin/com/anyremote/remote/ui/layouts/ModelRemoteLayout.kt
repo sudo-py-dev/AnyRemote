@@ -23,9 +23,16 @@ internal fun ModelRemoteLayout(keys: Set<RemoteKey>, onKey: (RemoteKey) -> Unit)
     Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(16.dp)) {
         if (POWER in keys) PowerKey(onClick = { onKey(POWER) })
         if (OK in keys) DPad(onKey = onKey)
-        FlowRow(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)) {
-            for ((key, label) in labels) if (key in keys) {
-                FilledTonalButton(onClick = { onKey(key) }) { Text(stringResource(label)) }
+        for (group in listOf(listOf(HOME, BACK, MUTE), listOf(VOLUME_DOWN, VOLUME_UP), listOf(CHANNEL_DOWN, CHANNEL_UP))) {
+            val available = group.filter { it in keys }
+            if (available.isEmpty()) continue
+            FlowRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
+            ) {
+                for (key in available) {
+                    FilledTonalButton(onClick = { onKey(key) }) { Text(stringResource(labels.getValue(key))) }
+                }
             }
         }
     }
