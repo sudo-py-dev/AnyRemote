@@ -2,6 +2,7 @@ package com.anyremote.remote.service
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ShortcutManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -10,17 +11,39 @@ import android.graphics.Rect
 import android.graphics.Typeface
 import android.util.Log
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.IconCompat
 import com.anyremote.remote.MainActivity
 import com.anyremote.remote.R
+import java.util.concurrent.Executors
 import kotlin.math.abs
 
 object ShortcutHelper {
     private const val TAG = "ShortcutHelper"
     private const val ICON_SIZE = 192
+    private val shortcutExecutor = Executors.newSingleThreadExecutor()
+
+    private fun shortcutId(deviceId: Int, brandId: Int) = "remote_${deviceId}_$brandId"
+
+    fun syncSavedShortcut(context: Context, deviceId: Int, brandId: Int) {
+        val app = context.applicationContext
+        shortcutExecutor.execute {
+            val manager = app.getSystemService(ShortcutManager::class.java) ?: return@execute
+            val ids = listOf(shortcutId(deviceId, brandId))
+            try {
+                if (FavoriteManager.isFavorite(app, deviceId, brandId)) {
+                    manager.enableShortcuts(ids)
+                } else {
+                    manager.disableShortcuts(ids, app.getText(R.string.remote_removed))
+                }
+            } catch (error: RuntimeException) {
+                Log.w(TAG, "Updating shortcut availability failed", error)
+            }
+        }
+    }
 
     /** Asks the launcher to pin a home-screen shortcut that opens this remote. */
     fun pinRemoteShortcut(
@@ -30,8 +53,10 @@ object ShortcutHelper {
         deviceName: String,
         brandName: String,
     ) {
-        val message =
-            try {
+        val app = context.applicationContext
+        shortcutExecutor.execute {
+            if (!FavoriteManager.isFavorite(app, deviceId, brandId)) return@execute
+            val message = try {
                 when {
                     !ShortcutManagerCompat.isRequestPinShortcutSupported(context) ->
                         context.getString(R.string.shortcut_not_supported)
@@ -44,7 +69,10 @@ object ShortcutHelper {
                 Log.w(TAG, "Pinning shortcut failed", e)
                 context.getString(R.string.shortcut_failed)
             }
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+            ContextCompat.getMainExecutor(app).execute {
+                Toast.makeText(app, message, Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     /** Adds this remote to the launcher's long-press menu; the system trims to its own limit. */
@@ -55,11 +83,15 @@ object ShortcutHelper {
         deviceName: String,
         brandName: String,
     ) {
-        try {
-            ShortcutManagerCompat.pushDynamicShortcut(
-                context, buildShortcut(context, deviceId, brandId, deviceName, brandName))
-        } catch (e: Exception) {
-            Log.w(TAG, "Updating dynamic shortcuts failed", e)
+        val app = context.applicationContext
+        shortcutExecutor.execute {
+            if (!FavoriteManager.isFavorite(app, deviceId, brandId)) return@execute
+            try {
+                ShortcutManagerCompat.pushDynamicShortcut(
+                    app, buildShortcut(app, deviceId, brandId, deviceName, brandName))
+            } catch (e: RuntimeException) {
+                Log.w(TAG, "Updating dynamic shortcuts failed", e)
+            }
         }
     }
 
@@ -77,7 +109,7 @@ object ShortcutHelper {
                 putExtra("brandId", brandId)
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
             }
-        return ShortcutInfoCompat.Builder(context, "remote_${deviceId}_$brandId")
+        return ShortcutInfoCompat.Builder(context, shortcutId(deviceId, brandId))
             .setShortLabel("$brandName $deviceName")
             .setLongLabel(context.getString(R.string.shortcut_long_label, brandName, deviceName))
             .setIcon(IconCompat.createWithAdaptiveBitmap(letterIcon(brandName)))

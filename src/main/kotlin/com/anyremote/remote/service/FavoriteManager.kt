@@ -66,6 +66,7 @@ object FavoriteManager {
             isAdded = true
         }
         prefs.edit().putStringSet(KEY_FAVORITES, favorites).apply()
+        ShortcutHelper.syncSavedShortcut(context, deviceId, brandId)
         return isAdded
     }
 

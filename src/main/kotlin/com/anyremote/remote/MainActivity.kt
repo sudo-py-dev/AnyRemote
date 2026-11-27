@@ -36,6 +36,7 @@ import androidx.navigation.toRoute
 import com.anyremote.remote.data.RemoteDatabase
 import com.anyremote.remote.service.FavoriteManager
 import com.anyremote.remote.service.LocaleManager
+import com.anyremote.remote.service.ShortcutHelper
 import com.anyremote.remote.ui.screens.DashboardScreen
 import com.anyremote.remote.ui.screens.MatchIRScreen
 import com.anyremote.remote.ui.screens.RemoteControllerScreen
@@ -67,7 +68,7 @@ class MainActivity : ComponentActivity() {
         FavoriteManager.init(applicationContext)
 
         // Only honor a shortcut launch on a fresh start, not after rotation or process restore.
-        val startRemote = if (savedInstanceState == null) intent.remoteRoute() else null
+        val startRemote = if (savedInstanceState == null) intent.remoteRoute(this) else null
 
         setContent {
             val darkTheme =
@@ -105,16 +106,27 @@ class MainActivity : ComponentActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
-        intent.remoteRoute()?.let { navController?.openRemote(it) }
+        if (intent.action != Intent.ACTION_VIEW) return
+        val route = intent.remoteRoute(this)
+        if (route != null) {
+            navController?.openRemote(route)
+        } else {
+            navController?.popBackStack(DashboardRoute, inclusive = false)
+        }
     }
 }
 
 /** Launcher shortcuts carry deviceId/brandId extras pointing at a saved remote. */
-private fun Intent?.remoteRoute(): RemoteRoute? {
-    val deviceId = this?.getIntExtra("deviceId", -1) ?: -1
-    val brandId = this?.getIntExtra("brandId", -1) ?: -1
+private fun Intent?.remoteRoute(context: Context): RemoteRoute? {
+    if (this?.action != Intent.ACTION_VIEW) return null
+    val deviceId = getIntExtra("deviceId", -1)
+    val brandId = getIntExtra("brandId", -1)
     val device = RemoteDatabase.deviceTypes.firstOrNull { it.id == deviceId } ?: return null
     if (device.brands.none { it.id == brandId }) return null
+    if (!FavoriteManager.isFavorite(context, deviceId, brandId)) {
+        ShortcutHelper.syncSavedShortcut(context, deviceId, brandId)
+        return null
+    }
     return RemoteRoute(deviceId, brandId)
 }
 

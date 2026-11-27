@@ -51,8 +51,8 @@ fun RemoteControllerScreen(
 
     // Previews (screenshot tests) have no launcher to register shortcuts with.
     val inPreview = LocalInspectionMode.current
-    LaunchedEffect(deviceId, brandId, device, brand) {
-        if (device != null && brand != null && !inPreview) {
+    LaunchedEffect(deviceId, brandId, device, brand, isFavorite) {
+        if (isFavorite && device != null && brand != null && !inPreview) {
             ShortcutHelper.registerDynamicShortcuts(
                 context = context,
                 deviceId = deviceId,
@@ -113,6 +113,7 @@ fun RemoteControllerScreen(
                             haptic.performHapticFeedback(
                                 androidx.compose.ui.hapticfeedback.HapticFeedbackType.ToggleOn)
                             isFavorite = FavoriteManager.toggleFavorite(context, deviceId, brandId)
+                            if (!isFavorite) menuOpen = false
                         },
                     ) {
                         Icon(
@@ -123,7 +124,7 @@ fun RemoteControllerScreen(
                                 else MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
-                    Box {
+                    if (isFavorite && brand != null) Box {
                         IconButton(onClick = { menuOpen = true }) {
                             Icon(Icons.Default.MoreVert, contentDescription = stringResource(R.string.more_options))
                         }
@@ -138,7 +139,7 @@ fun RemoteControllerScreen(
                                         deviceId = deviceId,
                                         brandId = brandId,
                                         deviceName = deviceName,
-                                        brandName = brand?.nameEn ?: fallbackTitle,
+                                        brandName = brand.nameEn,
                                     )
                                 },
                             )
