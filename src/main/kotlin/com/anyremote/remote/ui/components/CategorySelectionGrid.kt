@@ -37,7 +37,7 @@ fun CategorySelectionGrid(onCategoryClick: (DeviceType) -> Unit) {
                 modifier = Modifier.padding(start = 4.dp, bottom = 4.dp),
             )
         }
-        items(RemoteDatabase.deviceTypes, key = { it.id }) { device ->
+        items(RemoteDatabase.deviceTypes.filter { it.brands.isNotEmpty() }, key = { it.id }) { device ->
             CategoryCard(device = device, onClick = { onCategoryClick(device) })
         }
     }
