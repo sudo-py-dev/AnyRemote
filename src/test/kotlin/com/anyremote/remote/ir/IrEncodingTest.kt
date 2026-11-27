@@ -25,7 +25,11 @@ class IrEncodingTest {
             )
         for (s in states) {
             val bytes = s.toBytes()
-            assertEquals(s.toString(), IREncodingEngine.greeChecksum(bytes), (bytes[7].toInt() and 0xFF) shr 4)
+            assertEquals(
+                s.toString(),
+                IREncodingEngine.greeChecksum(bytes),
+                (bytes[7].toInt() and 0xFF) shr 4,
+            )
         }
     }
 
@@ -50,7 +54,11 @@ class IrEncodingTest {
                 if (i == change.first) assertNotEquals("$state byte $i unchanged", 0, diff)
             }
             if (change.first == 7) {
-                assertEquals("$state byte 7", change.second, (bytes[7].toInt() xor base[7].toInt()) and 0x0F)
+                assertEquals(
+                    "$state byte 7",
+                    change.second,
+                    (bytes[7].toInt() xor base[7].toInt()) and 0x0F,
+                )
             }
         }
     }
@@ -66,7 +74,9 @@ class IrEncodingTest {
 
     @Test
     fun powerOffClearsPoweredFeatures() {
-        val off = AcState(power = false, turbo = true, eco = true, swingH = true, tempDisplay = true).toBytes()
+        val off =
+            AcState(power = false, turbo = true, eco = true, swingH = true, tempDisplay = true)
+                .toBytes()
         assertEquals(0, off[2].toInt() and 0x30)
         assertEquals(0, off[4].toInt() and 0x70)
         assertEquals(0x21, off[5].toInt())

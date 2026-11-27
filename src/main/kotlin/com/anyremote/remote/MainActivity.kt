@@ -7,6 +7,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -19,15 +25,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -58,7 +58,9 @@ class MainActivity : ComponentActivity() {
 
     override fun attachBaseContext(newBase: Context) {
         LocaleManager.init(newBase)
-        super.attachBaseContext(LocaleManager.applyLocale(newBase, LocaleManager.getSavedLanguage(newBase)))
+        super.attachBaseContext(
+            LocaleManager.applyLocale(newBase, LocaleManager.getSavedLanguage(newBase))
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,7 +86,9 @@ class MainActivity : ComponentActivity() {
                     if (darkTheme) SystemBarStyle.dark(android.graphics.Color.TRANSPARENT)
                     else
                         SystemBarStyle.light(
-                            android.graphics.Color.TRANSPARENT, android.graphics.Color.TRANSPARENT)
+                            android.graphics.Color.TRANSPARENT,
+                            android.graphics.Color.TRANSPARENT,
+                        )
                 enableEdgeToEdge(statusBarStyle = style, navigationBarStyle = style)
                 onDispose {}
             }
@@ -93,7 +97,10 @@ class MainActivity : ComponentActivity() {
                 darkTheme = darkTheme,
                 dynamicColor = FavoriteManager.currentDynamicColorState.value,
             ) {
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background,
+                ) {
                     val controller = rememberNavController()
                     navController = controller
                     AppNavigation(controller, startRemote)
@@ -149,13 +156,15 @@ fun AppNavigation(
         navController = navController,
         startDestination = DashboardRoute,
         enterTransition = {
-            fadeIn(tween(220)) + slideInHorizontally(tween(280, easing = FastOutSlowInEasing)) { forward * it / 8 }
+            fadeIn(tween(220)) +
+                slideInHorizontally(tween(280, easing = FastOutSlowInEasing)) { forward * it / 8 }
         },
         exitTransition = {
             fadeOut(tween(180)) + slideOutHorizontally(tween(220)) { -forward * it / 16 }
         },
         popEnterTransition = {
-            fadeIn(tween(220)) + slideInHorizontally(tween(250, easing = FastOutSlowInEasing)) { -forward * it / 16 }
+            fadeIn(tween(220)) +
+                slideInHorizontally(tween(250, easing = FastOutSlowInEasing)) { -forward * it / 16 }
         },
         popExitTransition = {
             fadeOut(tween(180)) + slideOutHorizontally(tween(220)) { forward * it / 8 }
@@ -184,8 +193,12 @@ fun AppNavigation(
             MatchIRScreen(
                 deviceId = route.deviceId,
                 brandId = route.brandId,
-                onMatchSuccess = { navController.openRemote(RemoteRoute(route.deviceId, route.brandId)) },
-                onSaveAndReturnToDashboard = { navController.popBackStack(DashboardRoute, inclusive = false) },
+                onMatchSuccess = {
+                    navController.openRemote(RemoteRoute(route.deviceId, route.brandId))
+                },
+                onSaveAndReturnToDashboard = {
+                    navController.popBackStack(DashboardRoute, inclusive = false)
+                },
                 onBackClick = { navController.popBackStack() },
             )
         }

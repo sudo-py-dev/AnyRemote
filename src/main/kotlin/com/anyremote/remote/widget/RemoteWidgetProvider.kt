@@ -20,10 +20,12 @@ class RemoteWidgetProvider : AppWidgetProvider() {
             val views = RemoteViews(context.packageName, R.layout.remote_widget)
             views.setOnClickPendingIntent(
                 R.id.btn_widget_power,
-                actionIntent(context, appWidgetId * 10 + 1, WidgetActionReceiver.ACTION_POWER))
+                actionIntent(context, appWidgetId * 10 + 1, WidgetActionReceiver.ACTION_POWER),
+            )
             views.setOnClickPendingIntent(
                 R.id.btn_widget_up,
-                actionIntent(context, appWidgetId * 10 + 2, WidgetActionReceiver.ACTION_UP))
+                actionIntent(context, appWidgetId * 10 + 2, WidgetActionReceiver.ACTION_UP),
+            )
 
             val appIntent =
                 Intent(context, MainActivity::class.java).apply {
@@ -31,7 +33,8 @@ class RemoteWidgetProvider : AppWidgetProvider() {
                 }
             views.setOnClickPendingIntent(
                 R.id.btn_widget_open,
-                PendingIntent.getActivity(context, appWidgetId * 10 + 3, appIntent, FLAGS))
+                PendingIntent.getActivity(context, appWidgetId * 10 + 3, appIntent, FLAGS),
+            )
 
             appWidgetManager.updateAppWidget(appWidgetId, views)
         }

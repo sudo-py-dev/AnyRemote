@@ -32,5 +32,8 @@ fun DeviceType.getLocalizedName(context: Context): String {
 }
 
 /** Name a saved remote shows until the user renames it, e.g. "Samsung TV". */
-fun defaultRemoteName(context: Context, device: DeviceType, brand: com.anyremote.remote.data.RemoteDatabase.Brand): String =
-    "${brand.nameEn} ${device.getLocalizedName(context).substringBefore(" ")}"
+fun defaultRemoteName(
+    context: Context,
+    device: DeviceType,
+    brand: com.anyremote.remote.data.RemoteDatabase.Brand,
+): String = "${brand.nameEn} ${device.getLocalizedName(context).substringBefore(" ")}"

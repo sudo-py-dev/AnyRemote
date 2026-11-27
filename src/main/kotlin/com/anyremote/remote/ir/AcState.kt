@@ -32,19 +32,30 @@ data class AcState(
             tempDisplay = tempDisplay,
         )
 
-    fun toPulses(protocol: AcProtocol = AcProtocol.GREE): IntArray = when (protocol) {
-        AcProtocol.GREE -> IREncodingEngine.encodeGree(toBytes())
-        AcProtocol.ELECTRA -> electraPulses()
-        AcProtocol.AMCOR -> amcorPulses()
-    }
+    fun toPulses(protocol: AcProtocol = AcProtocol.GREE): IntArray =
+        when (protocol) {
+            AcProtocol.GREE -> IREncodingEngine.encodeGree(toBytes())
+            AcProtocol.ELECTRA -> electraPulses()
+            AcProtocol.AMCOR -> amcorPulses()
+        }
 
     companion object {
         val Saver =
             listSaver<AcState, Any>(
                 save = {
                     listOf(
-                        it.power, it.temp, it.mode, it.speed, it.swing, it.swingPosition, it.turbo,
-                        it.light, it.eco, it.swingH, it.tempDisplay)
+                        it.power,
+                        it.temp,
+                        it.mode,
+                        it.speed,
+                        it.swing,
+                        it.swingPosition,
+                        it.turbo,
+                        it.light,
+                        it.eco,
+                        it.swingH,
+                        it.tempDisplay,
+                    )
                 },
                 restore = {
                     AcState(

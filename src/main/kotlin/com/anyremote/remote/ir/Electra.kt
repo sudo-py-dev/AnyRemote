@@ -6,9 +6,22 @@ internal fun AcState.electraPulses(): IntArray {
     frame[0] = 0xc3
     frame[1] = ((temp.coerceIn(16, 32) - 8) shl 3) or if (swing) 0 else 7
     frame[2] = if (swingH) 0 else 0xe0
-    frame[4] = when (speed) { "SL" -> 3; "SM" -> 2; "SH" -> 1; else -> 5 } shl 5
+    frame[4] =
+        when (speed) {
+            "SL" -> 3
+            "SM" -> 2
+            "SH" -> 1
+            else -> 5
+        } shl 5
     frame[5] = if (turbo) 0x40 else 0
-    frame[6] = when (mode) { "MC" -> 1; "MD" -> 2; "MH" -> 4; "MV" -> 6; else -> 0 } shl 5
+    frame[6] =
+        when (mode) {
+            "MC" -> 1
+            "MD" -> 2
+            "MH" -> 4
+            "MV" -> 6
+            else -> 0
+        } shl 5
     frame[9] = if (power) 0x20 else 0
     frame[11] = 0x08 // Leave the display light unchanged.
     frame[12] = frame.sum() and 0xff
@@ -22,5 +35,6 @@ internal fun AcState.electraPulses(): IntArray {
         }
         add(646)
         add(100000)
-    }.toIntArray()
+    }
+        .toIntArray()
 }

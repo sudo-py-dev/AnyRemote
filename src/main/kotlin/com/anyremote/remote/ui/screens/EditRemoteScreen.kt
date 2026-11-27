@@ -22,9 +22,9 @@ import com.anyremote.remote.R
 import com.anyremote.remote.data.RemoteDatabase.Brand
 import com.anyremote.remote.data.RemoteDatabase.DeviceType
 import com.anyremote.remote.service.FavoriteManager
-import com.anyremote.remote.util.limitCodePoints
 import com.anyremote.remote.service.RemoteName
 import com.anyremote.remote.ui.helpers.defaultRemoteName
+import com.anyremote.remote.util.limitCodePoints
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -37,9 +37,17 @@ fun EditRemoteScreen(
     val context = LocalContext.current
     val currentName =
         remember(device, brand) {
-            FavoriteManager.getCustomName(context, device.id, brand.id, defaultRemoteName(context, device, brand))
+            FavoriteManager.getCustomName(
+                context,
+                device.id,
+                brand.id,
+                defaultRemoteName(context, device, brand),
+            )
         }
-    var nameInput by rememberSaveable(device.id, brand.id) { mutableStateOf(currentName.limitCodePoints(RemoteName.MAX_LENGTH)) }
+    var nameInput by
+        rememberSaveable(device.id, brand.id) {
+            mutableStateOf(currentName.limitCodePoints(RemoteName.MAX_LENGTH))
+        }
     val length = nameInput.codePointCount(0, nameInput.length)
     val canSave = RemoteName.isValid(nameInput)
     fun save() {
@@ -54,16 +62,23 @@ fun EditRemoteScreen(
                 title = { Text(stringResource(R.string.edit_remote)) },
                 navigationIcon = {
                     IconButton(onClick = onDismiss) {
-                        Icon(Icons.Default.Close, contentDescription = stringResource(R.string.cancel))
+                        Icon(
+                            Icons.Default.Close,
+                            contentDescription = stringResource(R.string.cancel),
+                        )
                     }
                 },
                 actions = {
-                    TextButton(onClick = ::save, enabled = canSave, modifier = Modifier.padding(end = 8.dp)) {
+                    TextButton(
+                        onClick = ::save,
+                        enabled = canSave,
+                        modifier = Modifier.padding(end = 8.dp),
+                    ) {
                         Text(stringResource(R.string.save))
                     }
                 },
             )
-        },
+        }
     ) { innerPadding ->
         Column(
             modifier =
@@ -80,12 +95,13 @@ fun EditRemoteScreen(
                 label = { Text(stringResource(R.string.remote_name_label)) },
                 singleLine = true,
                 supportingText = {
-                    Text(
-                        stringResource(R.string.remote_name_count, length, RemoteName.MAX_LENGTH),
-                    )
+                    Text(stringResource(R.string.remote_name_count, length, RemoteName.MAX_LENGTH))
                 },
                 keyboardOptions =
-                    KeyboardOptions(capitalization = KeyboardCapitalization.Words, imeAction = ImeAction.Done),
+                    KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Words,
+                        imeAction = ImeAction.Done,
+                    ),
                 keyboardActions = KeyboardActions(onDone = { save() }),
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -98,33 +114,52 @@ fun EditRemoteScreen(
                 )
                 val locations =
                     listOf(
-                        R.string.location_living_room,
-                        R.string.location_bedroom,
-                        R.string.location_study_room,
-                        R.string.location_dining_room,
-                        R.string.location_office,
-                    ).map { stringResource(it) }
-                val defaultName = remember(device, brand) { defaultRemoteName(context, device, brand) }
+                            R.string.location_living_room,
+                            R.string.location_bedroom,
+                            R.string.location_study_room,
+                            R.string.location_dining_room,
+                            R.string.location_office,
+                        )
+                        .map { stringResource(it) }
+                val defaultName =
+                    remember(device, brand) { defaultRemoteName(context, device, brand) }
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    // "Default" goes back to the brand + device name rather than a literal "Default".
+                    // "Default" goes back to the brand + device name rather than a literal
+                    // "Default".
                     FilterChip(
                         selected = nameInput == defaultName,
-                        onClick = { nameInput = defaultName.limitCodePoints(RemoteName.MAX_LENGTH) },
+                        onClick = {
+                            nameInput = defaultName.limitCodePoints(RemoteName.MAX_LENGTH)
+                        },
                         label = { Text(stringResource(R.string.location_default)) },
                         leadingIcon =
                             if (nameInput == defaultName) {
-                                { Icon(Icons.Default.Check, null, Modifier.size(FilterChipDefaults.IconSize)) }
+                                {
+                                    Icon(
+                                        Icons.Default.Check,
+                                        null,
+                                        Modifier.size(FilterChipDefaults.IconSize),
+                                    )
+                                }
                             } else null,
                     )
                     locations.forEach { location ->
                         val selected = nameInput == location
                         FilterChip(
                             selected = selected,
-                            onClick = { nameInput = location.limitCodePoints(RemoteName.MAX_LENGTH) },
+                            onClick = {
+                                nameInput = location.limitCodePoints(RemoteName.MAX_LENGTH)
+                            },
                             label = { Text(location) },
                             leadingIcon =
                                 if (selected) {
-                                    { Icon(Icons.Default.Check, null, Modifier.size(FilterChipDefaults.IconSize)) }
+                                    {
+                                        Icon(
+                                            Icons.Default.Check,
+                                            null,
+                                            Modifier.size(FilterChipDefaults.IconSize),
+                                        )
+                                    }
                                 } else null,
                         )
                     }

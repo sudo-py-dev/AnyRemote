@@ -11,6 +11,7 @@ import org.json.JSONObject
 object RemoteDatabase {
     sealed interface RemoteProfile {
         data class AirConditioner(val protocol: AcProtocol) : RemoteProfile
+
         data class Nec(val commands: ModelCommands, val testKey: RemoteKey) : RemoteProfile
     }
 
@@ -40,7 +41,10 @@ object RemoteDatabase {
         return acOptions.keys.any { it.lowercase().replace("_", "") == normalized }
     }
 
-    /** True when remote.json couldn't be read; the dashboard shows an error instead of an empty list. */
+    /**
+     * True when remote.json couldn't be read; the dashboard shows an error instead of an empty
+     * list.
+     */
     var loadFailed: Boolean = false
         private set
 
@@ -59,7 +63,10 @@ object RemoteDatabase {
         if (protocol != "NEC") return RemoteProfile.AirConditioner(AcProtocol.valueOf(protocol))
 
         val codes = getJSONObject("keys")
-        val keys = codes.keys().asSequence().associate { key -> RemoteKey.valueOf(key) to codes.readByte(key) }
+        val keys =
+            codes.keys().asSequence().associate { key ->
+                RemoteKey.valueOf(key) to codes.readByte(key)
+            }
         val testKey = RemoteKey.valueOf(optString("testKey", RemoteKey.POWER.name))
         require(testKey in keys) { "Missing test command" }
         return RemoteProfile.Nec(
@@ -75,27 +82,43 @@ object RemoteDatabase {
         if (loaded) return
         loaded = true
         try {
-            val json = JSONObject(context.assets.open("remote.json").bufferedReader().use { it.readText() })
-            val devices = json.getJSONArray("devices").readList { index ->
-                val device = getJSONObject(index)
-                val brands = device.getJSONArray("brands").readList { brandIndex ->
-                    val brand = getJSONObject(brandIndex)
-                    Brand(
-                        id = brand.getInt("id"),
-                        nameEn = brand.getString("nameEn"),
-                        category = brand.getString("category"),
-                        aliases = brand.optJSONArray("aliases")?.readList { getString(it) }.orEmpty(),
-                        profile = brand.optJSONObject("ir")?.readProfile(),
-                    )
+            val json =
+                JSONObject(
+                    context.assets.open("remote.json").bufferedReader().use { it.readText() }
+                )
+            val devices =
+                json.getJSONArray("devices").readList { index ->
+                    val device = getJSONObject(index)
+                    val brands =
+                        device.getJSONArray("brands").readList { brandIndex ->
+                            val brand = getJSONObject(brandIndex)
+                            Brand(
+                                id = brand.getInt("id"),
+                                nameEn = brand.getString("nameEn"),
+                                category = brand.getString("category"),
+                                aliases =
+                                    brand
+                                        .optJSONArray("aliases")
+                                        ?.readList { getString(it) }
+                                        .orEmpty(),
+                                profile = brand.optJSONObject("ir")?.readProfile(),
+                            )
+                        }
+                    require(brands.distinctBy { it.id }.size == brands.size) {
+                        "Duplicate brand ID"
+                    }
+                    DeviceType(device.getInt("id"), device.getString("nameEn"), brands)
                 }
-                require(brands.distinctBy { it.id }.size == brands.size) { "Duplicate brand ID" }
-                DeviceType(device.getInt("id"), device.getString("nameEn"), brands)
-            }
             require(devices.distinctBy { it.id }.size == devices.size) { "Duplicate device ID" }
             val options = json.optJSONObject("acOptions")
-            acOptions = options?.keys()?.asSequence()?.associateWith { key ->
-                options.getJSONArray(key).readList { getString(it) }
-            }.orEmpty()
+            acOptions =
+                options
+                    ?.keys()
+                    ?.asSequence()
+                    ?.associateWith { key ->
+                        options.getJSONArray(key).readList { getString(it) }
+                    }
+                    .orEmpty()
             deviceTypes = devices
             loadFailed = false
         } catch (e: Exception) {

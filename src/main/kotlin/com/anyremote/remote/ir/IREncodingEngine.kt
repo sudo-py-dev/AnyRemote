@@ -78,11 +78,10 @@ object IREncodingEngine {
             pulses += 620
             pulses += if (b == 1) 1600 else 540
         }
-        fun bytes(range: IntRange) =
-            range.forEach { i ->
-                val b = state[i].toInt() and 0xFF
-                for (bitIndex in 0..7) bit((b shr bitIndex) and 1)
-            }
+        fun bytes(range: IntRange) = range.forEach { i ->
+            val b = state[i].toInt() and 0xFF
+            for (bitIndex in 0..7) bit((b shr bitIndex) and 1)
+        }
 
         bytes(0..3)
         intArrayOf(0, 1, 0).forEach(::bit)

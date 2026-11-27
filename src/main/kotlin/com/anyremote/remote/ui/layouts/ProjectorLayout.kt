@@ -28,12 +28,27 @@ fun ProjectorLayout(onKeyPressed: (RemoteKey) -> Unit) {
         DPad(onKey = onKeyPressed)
 
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-            IconKey(Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.back), { onKeyPressed(RemoteKey.BACK) })
-            IconKey(Icons.Default.Home, stringResource(R.string.cd_home), { onKeyPressed(RemoteKey.HOME) })
-            IconKey(Icons.Default.Menu, stringResource(R.string.cd_menu), { onKeyPressed(RemoteKey.MENU) })
+            IconKey(
+                Icons.AutoMirrored.Filled.ArrowBack,
+                stringResource(R.string.back),
+                { onKeyPressed(RemoteKey.BACK) },
+            )
+            IconKey(
+                Icons.Default.Home,
+                stringResource(R.string.cd_home),
+                { onKeyPressed(RemoteKey.HOME) },
+            )
+            IconKey(
+                Icons.Default.Menu,
+                stringResource(R.string.cd_menu),
+                { onKeyPressed(RemoteKey.MENU) },
+            )
         }
 
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
             TextKey(
                 stringResource(R.string.focus_minus),
                 onClick = { onKeyPressed(RemoteKey.FOCUS_DOWN) },

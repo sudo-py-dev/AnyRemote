@@ -24,14 +24,15 @@ fun rememberVibratingHapticFeedback(): HapticFeedback {
         object : HapticFeedback {
             override fun performHapticFeedback(hapticFeedbackType: HapticFeedbackType) {
                 if (!FavoriteManager.currentVibrationState.value) return
-                val feedback = when (hapticFeedbackType) {
-                    HapticFeedbackType.Confirm -> HapticFeedbackConstantsCompat.CONFIRM
-                    HapticFeedbackType.Reject -> HapticFeedbackConstantsCompat.REJECT
-                    HapticFeedbackType.LongPress -> HapticFeedbackConstantsCompat.LONG_PRESS
-                    HapticFeedbackType.SegmentTick -> HapticFeedbackConstantsCompat.SEGMENT_TICK
-                    HapticFeedbackType.ToggleOn -> HapticFeedbackConstantsCompat.TOGGLE_ON
-                    else -> HapticFeedbackConstantsCompat.KEYBOARD_TAP
-                }
+                val feedback =
+                    when (hapticFeedbackType) {
+                        HapticFeedbackType.Confirm -> HapticFeedbackConstantsCompat.CONFIRM
+                        HapticFeedbackType.Reject -> HapticFeedbackConstantsCompat.REJECT
+                        HapticFeedbackType.LongPress -> HapticFeedbackConstantsCompat.LONG_PRESS
+                        HapticFeedbackType.SegmentTick -> HapticFeedbackConstantsCompat.SEGMENT_TICK
+                        HapticFeedbackType.ToggleOn -> HapticFeedbackConstantsCompat.TOGGLE_ON
+                        else -> HapticFeedbackConstantsCompat.KEYBOARD_TAP
+                    }
                 if (ViewCompat.performHapticFeedback(view, feedback)) return
                 if (view.isHapticFeedbackEnabled) {
                     vibrator?.playTouchFallback(view.context)
@@ -55,9 +56,12 @@ private fun Vibrator.playTouchFallback(context: Context) {
 
 @Suppress("DEPRECATION")
 private fun Vibrator.vibrateLegacyTouch(context: Context) {
-    val enabled = Settings.System.getInt(
-        context.contentResolver, Settings.System.HAPTIC_FEEDBACK_ENABLED, 1,
-    ) != 0
+    val enabled =
+        Settings.System.getInt(
+            context.contentResolver,
+            Settings.System.HAPTIC_FEEDBACK_ENABLED,
+            1,
+        ) != 0
     if (!enabled) return
 
     val effect =
@@ -66,9 +70,10 @@ private fun Vibrator.vibrateLegacyTouch(context: Context) {
         } else {
             VibrationEffect.createOneShot(12, VibrationEffect.DEFAULT_AMPLITUDE)
         }
-    val attributes = AudioAttributes.Builder()
-        .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
-        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-        .build()
+    val attributes =
+        AudioAttributes.Builder()
+            .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
+            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+            .build()
     vibrate(effect, attributes)
 }

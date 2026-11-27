@@ -33,7 +33,9 @@ class WidgetActionReceiver : BroadcastReceiver() {
             }
             ACTION_UP ->
                 IRTransmitter.transmit(
-                    context, IrCodebook.pulses(TV_DEVICE_ID, codeset = 1, RemoteKey.VOLUME_UP))
+                    context,
+                    IrCodebook.pulses(TV_DEVICE_ID, codeset = 1, RemoteKey.VOLUME_UP),
+                )
         }
     }
 }

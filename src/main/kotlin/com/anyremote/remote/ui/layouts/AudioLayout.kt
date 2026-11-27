@@ -42,7 +42,8 @@ fun AudioLayout(onKeyPressed: (RemoteKey) -> Unit) {
             title =
                 if (power) stringResource(R.string.audio_volume_banner, volume)
                 else stringResource(R.string.audio_standby_banner),
-            subtitle = if (power) stringResource(R.string.audio_source_banner, sourceName) else null,
+            subtitle =
+                if (power) stringResource(R.string.audio_source_banner, sourceName) else null,
             active = power,
             icon = Icons.Default.Speaker,
         )

@@ -1,6 +1,7 @@
 package com.anyremote.remote.service
 
 import android.content.Context
+import androidx.core.content.edit
 
 object FavoriteManager {
     internal const val PREFS_NAME = "mi_favorites_prefs"
@@ -27,17 +28,12 @@ object FavoriteManager {
         currentVibrationState.value = prefs.getBoolean(KEY_VIBRATION, true)
     }
 
-    fun getThemeMode(context: Context): String {
-        val prefs = prefs(context)
-        return prefs.getString(KEY_THEME, "system") ?: "system"
-    }
-
     fun setThemeMode(
         context: Context,
         mode: String,
     ) {
         val prefs = prefs(context)
-        prefs.edit().putString(KEY_THEME, mode).apply()
+        prefs.edit { putString(KEY_THEME, mode) }
         currentThemeState.value = mode
     }
 
@@ -45,7 +41,7 @@ object FavoriteManager {
         context: Context,
         enabled: Boolean,
     ) {
-        prefs(context).edit().putBoolean(KEY_DYNAMIC_COLOR, enabled).apply()
+        prefs(context).edit { putBoolean(KEY_DYNAMIC_COLOR, enabled) }
         currentDynamicColorState.value = enabled
     }
 
@@ -65,7 +61,7 @@ object FavoriteManager {
             favorites.add(item)
             isAdded = true
         }
-        prefs.edit().putStringSet(KEY_FAVORITES, favorites).apply()
+        prefs.edit { putStringSet(KEY_FAVORITES, favorites) }
         ShortcutHelper.syncSavedShortcut(context, deviceId, brandId)
         return isAdded
     }
@@ -86,7 +82,7 @@ object FavoriteManager {
         enabled: Boolean,
     ) {
         val prefs = prefs(context)
-        prefs.edit().putBoolean(KEY_VIBRATION, enabled).apply()
+        prefs.edit { putBoolean(KEY_VIBRATION, enabled) }
         currentVibrationState.value = enabled
     }
 
@@ -107,10 +103,12 @@ object FavoriteManager {
         customName: String,
     ) {
         if (!RemoteName.isValid(customName)) return
-        prefs(context).edit().putString("name_${deviceId}_$brandId", customName.trim()).apply()
+        prefs(context).edit { putString("name_${deviceId}_$brandId", customName.trim()) }
     }
 
-    /** Codeset the user confirmed in the match wizard for this device/brand (1 if never matched). */
+    /**
+     * Codeset the user confirmed in the match wizard for this device/brand (1 if never matched).
+     */
     fun getCodeset(
         context: Context,
         deviceId: Int,
@@ -123,20 +121,22 @@ object FavoriteManager {
         brandId: Int,
         codeset: Int,
     ) {
-        prefs(context).edit().putInt("codeset_${deviceId}_$brandId", codeset).apply()
+        prefs(context).edit { putInt("codeset_${deviceId}_$brandId", codeset) }
     }
 
     /** Last AC power state the home-screen widget sent, so its Power button can toggle. */
-    fun getWidgetAcPower(context: Context): Boolean = prefs(context).getBoolean(KEY_WIDGET_AC_POWER, false)
+    fun getWidgetAcPower(context: Context): Boolean =
+        prefs(context).getBoolean(KEY_WIDGET_AC_POWER, false)
 
     fun setWidgetAcPower(
         context: Context,
         on: Boolean,
     ) {
-        prefs(context).edit().putBoolean(KEY_WIDGET_AC_POWER, on).apply()
+        prefs(context).edit { putBoolean(KEY_WIDGET_AC_POWER, on) }
     }
 
-    private fun prefs(context: Context) = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+    private fun prefs(context: Context) =
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
     fun isIrNoticeDismissed(context: Context): Boolean {
         val prefs = prefs(context)
@@ -148,6 +148,6 @@ object FavoriteManager {
         dismissed: Boolean,
     ) {
         val prefs = prefs(context)
-        prefs.edit().putBoolean(KEY_IR_NOTICE_DISMISSED, dismissed).apply()
+        prefs.edit { putBoolean(KEY_IR_NOTICE_DISMISSED, dismissed) }
     }
 }

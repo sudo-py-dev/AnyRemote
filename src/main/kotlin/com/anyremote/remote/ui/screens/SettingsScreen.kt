@@ -15,12 +15,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.BrightnessAuto
-import androidx.compose.material.icons.outlined.DashboardCustomize
 import androidx.compose.material.icons.outlined.DarkMode
-import androidx.compose.material.icons.outlined.LightMode
-import androidx.compose.material.icons.outlined.Translate
+import androidx.compose.material.icons.outlined.DashboardCustomize
 import androidx.compose.material.icons.outlined.Language
+import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material.icons.outlined.Palette
+import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.material.icons.outlined.Vibration
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -61,11 +61,12 @@ private val themeModes =
         "dark" to R.string.theme_dark,
     )
 
-private fun themeIcon(mode: String): ImageVector = when (mode) {
-    "light" -> Icons.Outlined.LightMode
-    "dark" -> Icons.Outlined.DarkMode
-    else -> Icons.Outlined.BrightnessAuto
-}
+private fun themeIcon(mode: String): ImageVector =
+    when (mode) {
+        "light" -> Icons.Outlined.LightMode
+        "dark" -> Icons.Outlined.DarkMode
+        else -> Icons.Outlined.BrightnessAuto
+    }
 
 private fun languageIcon(code: String): ImageVector =
     if (code == "system") Icons.Outlined.Language else Icons.Outlined.Translate
@@ -100,7 +101,12 @@ fun SettingsScreen(onBackClick: () -> Unit) {
                         StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ADDED,
                         StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_NOT_ADDED -> Unit
                         StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ALREADY_ADDED ->
-                            Toast.makeText(context, R.string.quick_settings_added, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                    context,
+                                    R.string.quick_settings_added,
+                                    Toast.LENGTH_SHORT,
+                                )
+                                .show()
                         else -> showQuickSettingsInstructions = true
                     }
                 }
@@ -111,7 +117,10 @@ fun SettingsScreen(onBackClick: () -> Unit) {
     }
 
     val systemLabel = stringResource(R.string.theme_system)
-    val themeLabel = stringResource(themeModes.firstOrNull { it.first == themeMode }?.second ?: R.string.theme_system)
+    val themeLabel =
+        stringResource(
+            themeModes.firstOrNull { it.first == themeMode }?.second ?: R.string.theme_system
+        )
     val languageLabel = languages.firstOrNull { it.first == langCode }?.second ?: systemLabel
 
     Scaffold(
@@ -120,11 +129,14 @@ fun SettingsScreen(onBackClick: () -> Unit) {
                 title = { Text(stringResource(R.string.settings_title)) },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.back),
+                        )
                     }
                 },
             )
-        },
+        }
     ) { innerPadding ->
         Column(
             modifier =

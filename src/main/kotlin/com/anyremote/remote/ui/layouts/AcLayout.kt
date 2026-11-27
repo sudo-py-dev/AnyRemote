@@ -39,14 +39,36 @@ private enum class AcToggle(
     val isOn: (AcState) -> Boolean,
     val toggle: (AcState) -> AcState,
 ) {
-    TURBO("turbo", Icons.Default.FlashOn, R.string.ac_label_turbo, { it.turbo }, { it.copy(turbo = !it.turbo) }),
+    TURBO(
+        "turbo",
+        Icons.Default.FlashOn,
+        R.string.ac_label_turbo,
+        { it.turbo },
+        { it.copy(turbo = !it.turbo) },
+    ),
     ECO("eco", Icons.Default.Eco, R.string.ac_label_eco, { it.eco }, { it.copy(eco = !it.eco) }),
-    LIGHT("light", Icons.Default.Lightbulb, R.string.ac_label_light, { it.light }, { it.copy(light = !it.light) }),
-    SWING_H("swing_h", Icons.Default.SwapHoriz, R.string.ac_label_swing_h, { it.swingH }, { it.copy(swingH = !it.swingH) }),
-    TEMP_DISPLAY("temp_display", Icons.Default.DeviceThermostat, R.string.ac_label_temp_display,
-        { it.tempDisplay }, { it.copy(tempDisplay = !it.tempDisplay) }),
+    LIGHT(
+        "light",
+        Icons.Default.Lightbulb,
+        R.string.ac_label_light,
+        { it.light },
+        { it.copy(light = !it.light) },
+    ),
+    SWING_H(
+        "swing_h",
+        Icons.Default.SwapHoriz,
+        R.string.ac_label_swing_h,
+        { it.swingH },
+        { it.copy(swingH = !it.swingH) },
+    ),
+    TEMP_DISPLAY(
+        "temp_display",
+        Icons.Default.DeviceThermostat,
+        R.string.ac_label_temp_display,
+        { it.tempDisplay },
+        { it.copy(tempDisplay = !it.tempDisplay) },
+    ),
 }
-
 
 private val modes = listOf("MC", "MH", "MD", "MV", "MA")
 private val speeds = listOf("SA", "SL", "SM", "SH")
@@ -87,8 +109,11 @@ fun AcLayout(
     val maxTemp = protocol.maxTemp
     val minTemp = protocol.minTemp
     val electra = protocol == AcProtocol.ELECTRA
-    val options = if (electra) listOf(AcToggle.TURBO, AcToggle.SWING_H) else AcToggle.entries.filter { RemoteDatabase.hasAcOption(it.key) }
-    val hasSweep = electra || RemoteDatabase.hasAcOption("wind_model") || RemoteDatabase.hasAcOption("swing")
+    val options =
+        if (electra) listOf(AcToggle.TURBO, AcToggle.SWING_H)
+        else AcToggle.entries.filter { RemoteDatabase.hasAcOption(it.key) }
+    val hasSweep =
+        electra || RemoteDatabase.hasAcOption("wind_model") || RemoteDatabase.hasAcOption("swing")
 
     fun setTemp(t: Int) {
         val clamped = t.coerceIn(minTemp, maxTemp)
@@ -131,7 +156,10 @@ fun AcLayout(
         }
 
         RemoteSection(title = stringResource(R.string.ac_label_mode)) {
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
                 modes.forEach { mode ->
                     OptionKey(
                         icon = modeIcon(mode),
@@ -154,45 +182,55 @@ fun AcLayout(
             )
         }
 
-        if (protocol != AcProtocol.AMCOR) RemoteSection(title = stringResource(R.string.airflow)) {
-            @OptIn(ExperimentalLayoutApi::class)
-            FlowRow(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                maxItemsInEachRow = 4,
-            ) {
-                if (hasSweep) {
-                    OptionKey(
-                        icon = Icons.AutoMirrored.Filled.CompareArrows,
-                        label = stringResource(R.string.ac_label_sweep),
-                        selected = power && state.swing,
-                        enabled = power,
-                        onClick = { onChange(state.copy(swing = !state.swing)) },
-                    )
-                }
-                val fixedVane = !state.swing && state.swingPosition > 0
-                if (!electra) OptionKey(
-                    icon = Icons.Default.SyncAlt,
-                    label =
-                        stringResource(R.string.ac_label_direction) +
-                            if (fixedVane) " ${state.swingPosition}" else "",
-                    selected = power && fixedVane,
-                    enabled = power,
-                    // Step the vane through fixed positions 1..5; this turns auto-sweep off.
-                    onClick = { onChange(state.copy(swing = false, swingPosition = state.swingPosition % 5 + 1)) },
-                )
-                options.forEach { option ->
-                    OptionKey(
-                        icon = option.icon,
-                        label = stringResource(option.label),
-                        selected = power && option.isOn(state),
-                        enabled = power,
-                        onClick = { onChange(option.toggle(state)) },
-                    )
+        if (protocol != AcProtocol.AMCOR)
+            RemoteSection(title = stringResource(R.string.airflow)) {
+                @OptIn(ExperimentalLayoutApi::class)
+                FlowRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    maxItemsInEachRow = 4,
+                ) {
+                    if (hasSweep) {
+                        OptionKey(
+                            icon = Icons.AutoMirrored.Filled.CompareArrows,
+                            label = stringResource(R.string.ac_label_sweep),
+                            selected = power && state.swing,
+                            enabled = power,
+                            onClick = { onChange(state.copy(swing = !state.swing)) },
+                        )
+                    }
+                    val fixedVane = !state.swing && state.swingPosition > 0
+                    if (!electra)
+                        OptionKey(
+                            icon = Icons.Default.SyncAlt,
+                            label =
+                                stringResource(R.string.ac_label_direction) +
+                                    if (fixedVane) " ${state.swingPosition}" else "",
+                            selected = power && fixedVane,
+                            enabled = power,
+                            // Step the vane through fixed positions 1..5; this turns auto-sweep
+                            // off.
+                            onClick = {
+                                onChange(
+                                    state.copy(
+                                        swing = false,
+                                        swingPosition = state.swingPosition % 5 + 1,
+                                    )
+                                )
+                            },
+                        )
+                    options.forEach { option ->
+                        OptionKey(
+                            icon = option.icon,
+                            label = stringResource(option.label),
+                            selected = power && option.isOn(state),
+                            enabled = power,
+                            onClick = { onChange(option.toggle(state)) },
+                        )
+                    }
                 }
             }
-        }
     }
 }
 
@@ -227,14 +265,31 @@ private fun ThermostatDial(state: AcState, minTemp: Int, maxTemp: Int) {
             val inset = stroke / 2
             val arcSize = Size(size.width - stroke, size.height - stroke)
             val topLeft = Offset(inset, inset)
-            drawArc(trackColor, 135f, 270f, false, topLeft, arcSize, style = Stroke(stroke, cap = StrokeCap.Round))
+            drawArc(
+                trackColor,
+                135f,
+                270f,
+                false,
+                topLeft,
+                arcSize,
+                style = Stroke(stroke, cap = StrokeCap.Round),
+            )
             val sweep = 270f * fraction
-            drawArc(arcColor, 135f, sweep, false, topLeft, arcSize, style = Stroke(stroke, cap = StrokeCap.Round))
+            drawArc(
+                arcColor,
+                135f,
+                sweep,
+                false,
+                topLeft,
+                arcSize,
+                style = Stroke(stroke, cap = StrokeCap.Round),
+            )
             // Thumb at the end of the arc.
             val angle = Math.toRadians((135f + sweep).toDouble())
             val r = arcSize.width / 2
             val center = Offset(size.width / 2, size.height / 2)
-            val thumb = Offset(center.x + r * cos(angle).toFloat(), center.y + r * sin(angle).toFloat())
+            val thumb =
+                Offset(center.x + r * cos(angle).toFloat(), center.y + r * sin(angle).toFloat())
             drawCircle(scheme.surface, radius = stroke * 0.7f, center = thumb)
             drawCircle(arcColor, radius = stroke * 0.45f, center = thumb)
         }

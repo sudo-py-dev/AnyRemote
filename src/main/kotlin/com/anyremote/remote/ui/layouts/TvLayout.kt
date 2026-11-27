@@ -24,10 +24,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.anyremote.remote.R
 import com.anyremote.remote.ir.RemoteKey
@@ -65,8 +65,16 @@ fun TvLayout(onKeyPressed: (RemoteKey) -> Unit) {
         ) {
             PowerKey(onClick = { onKeyPressed(RemoteKey.POWER) })
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                IconKey(Icons.AutoMirrored.Filled.Input, stringResource(R.string.cd_source), { onKeyPressed(RemoteKey.SOURCE) })
-                IconKey(Icons.AutoMirrored.Filled.VolumeOff, stringResource(R.string.cd_mute), { onKeyPressed(RemoteKey.MUTE) })
+                IconKey(
+                    Icons.AutoMirrored.Filled.Input,
+                    stringResource(R.string.cd_source),
+                    { onKeyPressed(RemoteKey.SOURCE) },
+                )
+                IconKey(
+                    Icons.AutoMirrored.Filled.VolumeOff,
+                    stringResource(R.string.cd_mute),
+                    { onKeyPressed(RemoteKey.MUTE) },
+                )
             }
         }
 
@@ -76,27 +84,50 @@ fun TvLayout(onKeyPressed: (RemoteKey) -> Unit) {
                 selected = !showNumericPad,
                 onClick = { showNumericPad = false },
                 shape = SegmentedButtonDefaults.itemShape(0, 2),
-                icon = { SegmentedButtonDefaults.Icon(!showNumericPad) { Icon(Icons.Default.Gamepad, null, Modifier.size(18.dp)) } },
+                icon = {
+                    SegmentedButtonDefaults.Icon(!showNumericPad) {
+                        Icon(Icons.Default.Gamepad, null, Modifier.size(18.dp))
+                    }
+                },
                 label = { Text(stringResource(R.string.dpad), maxLines = 1) },
             )
             SegmentedButton(
                 selected = showNumericPad,
                 onClick = { showNumericPad = true },
                 shape = SegmentedButtonDefaults.itemShape(1, 2),
-                icon = { SegmentedButtonDefaults.Icon(showNumericPad) { Icon(Icons.Default.Dialpad, null, Modifier.size(18.dp)) } },
+                icon = {
+                    SegmentedButtonDefaults.Icon(showNumericPad) {
+                        Icon(Icons.Default.Dialpad, null, Modifier.size(18.dp))
+                    }
+                },
                 label = { Text(stringResource(R.string.num_pad), maxLines = 1) },
             )
         }
 
         // Fixed height so switching between the two pads doesn't move the keys below.
-        Box(modifier = Modifier.fillMaxWidth().height(272.dp), contentAlignment = Alignment.Center) {
+        Box(
+            modifier = Modifier.fillMaxWidth().height(272.dp),
+            contentAlignment = Alignment.Center,
+        ) {
             if (showNumericPad) NumberPad(onKeyPressed) else DPad(onKey = onKeyPressed)
         }
 
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-            IconKey(Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.back), { onKeyPressed(RemoteKey.BACK) })
-            IconKey(Icons.Default.Home, stringResource(R.string.cd_home), { onKeyPressed(RemoteKey.HOME) })
-            IconKey(Icons.Default.Menu, stringResource(R.string.cd_menu), { onKeyPressed(RemoteKey.MENU) })
+            IconKey(
+                Icons.AutoMirrored.Filled.ArrowBack,
+                stringResource(R.string.back),
+                { onKeyPressed(RemoteKey.BACK) },
+            )
+            IconKey(
+                Icons.Default.Home,
+                stringResource(R.string.cd_home),
+                { onKeyPressed(RemoteKey.HOME) },
+            )
+            IconKey(
+                Icons.Default.Menu,
+                stringResource(R.string.cd_menu),
+                { onKeyPressed(RemoteKey.MENU) },
+            )
         }
 
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
@@ -129,9 +160,13 @@ internal fun NumberPad(onKeyPressed: (RemoteKey) -> Unit, keys: Set<RemoteKey>? 
         modifier = Modifier.fillMaxWidth(),
     ) {
         numberPad.forEach { row ->
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
                 // Physical keypad order stays 1–2–3 from left to right in every locale.
-                val orderedLabels = if (LocalLayoutDirection.current == LayoutDirection.Rtl) row.reversed() else row
+                val orderedLabels =
+                    if (LocalLayoutDirection.current == LayoutDirection.Rtl) row.reversed() else row
                 orderedLabels.forEach keyLoop@{ label ->
                     val scheme = MaterialTheme.colorScheme
                     val special = label == "-" || label == "⌫"
@@ -143,12 +178,18 @@ internal fun NumberPad(onKeyPressed: (RemoteKey) -> Unit, keys: Set<RemoteKey>? 
                     RemoteButton(
                         onClick = { onKeyPressed(key) },
                         modifier = Modifier.weight(1f).height(58.dp),
-                        containerColor = if (special) scheme.secondaryContainer else scheme.surfaceContainerHighest,
-                        contentColor = if (special) scheme.onSecondaryContainer else scheme.onSurface,
+                        containerColor =
+                            if (special) scheme.secondaryContainer
+                            else scheme.surfaceContainerHighest,
+                        contentColor =
+                            if (special) scheme.onSecondaryContainer else scheme.onSurface,
                         repeatOnHold = label == "⌫",
                     ) {
                         if (label == "⌫") {
-                            Icon(Icons.AutoMirrored.Filled.Backspace, contentDescription = stringResource(R.string.cd_backspace))
+                            Icon(
+                                Icons.AutoMirrored.Filled.Backspace,
+                                contentDescription = stringResource(R.string.cd_backspace),
+                            )
                         } else {
                             Text(label, style = MaterialTheme.typography.headlineSmall)
                         }

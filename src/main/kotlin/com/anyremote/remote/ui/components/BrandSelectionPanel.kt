@@ -5,9 +5,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -25,18 +25,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.unit.dp
 import com.anyremote.remote.R
 import com.anyremote.remote.data.BrandSearchIndex
 import com.anyremote.remote.data.MAX_BRAND_QUERY_LENGTH
-import com.anyremote.remote.util.limitCodePoints
 import com.anyremote.remote.data.RemoteDatabase.Brand
 import com.anyremote.remote.data.RemoteDatabase.DeviceType
 import com.anyremote.remote.ui.helpers.rememberVibratingHapticFeedback
+import com.anyremote.remote.util.limitCodePoints
 import kotlinx.coroutines.flow.first
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -50,13 +50,15 @@ fun BrandSelectionPanel(
 
     val searchIndex = remember(device) { BrandSearchIndex(device) }
     val filteredBrands = remember(searchIndex, query) { searchIndex.search(query) }
-    val groupedBrands = remember(searchIndex) {
-        searchIndex.alphabetical.groupBy { it.nameEn.take(1).uppercase() }
-    }
-    val headerIndices = remember(groupedBrands) {
-        var next = 0
-        groupedBrands.mapValues { (_, brands) -> next.also { next += 1 + brands.size } }
-    }
+    val groupedBrands =
+        remember(searchIndex) {
+            searchIndex.alphabetical.groupBy { it.nameEn.take(1).uppercase() }
+        }
+    val headerIndices =
+        remember(groupedBrands) {
+            var next = 0
+            groupedBrands.mapValues { (_, brands) -> next.also { next += 1 + brands.size } }
+        }
 
     val focusManager = LocalFocusManager.current
     fun selectBrand(brand: Brand) {
@@ -72,19 +74,26 @@ fun BrandSelectionPanel(
     }
     var requestedLetter by remember(device.id) { mutableStateOf<String?>(null) }
     LaunchedEffect(browseState) {
-        snapshotFlow { browseState.isScrollInProgress }.collect { scrolling ->
-            if (scrolling) requestedLetter = null
-        }
+        snapshotFlow { browseState.isScrollInProgress }
+            .collect { scrolling ->
+                if (scrolling) requestedLetter = null
+            }
     }
 
-    val currentLetter = remember(browseState, headerIndices) {
-        derivedStateOf {
-            requestedLetter ?: when {
-                browseState.canScrollBackward && !browseState.canScrollForward -> headerIndices.keys.lastOrNull()
-                else -> headerIndices.entries.lastOrNull { it.value <= browseState.firstVisibleItemIndex }?.key
+    val currentLetter =
+        remember(browseState, headerIndices) {
+            derivedStateOf {
+                requestedLetter
+                    ?: when {
+                        browseState.canScrollBackward && !browseState.canScrollForward ->
+                            headerIndices.keys.lastOrNull()
+                        else ->
+                            headerIndices.entries
+                                .lastOrNull { it.value <= browseState.firstVisibleItemIndex }
+                                ?.key
+                    }
             }
         }
-    }
 
     Column(modifier = Modifier.fillMaxSize().imePadding()) {
         TextField(
@@ -95,7 +104,10 @@ fun BrandSelectionPanel(
             trailingIcon = {
                 if (searchQuery.isNotEmpty()) {
                     IconButton(onClick = { searchQuery = "" }) {
-                        Icon(Icons.Default.Close, contentDescription = stringResource(R.string.clear_search))
+                        Icon(
+                            Icons.Default.Close,
+                            contentDescription = stringResource(R.string.clear_search),
+                        )
                     }
                 }
             },
@@ -110,9 +122,7 @@ fun BrandSelectionPanel(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                 ),
-            modifier =
-                Modifier.fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
         )
 
         if (filteredBrands.isEmpty()) {
@@ -196,23 +206,27 @@ private fun AlphabetIndex(
 
     LaunchedEffect(state, currentLetter, indices) {
         snapshotFlow { state.layoutInfo.visibleItemsInfo.isNotEmpty() }.first { it }
-        snapshotFlow { currentLetter.value }.collect { letter ->
-            val index = indices[letter] ?: return@collect
-            if (state.isScrollInProgress) return@collect
+        snapshotFlow { currentLetter.value }
+            .collect { letter ->
+                val index = indices[letter] ?: return@collect
+                if (state.isScrollInProgress) return@collect
 
-            val layout = state.layoutInfo
-            val firstVisible = layout.visibleItemsInfo.firstOrNull() ?: return@collect
-            val selected = layout.visibleItemsInfo.firstOrNull { it.index == index }
-            if (selected != null &&
-                selected.offset >= layout.viewportStartOffset &&
-                selected.offset + selected.size <= layout.viewportEndOffset
-            ) return@collect
+                val layout = state.layoutInfo
+                val firstVisible = layout.visibleItemsInfo.firstOrNull() ?: return@collect
+                val selected = layout.visibleItemsInfo.firstOrNull { it.index == index }
+                if (
+                    selected != null &&
+                        selected.offset >= layout.viewportStartOffset &&
+                        selected.offset + selected.size <= layout.viewportEndOffset
+                )
+                    return@collect
 
-            val height = layout.viewportEndOffset - maxOf(layout.viewportStartOffset, 0)
-            val rows = (height / firstVisible.size.coerceAtLeast(1)).coerceAtLeast(1)
-            val first = if (index <= firstVisible.index) index else (index - rows + 1).coerceAtLeast(0)
-            state.requestScrollToItem(first)
-        }
+                val height = layout.viewportEndOffset - maxOf(layout.viewportStartOffset, 0)
+                val rows = (height / firstVisible.size.coerceAtLeast(1)).coerceAtLeast(1)
+                val first =
+                    if (index <= firstVisible.index) index else (index - rows + 1).coerceAtLeast(0)
+                state.requestScrollToItem(first)
+            }
     }
 
     LazyColumn(
@@ -223,29 +237,36 @@ private fun AlphabetIndex(
         verticalArrangement = Arrangement.Center,
     ) {
         items(letters, key = { it }) { letter ->
-            val selected by remember(currentLetter, letter) {
-                derivedStateOf { currentLetter.value == letter }
-            }
+            val selected by
+                remember(currentLetter, letter) {
+                    derivedStateOf { currentLetter.value == letter }
+                }
             Box(
-                modifier = Modifier.size(48.dp)
-                    .clip(CircleShape)
-                    .selectable(selected = selected, role = Role.Button) {
+                modifier =
+                    Modifier.size(48.dp).clip(CircleShape).selectable(
+                        selected = selected,
+                        role = Role.Button,
+                    ) {
                         if (!selected) haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
                         onLetterSelected(letter)
                     },
                 contentAlignment = Alignment.Center,
             ) {
                 Box(
-                    modifier = Modifier.size(34.dp).background(
-                        if (selected) MaterialTheme.colorScheme.primaryContainer else Color.Transparent,
-                        CircleShape,
-                    ),
+                    modifier =
+                        Modifier.size(34.dp)
+                            .background(
+                                if (selected) MaterialTheme.colorScheme.primaryContainer
+                                else Color.Transparent,
+                                CircleShape,
+                            ),
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
                         text = letter,
                         style = MaterialTheme.typography.labelMedium,
-                        color = if (selected) MaterialTheme.colorScheme.onPrimaryContainer
+                        color =
+                            if (selected) MaterialTheme.colorScheme.onPrimaryContainer
                             else MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
@@ -269,7 +290,10 @@ fun BrandListItem(
                 modifier = Modifier.size(40.dp),
             ) {
                 Box(contentAlignment = Alignment.Center) {
-                    Text(brand.nameEn.take(1).uppercase(), style = MaterialTheme.typography.titleMedium)
+                    Text(
+                        brand.nameEn.take(1).uppercase(),
+                        style = MaterialTheme.typography.titleMedium,
+                    )
                 }
             }
         },

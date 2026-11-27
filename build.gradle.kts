@@ -47,7 +47,8 @@ android {
         compose = true
     }
 
-    // Renders the @PreviewTest previews in src/screenshotTest to PNGs (CI uploads them for UI review).
+    // Renders the @PreviewTest previews in src/screenshotTest to PNGs (CI uploads them for UI
+    // review).
     testOptions {
         screenshotTests.create("screenshotTest") {
             engineVersion = libs.versions.screenshot.get()
@@ -64,7 +65,10 @@ android {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
             signingConfig = signingConfigs.findByName("release")
         }
         debug {

@@ -21,9 +21,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.content.FileProvider
 import com.anyremote.remote.R
+import java.io.File
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
-import java.io.File
 
 @Composable
 internal fun UpdatePrompt() {
@@ -52,19 +52,27 @@ internal fun UpdatePrompt() {
         try {
             if (!context.packageManager.canRequestPackageInstalls()) {
                 context.startActivity(
-                    Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, Uri.fromParts("package", context.packageName, null)),
+                    Intent(
+                        Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,
+                        Uri.fromParts("package", context.packageName, null),
+                    )
                 )
                 return
             }
             val uri = FileProvider.getUriForFile(context, "${context.packageName}.updates", apk)
-            val installIntent = Intent(Intent.ACTION_VIEW)
-                .setDataAndType(uri, "application/vnd.android.package-archive")
+            val installIntent =
+                Intent(Intent.ACTION_VIEW)
+                    .setDataAndType(uri, "application/vnd.android.package-archive")
             @Suppress("DEPRECATION")
-            val installer = context.packageManager.queryIntentActivities(
-                installIntent,
-                PackageManager.MATCH_DEFAULT_ONLY or PackageManager.MATCH_SYSTEM_ONLY,
-            ).firstOrNull { it.activityInfo.exported }?.activityInfo
-                ?: throw ActivityNotFoundException("No system APK installer found")
+            val installer =
+                context.packageManager
+                    .queryIntentActivities(
+                        installIntent,
+                        PackageManager.MATCH_DEFAULT_ONLY or PackageManager.MATCH_SYSTEM_ONLY,
+                    )
+                    .firstOrNull { it.activityInfo.exported }
+                    ?.activityInfo
+                    ?: throw ActivityNotFoundException("No system APK installer found")
             installIntent.setClassName(installer.packageName, installer.name)
             installIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             context.startActivity(installIntent)
@@ -101,7 +109,8 @@ internal fun UpdatePrompt() {
                         downloading = true
                         scope.launch {
                             try {
-                                verifiedApk = GitHubUpdates.download(context.applicationContext, update)
+                                verifiedApk =
+                                    GitHubUpdates.download(context.applicationContext, update)
                             } catch (error: CancellationException) {
                                 throw error
                             } catch (_: Exception) {
@@ -113,7 +122,12 @@ internal fun UpdatePrompt() {
                     }
                 },
             ) {
-                Text(stringResource(if (verifiedApk != null) R.string.update_install else R.string.update_download))
+                Text(
+                    stringResource(
+                        if (verifiedApk != null) R.string.update_install
+                        else R.string.update_download
+                    )
+                )
             }
         },
         dismissButton = {

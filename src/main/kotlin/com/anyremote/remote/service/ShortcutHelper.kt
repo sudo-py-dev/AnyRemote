@@ -56,19 +56,22 @@ object ShortcutHelper {
         val app = context.applicationContext
         shortcutExecutor.execute {
             if (!FavoriteManager.isFavorite(app, deviceId, brandId)) return@execute
-            val message = try {
-                when {
-                    !ShortcutManagerCompat.isRequestPinShortcutSupported(context) ->
-                        context.getString(R.string.shortcut_not_supported)
-                    ShortcutManagerCompat.requestPinShortcut(
-                        context, buildShortcut(context, deviceId, brandId, deviceName, brandName), null) ->
-                        context.getString(R.string.shortcut_adding, "$brandName $deviceName")
-                    else -> context.getString(R.string.shortcut_not_supported)
+            val message =
+                try {
+                    when {
+                        !ShortcutManagerCompat.isRequestPinShortcutSupported(context) ->
+                            context.getString(R.string.shortcut_not_supported)
+                        ShortcutManagerCompat.requestPinShortcut(
+                            context,
+                            buildShortcut(context, deviceId, brandId, deviceName, brandName),
+                            null,
+                        ) -> context.getString(R.string.shortcut_adding, "$brandName $deviceName")
+                        else -> context.getString(R.string.shortcut_not_supported)
+                    }
+                } catch (e: Exception) {
+                    Log.w(TAG, "Pinning shortcut failed", e)
+                    context.getString(R.string.shortcut_failed)
                 }
-            } catch (e: Exception) {
-                Log.w(TAG, "Pinning shortcut failed", e)
-                context.getString(R.string.shortcut_failed)
-            }
             ContextCompat.getMainExecutor(app).execute {
                 Toast.makeText(app, message, Toast.LENGTH_SHORT).show()
             }
@@ -88,7 +91,9 @@ object ShortcutHelper {
             if (!FavoriteManager.isFavorite(app, deviceId, brandId)) return@execute
             try {
                 ShortcutManagerCompat.pushDynamicShortcut(
-                    app, buildShortcut(app, deviceId, brandId, deviceName, brandName))
+                    app,
+                    buildShortcut(app, deviceId, brandId, deviceName, brandName),
+                )
             } catch (e: RuntimeException) {
                 Log.w(TAG, "Updating dynamic shortcuts failed", e)
             }
@@ -124,7 +129,9 @@ object ShortcutHelper {
         val canvas = Canvas(bitmap)
         val hue = abs(text.hashCode() % 360).toFloat()
         val fill =
-            Paint(Paint.ANTI_ALIAS_FLAG).apply { color = Color.HSVToColor(floatArrayOf(hue, 0.6f, 0.9f)) }
+            Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                color = Color.HSVToColor(floatArrayOf(hue, 0.6f, 0.9f))
+            }
         canvas.drawCircle(size / 2, size / 2, size / 2, fill)
 
         val textPaint =

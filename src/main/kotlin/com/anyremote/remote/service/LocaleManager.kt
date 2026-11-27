@@ -3,6 +3,7 @@ package com.anyremote.remote.service
 import android.content.Context
 import android.content.res.Configuration
 import androidx.compose.runtime.mutableStateOf
+import androidx.core.content.edit
 import java.util.Locale
 
 object LocaleManager {
@@ -22,7 +23,7 @@ object LocaleManager {
         lang: String,
     ) {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        prefs.edit().putString(KEY_LANG, lang).apply()
+        prefs.edit { putString(KEY_LANG, lang) }
         currentLanguage.value = lang
 
         if (context is android.app.Activity) {

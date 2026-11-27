@@ -4,8 +4,8 @@ package com.anyremote.remote.ir
  * Single place that turns (device, codeset, key) into an IR frame.
  *
  * remote.json does not carry real per-brand IR codes yet, so the NEC address is derived from the
- * device type and the codeset the user confirmed in the match wizard. The test pulse in the
- * wizard and the live remote both go through here, so whatever the user matched is what gets sent.
+ * device type and the codeset the user confirmed in the match wizard. The test pulse in the wizard
+ * and the live remote both go through here, so whatever the user matched is what gets sent.
  */
 object IrCodebook {
     const val CARRIER_HZ = 38_000

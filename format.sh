@@ -1,9 +1,24 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
-# Silence JVM Unsafe and native-access warnings in JDK 21+
-export JDK_JAVA_OPTIONS="--sun-misc-unsafe-memory-access=allow --enable-native-access=ALL-UNNAMED"
+repo_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+formatter="${KTFMT_JAR:-$repo_root/ktfmt.jar}"
+options=(--kotlinlang-style)
 
-echo "🧹 Auto-formatting all Kotlin files recursively..."
-java -jar ktfmt.jar --kotlinlang-style $(find src -name "*.kt")
+case "${1:-}" in
+    '') ;;
+    --check) options+=(--dry-run --set-exit-if-changed) ;;
+    *) printf 'Usage: %s [--check]\n' "$0" >&2; exit 2 ;;
+esac
 
-echo "✅ Codebase formatting successfully completed!"
+if [[ ! -f "$formatter" ]]; then
+    printf 'ktfmt not found. Set KTFMT_JAR or place ktfmt.jar in the repository root.\n' >&2
+    exit 1
+fi
+
+sources=("$repo_root/build.gradle.kts" "$repo_root/settings.gradle.kts")
+while IFS= read -r -d '' source; do
+    sources+=("$source")
+done < <(find "$repo_root/src" -type f -name '*.kt' -print0)
+
+exec java -jar "$formatter" "${options[@]}" "${sources[@]}"

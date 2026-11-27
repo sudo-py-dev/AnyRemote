@@ -14,14 +14,18 @@ import androidx.compose.ui.graphics.graphicsLayer
 @Composable
 internal fun Modifier.pressScale(interactions: InteractionSource, pressedScale: Float): Modifier {
     val pressed by interactions.collectIsPressedAsState()
-    val scale by animateFloatAsState(
-        targetValue = if (pressed) pressedScale else 1f,
-        animationSpec = if (pressed) tween(85) else spring(
-            dampingRatio = Spring.DampingRatioNoBouncy,
-            stiffness = Spring.StiffnessMedium,
-        ),
-        label = "Press scale",
-    )
+    val scale by
+        animateFloatAsState(
+            targetValue = if (pressed) pressedScale else 1f,
+            animationSpec =
+                if (pressed) tween(85)
+                else
+                    spring(
+                        dampingRatio = Spring.DampingRatioNoBouncy,
+                        stiffness = Spring.StiffnessMedium,
+                    ),
+            label = "Press scale",
+        )
     return graphicsLayer {
         scaleX = scale
         scaleY = scale

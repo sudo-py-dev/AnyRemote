@@ -3,20 +3,17 @@ package com.anyremote.remote.ui.screens
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.ui.graphics.TransformOrigin
-import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInVertically
-import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -35,11 +32,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.anyremote.remote.R
 import com.anyremote.remote.data.RemoteDatabase
@@ -61,12 +61,19 @@ private fun loadSavedRemotes(context: android.content.Context): List<SavedRemote
             if (parts.size != 2) return@mapNotNull null
             val deviceId = parts[0].toIntOrNull() ?: return@mapNotNull null
             val brandId = parts[1].toIntOrNull() ?: return@mapNotNull null
-            val device = RemoteDatabase.deviceTypes.firstOrNull { it.id == deviceId } ?: return@mapNotNull null
+            val device =
+                RemoteDatabase.deviceTypes.firstOrNull { it.id == deviceId }
+                    ?: return@mapNotNull null
             val brand = device.brands.firstOrNull { it.id == brandId } ?: return@mapNotNull null
             SavedRemote(
                 device,
                 brand,
-                FavoriteManager.getCustomName(context, device.id, brand.id, defaultRemoteName(context, device, brand)),
+                FavoriteManager.getCustomName(
+                    context,
+                    device.id,
+                    brand.id,
+                    defaultRemoteName(context, device, brand),
+                ),
             )
         }
         // Favorites are stored as a set; sort so tiles don't shuffle between launches.
@@ -100,7 +107,9 @@ fun DashboardScreen(
             false
         }
     }
-    var showIrNotice by remember { mutableStateOf(!hasIr && !FavoriteManager.isIrNoticeDismissed(context)) }
+    var showIrNotice by remember {
+        mutableStateOf(!hasIr && !FavoriteManager.isIrNoticeDismissed(context))
+    }
 
     var optionsFor by remember { mutableStateOf<SavedRemote?>(null) }
     var editing by remember { mutableStateOf<SavedRemote?>(null) }
@@ -121,7 +130,12 @@ fun DashboardScreen(
             brand = editingRemote.brand,
             onDismiss = { editing = null },
             onSave = { newName ->
-                FavoriteManager.setCustomName(context, editingRemote.device.id, editingRemote.brand.id, newName)
+                FavoriteManager.setCustomName(
+                    context,
+                    editingRemote.device.id,
+                    editingRemote.brand.id,
+                    newName,
+                )
                 reload()
                 editing = null
             },
@@ -143,15 +157,26 @@ fun DashboardScreen(
                 },
                 navigationIcon = {
                     if (selectedDevice != null || addingRemote) {
-                        IconButton(onClick = { if (selectedDevice != null) selectedDevice = null else addingRemote = false }) {
-                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
+                        IconButton(
+                            onClick = {
+                                if (selectedDevice != null) selectedDevice = null
+                                else addingRemote = false
+                            }
+                        ) {
+                            Icon(
+                                Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = stringResource(R.string.back),
+                            )
                         }
                     }
                 },
                 actions = {
                     if (!addingRemote) {
                         IconButton(onClick = onSettingsClick) {
-                            Icon(Icons.Outlined.Settings, contentDescription = stringResource(R.string.settings))
+                            Icon(
+                                Icons.Outlined.Settings,
+                                contentDescription = stringResource(R.string.settings),
+                            )
                         }
                     }
                 },
@@ -170,23 +195,27 @@ fun DashboardScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { innerPadding ->
         val end = if (LocalLayoutDirection.current == LayoutDirection.Rtl) 0.08f else 0.92f
-        val origin = if (remotes.isEmpty()) TransformOrigin(0.5f, 0.5f) else TransformOrigin(end, 0.97f)
+        val origin =
+            if (remotes.isEmpty()) TransformOrigin(0.5f, 0.5f) else TransformOrigin(end, 0.97f)
         AnimatedContent(
             targetState = addingRemote,
             modifier = Modifier.fillMaxSize().padding(innerPadding),
             transitionSpec = {
                 if (targetState) {
-                    (fadeIn(tween(200)) + scaleIn(
-                        animationSpec = tween(280, easing = FastOutSlowInEasing),
-                        initialScale = 0.76f,
-                        transformOrigin = origin,
-                    )) togetherWith fadeOut(tween(120))
+                    (fadeIn(tween(200)) +
+                        scaleIn(
+                            animationSpec = tween(280, easing = FastOutSlowInEasing),
+                            initialScale = 0.76f,
+                            transformOrigin = origin,
+                        )) togetherWith fadeOut(tween(120))
                 } else {
-                    fadeIn(tween(200)) togetherWith (fadeOut(tween(180)) + scaleOut(
-                        animationSpec = tween(220, easing = FastOutSlowInEasing),
-                        targetScale = 0.84f,
-                        transformOrigin = origin,
-                    ))
+                    fadeIn(tween(200)) togetherWith
+                        (fadeOut(tween(180)) +
+                            scaleOut(
+                                animationSpec = tween(220, easing = FastOutSlowInEasing),
+                                targetScale = 0.84f,
+                                transformOrigin = origin,
+                            ))
                 }
             },
             label = "Add remote picker",
@@ -194,8 +223,13 @@ fun DashboardScreen(
             if (showPicker) {
                 val device = selectedDevice
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    if (device == null) CategorySelectionGrid(onCategoryClick = { selectedDevice = it })
-                    else BrandSelectionPanel(device = device, onBrandClick = { onDeviceSelected(device.id, it.id) })
+                    if (device == null)
+                        CategorySelectionGrid(onCategoryClick = { selectedDevice = it })
+                    else
+                        BrandSelectionPanel(
+                            device = device,
+                            onBrandClick = { onDeviceSelected(device.id, it.id) },
+                        )
                 }
             } else {
                 RemotesHome(
@@ -243,8 +277,14 @@ fun DashboardScreen(
                             actionLabel = undoLabel,
                             duration = SnackbarDuration.Short,
                         )
-                    if (result == SnackbarResult.ActionPerformed &&
-                        !FavoriteManager.isFavorite(context, options.device.id, options.brand.id)) {
+                    if (
+                        result == SnackbarResult.ActionPerformed &&
+                            !FavoriteManager.isFavorite(
+                                context,
+                                options.device.id,
+                                options.brand.id,
+                            )
+                    ) {
                         FavoriteManager.toggleFavorite(context, options.device.id, options.brand.id)
                         reload()
                     }
@@ -353,7 +393,10 @@ private fun NoticeCard(
             }
             if (onDismiss != null) {
                 IconButton(onClick = onDismiss, modifier = Modifier.offset(y = (-12).dp)) {
-                    Icon(Icons.Default.Close, contentDescription = stringResource(R.string.ir_sensor_missing_action))
+                    Icon(
+                        Icons.Default.Close,
+                        contentDescription = stringResource(R.string.ir_sensor_missing_action),
+                    )
                 }
             }
         }
@@ -373,7 +416,11 @@ private fun EmptyRemotes(onAddClick: () -> Unit) {
             modifier = Modifier.size(112.dp),
         ) {
             Box(contentAlignment = Alignment.Center) {
-                Icon(Icons.Default.SettingsRemote, contentDescription = null, modifier = Modifier.size(52.dp))
+                Icon(
+                    Icons.Default.SettingsRemote,
+                    contentDescription = null,
+                    modifier = Modifier.size(52.dp),
+                )
             }
         }
         Spacer(Modifier.height(24.dp))
@@ -391,7 +438,11 @@ private fun EmptyRemotes(onAddClick: () -> Unit) {
         )
         Spacer(Modifier.height(24.dp))
         Button(onClick = onAddClick, contentPadding = ButtonDefaults.ButtonWithIconContentPadding) {
-            Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(ButtonDefaults.IconSize))
+            Icon(
+                Icons.Default.Add,
+                contentDescription = null,
+                modifier = Modifier.size(ButtonDefaults.IconSize),
+            )
             Spacer(Modifier.width(ButtonDefaults.IconSpacing))
             Text(stringResource(R.string.add_remote))
         }
@@ -413,7 +464,8 @@ private fun RemoteTile(
         shape = MaterialTheme.shapes.large,
         color = MaterialTheme.colorScheme.surfaceContainer,
         modifier =
-            modifier.fillMaxWidth()
+            modifier
+                .fillMaxWidth()
                 .pressScale(interaction, pressedScale = 0.97f)
                 .clip(MaterialTheme.shapes.large)
                 .combinedClickable(
@@ -425,13 +477,17 @@ private fun RemoteTile(
                     },
                 ),
     ) {
-        Column(modifier = Modifier.padding(start = 16.dp, top = 12.dp, bottom = 16.dp, end = 4.dp)) {
+        Column(
+            modifier = Modifier.padding(start = 16.dp, top = 12.dp, bottom = 16.dp, end = 4.dp)
+        ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Surface(
                     shape = CircleShape,
-                    color = if (remote.device.id == 3) MaterialTheme.colorScheme.tertiaryContainer
+                    color =
+                        if (remote.device.id == 3) MaterialTheme.colorScheme.tertiaryContainer
                         else MaterialTheme.colorScheme.secondaryContainer,
-                    contentColor = if (remote.device.id == 3) MaterialTheme.colorScheme.onTertiaryContainer
+                    contentColor =
+                        if (remote.device.id == 3) MaterialTheme.colorScheme.onTertiaryContainer
                         else MaterialTheme.colorScheme.onSecondaryContainer,
                     modifier = Modifier.size(44.dp),
                 ) {
@@ -441,7 +497,10 @@ private fun RemoteTile(
                 }
                 Spacer(Modifier.weight(1f))
                 IconButton(onClick = onOptions) {
-                    Icon(Icons.Default.MoreVert, contentDescription = stringResource(R.string.more_options))
+                    Icon(
+                        Icons.Default.MoreVert,
+                        contentDescription = stringResource(R.string.more_options),
+                    )
                 }
             }
             Spacer(Modifier.height(16.dp))
@@ -472,16 +531,24 @@ private fun RemoteOptionsSheet(
     onPin: () -> Unit,
     onRemove: () -> Unit,
 ) {
-    ModalBottomSheet(onDismissRequest = onDismiss, sheetState =
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState =
             rememberBottomSheetState(
                 initialValue = SheetValue.Hidden,
                 enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
-            )) {
+            ),
+    ) {
         Column(modifier = Modifier.padding(bottom = 24.dp)) {
             ListItem(
                 supportingContent = { Text(remote.device.localizedName()) },
-                leadingContent = { Icon(getDeviceIcon(remote.device.id), contentDescription = null) },
-                colors = ListItemDefaults.colors(containerColor = androidx.compose.ui.graphics.Color.Transparent),
+                leadingContent = {
+                    Icon(getDeviceIcon(remote.device.id), contentDescription = null)
+                },
+                colors =
+                    ListItemDefaults.colors(
+                        containerColor = androidx.compose.ui.graphics.Color.Transparent
+                    ),
             ) {
                 Text(remote.name, style = MaterialTheme.typography.titleLarge)
             }
@@ -508,7 +575,10 @@ private fun SheetAction(
     ListItem(
         onClick = onClick,
         leadingContent = { Icon(icon, contentDescription = null, tint = tint) },
-        colors = ListItemDefaults.colors(containerColor = androidx.compose.ui.graphics.Color.Transparent),
+        colors =
+            ListItemDefaults.colors(
+                containerColor = androidx.compose.ui.graphics.Color.Transparent
+            ),
     ) {
         Text(label, color = tint)
     }

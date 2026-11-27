@@ -1,16 +1,7 @@
 root = true
 
 [*.{kt,kts}]
-# Disable standard linter rules that are incompatible with Jetpack Compose
-ktlint_standard_function-naming = disabled
-ktlint_standard_no-wildcard-imports = disabled
-ktlint_standard_package-name = disabled
-ktlint_standard_property-naming = disabled
-ktlint_standard_value-argument-comment = disabled
-ktlint_standard_max-line-length = disabled
-
-# Standard auto-formatting styles
-indent_size = 4
 indent_style = space
+indent_size = 4
 insert_final_newline = true
-max_line_length = 200
+max_line_length = 100

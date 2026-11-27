@@ -4,11 +4,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.CompareArrows
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Air
 import androidx.compose.material.icons.filled.Bedtime
 import androidx.compose.material.icons.filled.Forest
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.icons.filled.WindPower
-import androidx.compose.material.icons.filled.Air
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import com.anyremote.remote.R
 import com.anyremote.remote.ir.RemoteKey
 import com.anyremote.remote.ui.components.*
-
 import kotlinx.coroutines.launch
 
 private enum class FanMode(val label: Int, val icon: ImageVector) {
@@ -33,8 +32,8 @@ private enum class FanMode(val label: Int, val icon: ImageVector) {
 private const val MAX_SPEED = 4
 
 /**
- * IR fans don't report state, so speed, mode and oscillation here are the app's best guess
- * from what it sent. They reset when the screen is recreated from scratch.
+ * IR fans don't report state, so speed, mode and oscillation here are the app's best guess from
+ * what it sent. They reset when the screen is recreated from scratch.
  */
 @Composable
 fun FanLayout(onKeyPressed: suspend (RemoteKey) -> Boolean) {
@@ -70,7 +69,9 @@ fun FanLayout(onKeyPressed: suspend (RemoteKey) -> Boolean) {
             title =
                 if (power) stringResource(R.string.fan_speed_banner, speed)
                 else stringResource(R.string.fan_power_off_banner),
-            subtitle = if (power) stringResource(R.string.fan_status_banner, modeName, oscillateStatus) else null,
+            subtitle =
+                if (power) stringResource(R.string.fan_status_banner, modeName, oscillateStatus)
+                else null,
             active = power,
             icon = Icons.Default.WindPower,
         )

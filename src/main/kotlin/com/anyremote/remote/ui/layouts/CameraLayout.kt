@@ -61,7 +61,11 @@ fun CameraLayout(onKeyPressed: (RemoteKey) -> Unit) {
         }
 
         RemoteSection(title = stringResource(R.string.delay)) {
-            SegmentedSelector(options = delays, selected = shutterKey, onSelect = { shutterKey = it })
+            SegmentedSelector(
+                options = delays,
+                selected = shutterKey,
+                onSelect = { shutterKey = it },
+            )
         }
     }
 }

@@ -17,8 +17,9 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.automirrored.filled.VolumeOff
 import androidx.compose.material.icons.filled.Air
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.CameraAlt
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.PowerSettingsNew
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.*
@@ -37,7 +38,6 @@ import androidx.compose.ui.unit.dp
 import com.anyremote.remote.R
 import com.anyremote.remote.data.RemoteDatabase
 import com.anyremote.remote.data.RemoteDatabase.RemoteProfile
-import androidx.compose.material.icons.filled.Home
 import com.anyremote.remote.ir.AcProtocol
 import com.anyremote.remote.ir.AcState
 import com.anyremote.remote.ir.IRTransmitter
@@ -68,7 +68,8 @@ fun MatchIRScreen(
             enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
         )
 
-    val category = remember(deviceId) { RemoteDatabase.deviceTypes.firstOrNull { it.id == deviceId } }
+    val category =
+        remember(deviceId) { RemoteDatabase.deviceTypes.firstOrNull { it.id == deviceId } }
     val brand = remember(brandId, category) { category?.brands?.firstOrNull { it.id == brandId } }
 
     val profile = brand?.profile
@@ -87,25 +88,33 @@ fun MatchIRScreen(
         codeset = if (codeset > 1) codeset - 1 else totalCodesets
     }
 
-    val testKey = (profile as? RemoteProfile.Nec)?.testKey ?: when (deviceId) {
-        6 -> RemoteKey.SPEED_UP
-        8 -> RemoteKey.MUTE
-        else -> RemoteKey.POWER
-    }
-    val (testLabelRes, testIcon) = when (testKey) {
-        RemoteKey.HOME -> R.string.cd_home to Icons.Default.Home
-        RemoteKey.SPEED_UP -> R.string.button_fan_speed to Icons.Default.Air
-        RemoteKey.MUTE -> R.string.button_mute to Icons.AutoMirrored.Filled.VolumeOff
-        RemoteKey.SHUTTER -> R.string.cd_shutter to Icons.Default.CameraAlt
-        else -> R.string.button_power to Icons.Default.PowerSettingsNew
-    }
+    val testKey =
+        (profile as? RemoteProfile.Nec)?.testKey
+            ?: when (deviceId) {
+                6 -> RemoteKey.SPEED_UP
+                8 -> RemoteKey.MUTE
+                else -> RemoteKey.POWER
+            }
+    val (testLabelRes, testIcon) =
+        when (testKey) {
+            RemoteKey.HOME -> R.string.cd_home to Icons.Default.Home
+            RemoteKey.SPEED_UP -> R.string.button_fan_speed to Icons.Default.Air
+            RemoteKey.MUTE -> R.string.button_mute to Icons.AutoMirrored.Filled.VolumeOff
+            RemoteKey.SHUTTER -> R.string.cd_shutter to Icons.Default.CameraAlt
+            else -> R.string.button_power to Icons.Default.PowerSettingsNew
+        }
 
-    // Same codebook as RemoteControllerScreen, so the code set that works here is the one the remote uses.
+    // Same codebook as RemoteControllerScreen, so the code set that works here is the one the
+    // remote uses.
     var sendingTest by remember { mutableStateOf(false) }
 
     suspend fun transmitTestPulse(selected: Int): Boolean {
         val pulses =
-            if (deviceId == 3) AcState(power = true, swing = false).toPulses((profile as? RemoteProfile.AirConditioner)?.protocol ?: AcProtocol.GREE)
+            if (deviceId == 3)
+                AcState(power = true, swing = false)
+                    .toPulses(
+                        (profile as? RemoteProfile.AirConditioner)?.protocol ?: AcProtocol.GREE
+                    )
             else commands?.pulses(testKey) ?: IrCodebook.pulses(deviceId, selected, testKey)
         return IRTransmitter.send(context, pulses)
     }
@@ -133,14 +142,18 @@ fun MatchIRScreen(
                 title = { Text(stringResource(R.string.pair_new_remote)) },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.back),
+                        )
                     }
                 },
             )
-        },
+        }
     ) { innerPadding ->
         Box(
-            modifier = Modifier.fillMaxSize().padding(innerPadding).verticalScroll(rememberScrollState()),
+            modifier =
+                Modifier.fillMaxSize().padding(innerPadding).verticalScroll(rememberScrollState()),
             contentAlignment = Alignment.TopCenter,
         ) {
             Column(
@@ -160,7 +173,11 @@ fun MatchIRScreen(
                         modifier = Modifier.size(64.dp),
                     ) {
                         Box(contentAlignment = Alignment.Center) {
-                            Icon(getDeviceIcon(deviceId), contentDescription = null, modifier = Modifier.size(32.dp))
+                            Icon(
+                                getDeviceIcon(deviceId),
+                                contentDescription = null,
+                                modifier = Modifier.size(32.dp),
+                            )
                         }
                     }
                     Spacer(Modifier.height(16.dp))
@@ -170,7 +187,8 @@ fun MatchIRScreen(
                         textAlign = TextAlign.Center,
                     )
                     Text(
-                        category?.localizedName() ?: stringResource(R.string.controller_fallback_subtitle),
+                        category?.localizedName()
+                            ?: stringResource(R.string.controller_fallback_subtitle),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -209,83 +227,102 @@ fun MatchIRScreen(
                         ) { sending ->
                             Box(Modifier.size(48.dp), contentAlignment = Alignment.Center) {
                                 if (sending) {
-                                    CircularProgressIndicator(Modifier.size(32.dp), strokeWidth = 3.dp)
+                                    CircularProgressIndicator(
+                                        Modifier.size(32.dp),
+                                        strokeWidth = 3.dp,
+                                    )
                                 } else {
-                                    Icon(testIcon, contentDescription = null, modifier = Modifier.fillMaxSize())
+                                    Icon(
+                                        testIcon,
+                                        contentDescription = null,
+                                        modifier = Modifier.fillMaxSize(),
+                                    )
                                 }
                             }
                         }
                         Spacer(Modifier.height(8.dp))
-                        Text(stringResource(testLabelRes), style = MaterialTheme.typography.titleMedium)
+                        Text(
+                            stringResource(testLabelRes),
+                            style = MaterialTheme.typography.titleMedium,
+                        )
                     }
                 }
 
                 // Only offer cycling when another distinct signal is available.
-                if (totalCodesets > 1) Row(verticalAlignment = Alignment.CenterVertically) {
-                    FilledTonalIconButton(
-                        enabled = !sendingTest && testedCodeset == null,
-                        onClick = {
-                            haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
-                            previousCodeset()
-                        },
-                    ) {
-                        Icon(
-                            Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                            contentDescription = stringResource(R.string.cd_previous_code),
-                        )
+                if (totalCodesets > 1)
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        FilledTonalIconButton(
+                            enabled = !sendingTest && testedCodeset == null,
+                            onClick = {
+                                haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
+                                previousCodeset()
+                            },
+                        ) {
+                            Icon(
+                                Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                                contentDescription = stringResource(R.string.cd_previous_code),
+                            )
+                        }
+                        AnimatedContent(
+                            targetState = codeset,
+                            modifier =
+                                Modifier.widthIn(min = 160.dp)
+                                    .padding(horizontal = 16.dp)
+                                    .semantics {
+                                        liveRegion = LiveRegionMode.Polite
+                                    },
+                            contentAlignment = Alignment.Center,
+                            transitionSpec = {
+                                val direction = if (targetState > initialState) 1 else -1
+                                (fadeIn(tween(170)) +
+                                    slideInVertically(tween(200)) {
+                                        direction * it / 2
+                                    }) togetherWith
+                                    (fadeOut(tween(110)) +
+                                        slideOutVertically(tween(170)) { -direction * it / 2 })
+                            },
+                            label = "Selected IR code",
+                        ) { selected ->
+                            Text(
+                                stringResource(R.string.code_set_of, selected, totalCodesets),
+                                style = MaterialTheme.typography.titleMedium,
+                                textAlign = TextAlign.Center,
+                            )
+                        }
+                        FilledTonalIconButton(
+                            enabled = !sendingTest && testedCodeset == null,
+                            onClick = {
+                                haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
+                                nextCodeset()
+                            },
+                        ) {
+                            Icon(
+                                Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                                contentDescription = stringResource(R.string.cd_next_code),
+                            )
+                        }
                     }
-                    AnimatedContent(
-                        targetState = codeset,
-                        modifier = Modifier.widthIn(min = 160.dp).padding(horizontal = 16.dp).semantics {
-                            liveRegion = LiveRegionMode.Polite
-                        },
-                        contentAlignment = Alignment.Center,
-                        transitionSpec = {
-                            val direction = if (targetState > initialState) 1 else -1
-                            (fadeIn(tween(170)) + slideInVertically(tween(200)) { direction * it / 2 }) togetherWith
-                                (fadeOut(tween(110)) + slideOutVertically(tween(170)) { -direction * it / 2 })
-                        },
-                        label = "Selected IR code",
-                    ) { selected ->
-                        Text(
-                            stringResource(R.string.code_set_of, selected, totalCodesets),
-                            style = MaterialTheme.typography.titleMedium,
-                            textAlign = TextAlign.Center,
-                        )
-                    }
-                    FilledTonalIconButton(
-                        enabled = !sendingTest && testedCodeset == null,
-                        onClick = {
-                            haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
-                            nextCodeset()
-                        },
-                    ) {
-                        Icon(
-                            Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                            contentDescription = stringResource(R.string.cd_next_code),
-                        )
-                    }
-                }
 
-                if (totalCodesets > 1) Surface(
-                    shape = MaterialTheme.shapes.large,
-                    color = MaterialTheme.colorScheme.surfaceContainer,
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.Top) {
-                        Icon(
-                            Icons.Outlined.Info,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary,
-                        )
-                        Spacer(Modifier.width(16.dp))
-                        Text(
-                            stringResource(R.string.info_banner_text),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
+                if (totalCodesets > 1)
+                    Surface(
+                        shape = MaterialTheme.shapes.large,
+                        color = MaterialTheme.colorScheme.surfaceContainer,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.Top) {
+                            Icon(
+                                Icons.Outlined.Info,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary,
+                            )
+                            Spacer(Modifier.width(16.dp))
+                            Text(
+                                stringResource(R.string.info_banner_text),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
                     }
-                }
             }
         }
     }
@@ -310,7 +347,8 @@ fun MatchIRScreen(
             sheetState = sheetState,
         ) {
             Column(
-                modifier = Modifier.fillMaxWidth().padding(start = 24.dp, end = 24.dp, bottom = 32.dp),
+                modifier =
+                    Modifier.fillMaxWidth().padding(start = 24.dp, end = 24.dp, bottom = 32.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
@@ -335,7 +373,10 @@ fun MatchIRScreen(
                     color = MaterialTheme.colorScheme.primary,
                 )
                 Spacer(Modifier.height(24.dp))
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                ) {
                     OutlinedButton(
                         onClick = {
                             haptic.performHapticFeedback(HapticFeedbackType.Reject)
@@ -344,7 +385,12 @@ fun MatchIRScreen(
                         enabled = !closingResponse,
                         modifier = Modifier.weight(1f).heightIn(min = 48.dp),
                     ) {
-                        Text(stringResource(if (totalCodesets == 1) R.string.back else R.string.no_try_next), textAlign = TextAlign.Center)
+                        Text(
+                            stringResource(
+                                if (totalCodesets == 1) R.string.back else R.string.no_try_next
+                            ),
+                            textAlign = TextAlign.Center,
+                        )
                     }
                     Button(
                         onClick = {
@@ -367,8 +413,16 @@ fun MatchIRScreen(
     if (showSuccessDialog) {
         AlertDialog(
             onDismissRequest = { showSuccessDialog = false },
-            icon = { Icon(Icons.Default.CheckCircle, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
-            title = { Text(stringResource(R.string.test_successful), textAlign = TextAlign.Center) },
+            icon = {
+                Icon(
+                    Icons.Default.CheckCircle,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                )
+            },
+            title = {
+                Text(stringResource(R.string.test_successful), textAlign = TextAlign.Center)
+            },
             text = { Text(stringResource(R.string.save_remote_dialog_text)) },
             confirmButton = {
                 TextButton(
@@ -378,7 +432,7 @@ fun MatchIRScreen(
                             FavoriteManager.toggleFavorite(context, deviceId, brandId)
                         }
                         showEditRemote = true
-                    },
+                    }
                 ) {
                     Text(stringResource(R.string.yes_add_to_main_page))
                 }
@@ -388,7 +442,7 @@ fun MatchIRScreen(
                     onClick = {
                         showSuccessDialog = false
                         onMatchSuccess()
-                    },
+                    }
                 ) {
                     Text(stringResource(R.string.just_test_controller))
                 }

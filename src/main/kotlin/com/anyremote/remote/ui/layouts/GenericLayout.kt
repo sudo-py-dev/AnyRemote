@@ -32,7 +32,10 @@ fun GenericLayout(onKeyPressed: (RemoteKey) -> Unit) {
         Spacer(Modifier.height(8.dp))
 
         genericKeys.chunked(3).forEach { row ->
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
                 row.forEach { (key, label) ->
                     TextKey(
                         stringResource(label),

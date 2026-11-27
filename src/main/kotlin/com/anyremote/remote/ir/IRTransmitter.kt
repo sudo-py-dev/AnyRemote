@@ -32,7 +32,8 @@ object IRTransmitter {
     ): Boolean {
         if (pulses.isEmpty()) return false
         return try {
-            val irManager = context.getSystemService(Context.CONSUMER_IR_SERVICE) as ConsumerIrManager?
+            val irManager =
+                context.getSystemService(Context.CONSUMER_IR_SERVICE) as ConsumerIrManager?
             if (irManager?.hasIrEmitter() == true) {
                 irManager.transmit(frequencyHz, pulses)
                 true

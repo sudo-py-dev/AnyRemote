@@ -7,8 +7,6 @@
 # Keep essential attributes for Android/Kotlin/Compose runtime
 -keepattributes *Annotation*,Signature,InnerClasses,EnclosingMethod
 
-# App code is shrunk by R8; only the serializable data classes below are kept.
-
 # Keep compose runtime classes to prevent layout verification issues
 -keep class androidx.compose.runtime.** { *; }
 
@@ -33,8 +31,3 @@
 -keepclassmembers class * {
     @kotlinx.serialization.Serializable *;
 }
-
-# Keep our specific Data Classes for the RemoteDatabase
--keep class com.anyremote.remote.data.RemoteDatabase$Brand { *; }
--keep class com.anyremote.remote.data.RemoteDatabase$DeviceType { *; }
--keep class com.anyremote.remote.data.RemoteDatabase$DatabaseContainer { *; }

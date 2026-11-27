@@ -5,16 +5,16 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.PowerSettingsNew
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -45,8 +45,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.anyremote.remote.R
 import com.anyremote.remote.ir.RemoteKey
-import com.anyremote.remote.ui.helpers.rememberVibratingHapticFeedback
 import com.anyremote.remote.ui.helpers.pressScale
+import com.anyremote.remote.ui.helpers.rememberVibratingHapticFeedback
 import kotlinx.coroutines.delay
 
 /** Sizes shared by every remote layout, so keys line up across device types. */
@@ -62,8 +62,8 @@ object RemoteDefaults {
 }
 
 /**
- * Click handling for a remote key: haptic tap, ripple, and optional auto-repeat while held
- * (volume, channel, temperature). A hold that already repeated doesn't fire again on release.
+ * Click handling for a remote key: haptic tap, ripple, and optional auto-repeat while held (volume,
+ * channel, temperature). A hold that already repeated doesn't fire again on release.
  */
 @Composable
 private fun Modifier.remoteKeyClick(
@@ -118,7 +118,8 @@ private fun Modifier.remoteKeyClick(
 }
 
 /**
- * Base for every remote key: a borderless tonal surface. The key scales down slightly while pressed.
+ * Base for every remote key: a borderless tonal surface. The key scales down slightly while
+ * pressed.
  *
  * [cornerPercent] is the resting corner radius as a percent of the shorter side (50 = circle).
  */
@@ -154,7 +155,7 @@ fun RemoteButton(
     ) {
         CompositionLocalProvider(
             androidx.compose.material3.LocalContentColor provides
-                if (enabled) contentColor else contentColor.copy(alpha = 0.38f),
+                if (enabled) contentColor else contentColor.copy(alpha = 0.38f)
         ) {
             content()
         }
@@ -187,8 +188,8 @@ fun IconKey(
 }
 
 /**
- * Power key. [active] means the device is known to be on (stateful remotes like the AC) or,
- * for stateless remotes, simply that power is the key to reach for: it gets the error tone.
+ * Power key. [active] means the device is known to be on (stateful remotes like the AC) or, for
+ * stateless remotes, simply that power is the key to reach for: it gets the error tone.
  */
 @Composable
 fun PowerKey(
@@ -241,8 +242,8 @@ fun TextKey(
 }
 
 /**
- * Round toggle with a caption underneath, like the quick tiles in Google Home. Used for AC
- * modes and features and the fan's oscillate/mode keys.
+ * Round toggle with a caption underneath, like the quick tiles in Google Home. Used for AC modes
+ * and features and the fan's oscillate/mode keys.
  */
 @Composable
 fun OptionKey(
@@ -261,10 +262,11 @@ fun OptionKey(
     ) {
         RemoteButton(
             onClick = onClick,
-            modifier = Modifier.size(RemoteDefaults.KeySize).semantics {
-                contentDescription = label
-                this.selected = selected
-            },
+            modifier =
+                Modifier.size(RemoteDefaults.KeySize).semantics {
+                    contentDescription = label
+                    this.selected = selected
+                },
             enabled = enabled,
             containerColor = if (selected) scheme.primary else scheme.surfaceContainerHighest,
             contentColor = if (selected) scheme.onPrimary else scheme.onSurfaceVariant,
@@ -381,8 +383,8 @@ private data class DPadArrow(
 )
 
 /**
- * Circular D-pad in the style of the Google TV remote: a tonal ring with four arrow zones and
- * a primary OK key in the middle. Arrows repeat while held so long lists scroll.
+ * Circular D-pad in the style of the Google TV remote: a tonal ring with four arrow zones and a
+ * primary OK key in the middle. Arrows repeat while held so long lists scroll.
  */
 @Composable
 fun DPad(
@@ -393,15 +395,34 @@ fun DPad(
     val scheme = MaterialTheme.colorScheme
     val zone = size * 0.3f
     Box(
-        modifier =
-            modifier.size(size).clip(CircleShape).background(scheme.surfaceContainerHighest),
+        modifier = modifier.size(size).clip(CircleShape).background(scheme.surfaceContainerHighest),
         contentAlignment = Alignment.Center,
     ) {
         listOf(
-                DPadArrow(RemoteKey.UP, Icons.Default.KeyboardArrowUp, Alignment.TopCenter, R.string.cd_up),
-                DPadArrow(RemoteKey.DOWN, Icons.Default.KeyboardArrowDown, Alignment.BottomCenter, R.string.cd_down),
-                DPadArrow(RemoteKey.LEFT, Icons.Default.KeyboardArrowLeft, AbsoluteAlignment.CenterLeft, R.string.cd_left),
-                DPadArrow(RemoteKey.RIGHT, Icons.Default.KeyboardArrowRight, AbsoluteAlignment.CenterRight, R.string.cd_right),
+                DPadArrow(
+                    RemoteKey.UP,
+                    Icons.Default.KeyboardArrowUp,
+                    Alignment.TopCenter,
+                    R.string.cd_up,
+                ),
+                DPadArrow(
+                    RemoteKey.DOWN,
+                    Icons.Default.KeyboardArrowDown,
+                    Alignment.BottomCenter,
+                    R.string.cd_down,
+                ),
+                DPadArrow(
+                    RemoteKey.LEFT,
+                    Icons.Default.KeyboardArrowLeft,
+                    AbsoluteAlignment.CenterLeft,
+                    R.string.cd_left,
+                ),
+                DPadArrow(
+                    RemoteKey.RIGHT,
+                    Icons.Default.KeyboardArrowRight,
+                    AbsoluteAlignment.CenterRight,
+                    R.string.cd_right,
+                ),
             )
             .forEach { (key, icon, alignment, description) ->
                 RemoteButton(
@@ -411,7 +432,11 @@ fun DPad(
                     contentColor = scheme.onSurfaceVariant,
                     repeatOnHold = true,
                 ) {
-                    Icon(icon, contentDescription = stringResource(description), modifier = Modifier.size(32.dp))
+                    Icon(
+                        icon,
+                        contentDescription = stringResource(description),
+                        modifier = Modifier.size(32.dp),
+                    )
                 }
             }
 
@@ -448,7 +473,8 @@ fun RockerKey(
                 .clip(RoundedCornerShape(50))
                 .background(
                     if (enabled) scheme.surfaceContainerHighest
-                    else scheme.onSurface.copy(alpha = 0.08f)),
+                    else scheme.onSurface.copy(alpha = 0.08f)
+                ),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         RockerHalf(upIcon, upDescription, onUp, enabled, Modifier.weight(1f))
@@ -474,7 +500,12 @@ private fun RockerHalf(
         modifier =
             modifier
                 .fillMaxWidth()
-                .remoteKeyClick(onClick, enabled, repeatOnHold = true, interactionSource = interactionSource),
+                .remoteKeyClick(
+                    onClick,
+                    enabled,
+                    repeatOnHold = true,
+                    interactionSource = interactionSource,
+                ),
         contentAlignment = Alignment.Center,
     ) {
         Icon(

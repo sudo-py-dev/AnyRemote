@@ -37,7 +37,8 @@ fun CategorySelectionGrid(onCategoryClick: (DeviceType) -> Unit) {
                 modifier = Modifier.padding(start = 4.dp, bottom = 4.dp),
             )
         }
-        items(RemoteDatabase.deviceTypes.filter { it.brands.isNotEmpty() }, key = { it.id }) { device ->
+        items(RemoteDatabase.deviceTypes.filter { it.brands.isNotEmpty() }, key = { it.id }) {
+            device ->
             CategoryCard(device = device, onClick = { onCategoryClick(device) })
         }
     }
@@ -52,7 +53,8 @@ fun CategoryCard(
     Surface(
         shape = MaterialTheme.shapes.large,
         color = MaterialTheme.colorScheme.surfaceContainer,
-        modifier = modifier.fillMaxWidth().clip(MaterialTheme.shapes.large).clickable(onClick = onClick),
+        modifier =
+            modifier.fillMaxWidth().clip(MaterialTheme.shapes.large).clickable(onClick = onClick),
     ) {
         Column(
             modifier = Modifier.padding(vertical = 20.dp, horizontal = 12.dp),
@@ -66,7 +68,11 @@ fun CategoryCard(
                 modifier = Modifier.size(56.dp),
             ) {
                 Box(contentAlignment = Alignment.Center) {
-                    Icon(getDeviceIcon(device.id), contentDescription = null, modifier = Modifier.size(28.dp))
+                    Icon(
+                        getDeviceIcon(device.id),
+                        contentDescription = null,
+                        modifier = Modifier.size(28.dp),
+                    )
                 }
             }
             Text(
