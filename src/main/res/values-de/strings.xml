@@ -208,4 +208,10 @@
     <string name="quick_settings_summary">Öffne die App über die Benachrichtigungsleiste.</string>
     <string name="quick_settings_manual">Wische nach unten, öffne die Schnelleinstellungen und tippe auf „Bearbeiten“. Ziehe %1$s zu den aktiven Kacheln.</string>
     <string name="quick_settings_added">Die Kachel ist bereits in den Schnelleinstellungen.</string>
+    <string name="update_available">Update %1$s verfügbar</string>
+    <string name="update_available_detail">Lade das signierte Update von GitHub herunter.</string>
+    <string name="update_ready">Das Update wurde geladen. Android bittet um Bestätigung der Installation.</string>
+    <string name="update_failed">Das Update konnte nicht abgeschlossen werden. Versuche es erneut.</string>
+    <string name="update_download">Herunterladen</string>
+    <string name="update_install">Installieren</string>
 </resources>

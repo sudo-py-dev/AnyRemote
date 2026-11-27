@@ -1,0 +1,118 @@
+package com.anyremote.remote.update
+
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.content.pm.ApplicationInfo
+import android.net.Uri
+import android.provider.Settings
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.core.content.FileProvider
+import com.anyremote.remote.R
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.launch
+import java.io.File
+
+@Composable
+internal fun UpdatePrompt() {
+    val context = LocalContext.current
+    if (context.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0) return
+
+    val scope = rememberCoroutineScope()
+    var release by remember { mutableStateOf<GitHubUpdates.Release?>(null) }
+    var verifiedApk by remember { mutableStateOf<File?>(null) }
+    var downloading by remember { mutableStateOf(false) }
+    var failed by remember { mutableStateOf(false) }
+
+    LaunchedEffect(context) {
+        try {
+            @Suppress("DEPRECATION")
+            val version = context.packageManager.getPackageInfo(context.packageName, 0).versionName
+            if (version != null) release = GitHubUpdates.latest(version)
+        } catch (error: CancellationException) {
+            throw error
+        } catch (_: Exception) {
+            // An offline or failed check should never interrupt remote controls.
+        }
+    }
+
+    fun install(apk: File) {
+        try {
+            if (!context.packageManager.canRequestPackageInstalls()) {
+                context.startActivity(
+                    Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, Uri.fromParts("package", context.packageName, null)),
+                )
+                return
+            }
+            val uri = FileProvider.getUriForFile(context, "${context.packageName}.updates", apk)
+            context.startActivity(
+                Intent(Intent.ACTION_VIEW)
+                    .setDataAndType(uri, "application/vnd.android.package-archive")
+                    .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION),
+            )
+            release = null
+        } catch (_: ActivityNotFoundException) {
+            failed = true
+        } catch (_: SecurityException) {
+            failed = true
+        }
+    }
+
+    val update = release ?: return
+    val dismiss = { if (!downloading) release = null }
+    AlertDialog(
+        onDismissRequest = dismiss,
+        title = { Text(stringResource(R.string.update_available, update.version)) },
+        text = {
+            when {
+                downloading -> LinearProgressIndicator()
+                failed -> Text(stringResource(R.string.update_failed))
+                verifiedApk != null -> Text(stringResource(R.string.update_ready))
+                else -> Text(stringResource(R.string.update_available_detail))
+            }
+        },
+        confirmButton = {
+            TextButton(
+                enabled = !downloading,
+                onClick = {
+                    failed = false
+                    val apk = verifiedApk
+                    if (apk != null && apk.isFile) {
+                        install(apk)
+                    } else {
+                        downloading = true
+                        scope.launch {
+                            try {
+                                verifiedApk = GitHubUpdates.download(context.applicationContext, update)
+                            } catch (error: CancellationException) {
+                                throw error
+                            } catch (_: Exception) {
+                                failed = true
+                            } finally {
+                                downloading = false
+                            }
+                        }
+                    }
+                },
+            ) {
+                Text(stringResource(if (verifiedApk != null) R.string.update_install else R.string.update_download))
+            }
+        },
+        dismissButton = {
+            TextButton(enabled = !downloading, onClick = dismiss) {
+                Text(stringResource(R.string.cancel))
+            }
+        },
+    )
+}

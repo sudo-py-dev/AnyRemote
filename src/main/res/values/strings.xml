@@ -209,4 +209,10 @@
     <string name="quick_settings_summary">Open the app from the notification shade.</string>
     <string name="quick_settings_manual">Swipe down to open Quick Settings, tap Edit, then drag %1$s into your active tiles.</string>
     <string name="quick_settings_added">The tile is already in Quick Settings.</string>
+    <string name="update_available">Update %1$s available</string>
+    <string name="update_available_detail">Download the signed update from GitHub.</string>
+    <string name="update_ready">Update downloaded. Android will ask you to confirm installation.</string>
+    <string name="update_failed">Could not complete the update. Try again.</string>
+    <string name="update_download">Download</string>
+    <string name="update_install">Install</string>
 </resources>

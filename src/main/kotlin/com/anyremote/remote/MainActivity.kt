@@ -41,6 +41,7 @@ import com.anyremote.remote.ui.screens.MatchIRScreen
 import com.anyremote.remote.ui.screens.RemoteControllerScreen
 import com.anyremote.remote.ui.screens.SettingsScreen
 import com.anyremote.remote.ui.theme.AnyRemoteTheme
+import com.anyremote.remote.update.UpdatePrompt
 import kotlinx.serialization.Serializable
 
 @Serializable data object DashboardRoute
@@ -95,6 +96,7 @@ class MainActivity : ComponentActivity() {
                     val controller = rememberNavController()
                     navController = controller
                     AppNavigation(controller, startRemote)
+                    UpdatePrompt()
                 }
             }
         }

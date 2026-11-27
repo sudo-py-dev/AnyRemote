@@ -208,4 +208,10 @@
     <string name="quick_settings_summary">Ouvrez l’appli depuis le volet de notifications.</string>
     <string name="quick_settings_manual">Balayez vers le bas pour ouvrir les réglages rapides, touchez Modifier, puis faites glisser %1$s parmi les tuiles actives.</string>
     <string name="quick_settings_added">La tuile est déjà dans les réglages rapides.</string>
+    <string name="update_available">Mise à jour %1$s disponible</string>
+    <string name="update_available_detail">Téléchargez la mise à jour signée depuis GitHub.</string>
+    <string name="update_ready">Mise à jour téléchargée. Android vous demandera de confirmer son installation.</string>
+    <string name="update_failed">La mise à jour a échoué. Réessayez.</string>
+    <string name="update_download">Télécharger</string>
+    <string name="update_install">Installer</string>
 </resources>

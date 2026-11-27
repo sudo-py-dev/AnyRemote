@@ -13,7 +13,7 @@ Built with Kotlin and Jetpack Compose (Material 3).
 - **Home-screen shortcuts and widget**: pin a remote to the launcher, or use the quick widget for AC power and volume.
 - **11 languages**: English, Hebrew, Arabic, Spanish, French, German, Italian, Portuguese, Russian, Chinese and Japanese, with right-to-left layout support.
 - **Light, dark or system theme**, edge-to-edge drawing and haptic feedback that can be turned off.
-- **Fully offline**: no network permission, no accounts, no tracking.
+- **Offline remote controls**: no accounts or tracking. Release builds check GitHub for app updates and require your approval before installing them.
 
 ## Requirements
 

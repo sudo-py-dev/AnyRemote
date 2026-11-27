@@ -208,4 +208,10 @@
     <string name="quick_settings_summary">从通知面板打开应用。</string>
     <string name="quick_settings_manual">向下滑动打开快捷设置，点按编辑，然后将 %1$s 拖到已启用的磁贴区域。</string>
     <string name="quick_settings_added">该磁贴已添加到快捷设置。</string>
+    <string name="update_available">有可用更新 %1$s</string>
+    <string name="update_available_detail">从 GitHub 下载已签名的更新。</string>
+    <string name="update_ready">更新已下载。Android 将要求确认安装。</string>
+    <string name="update_failed">无法完成更新。请重试。</string>
+    <string name="update_download">下载</string>
+    <string name="update_install">安装</string>
 </resources>

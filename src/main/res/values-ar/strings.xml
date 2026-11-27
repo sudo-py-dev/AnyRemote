@@ -208,4 +208,10 @@
     <string name="quick_settings_summary">افتح التطبيق من لوحة الإشعارات.</string>
     <string name="quick_settings_manual">اسحب لأسفل لفتح الإعدادات السريعة، واضغط على تعديل، ثم اسحب %1$s إلى المربعات النشطة.</string>
     <string name="quick_settings_added">المربع موجود بالفعل في الإعدادات السريعة.</string>
+    <string name="update_available">التحديث %1$s متاح</string>
+    <string name="update_available_detail">نزّل التحديث الموقّع من GitHub.</string>
+    <string name="update_ready">اكتمل التنزيل. سيطلب Android تأكيد التثبيت.</string>
+    <string name="update_failed">تعذّر إكمال التحديث. حاول مجددًا.</string>
+    <string name="update_download">تنزيل</string>
+    <string name="update_install">تثبيت</string>
 </resources>

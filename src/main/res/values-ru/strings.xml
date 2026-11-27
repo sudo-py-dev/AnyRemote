@@ -208,4 +208,10 @@
     <string name="quick_settings_summary">Открывайте приложение из панели уведомлений.</string>
     <string name="quick_settings_manual">Смахните вниз, чтобы открыть быстрые настройки, нажмите «Изменить» и перетащите %1$s в область активных плиток.</string>
     <string name="quick_settings_added">Плитка уже есть в быстрых настройках.</string>
+    <string name="update_available">Доступно обновление %1$s</string>
+    <string name="update_available_detail">Загрузите подписанное обновление с GitHub.</string>
+    <string name="update_ready">Обновление загружено. Android запросит подтверждение установки.</string>
+    <string name="update_failed">Не удалось обновить приложение. Попробуйте ещё раз.</string>
+    <string name="update_download">Скачать</string>
+    <string name="update_install">Установить</string>
 </resources>

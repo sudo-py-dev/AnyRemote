@@ -208,4 +208,10 @@
     <string name="quick_settings_summary">פתיחת האפליקציה מלוח ההתראות.</string>
     <string name="quick_settings_manual">מחליקים מטה לפתיחת ההגדרות המהירות, מקישים על עריכה וגוררים את %1$s אל האריחים הפעילים.</string>
     <string name="quick_settings_added">האריח כבר נמצא בהגדרות המהירות.</string>
+    <string name="update_available">עדכון %1$s זמין</string>
+    <string name="update_available_detail">הורדת העדכון החתום מ־GitHub.</string>
+    <string name="update_ready">העדכון הורד. Android יבקש אישור להתקנה.</string>
+    <string name="update_failed">העדכון לא הושלם. אפשר לנסות שוב.</string>
+    <string name="update_download">הורדה</string>
+    <string name="update_install">התקנה</string>
 </resources>

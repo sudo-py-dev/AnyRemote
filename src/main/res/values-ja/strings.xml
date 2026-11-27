@@ -208,4 +208,10 @@
     <string name="quick_settings_summary">通知パネルからアプリを開きます。</string>
     <string name="quick_settings_manual">下にスワイプしてクイック設定を開き、編集をタップして、%1$s を使用中のタイルにドラッグします。</string>
     <string name="quick_settings_added">タイルはすでにクイック設定にあります。</string>
+    <string name="update_available">アップデート %1$s が利用可能です</string>
+    <string name="update_available_detail">GitHub から署名済みのアップデートをダウンロードします。</string>
+    <string name="update_ready">ダウンロードが完了しました。Android でインストールを確認してください。</string>
+    <string name="update_failed">アップデートを完了できませんでした。もう一度お試しください。</string>
+    <string name="update_download">ダウンロード</string>
+    <string name="update_install">インストール</string>
 </resources>

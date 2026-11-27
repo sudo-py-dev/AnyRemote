@@ -208,4 +208,10 @@
     <string name="quick_settings_summary">Abre la app desde el panel de notificaciones.</string>
     <string name="quick_settings_manual">Desliza hacia abajo para abrir los ajustes rápidos, toca Editar y arrastra %1$s a los botones activos.</string>
     <string name="quick_settings_added">El botón ya está en los ajustes rápidos.</string>
+    <string name="update_available">Actualización %1$s disponible</string>
+    <string name="update_available_detail">Descarga la actualización firmada desde GitHub.</string>
+    <string name="update_ready">Actualización descargada. Android te pedirá confirmar la instalación.</string>
+    <string name="update_failed">No se pudo completar la actualización. Inténtalo de nuevo.</string>
+    <string name="update_download">Descargar</string>
+    <string name="update_install">Instalar</string>
 </resources>
