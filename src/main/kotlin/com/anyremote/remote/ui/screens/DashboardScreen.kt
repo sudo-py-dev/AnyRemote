@@ -1,7 +1,15 @@
 package com.anyremote.remote.ui.screens
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.togetherWith
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -162,23 +170,46 @@ fun DashboardScreen(
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { innerPadding ->
-        Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
-            val device = selectedDevice
-            when {
-                !addingRemote ->
-                    RemotesHome(
-                        remotes = remotes,
-                        showIrNotice = showIrNotice,
-                        onDismissIrNotice = {
-                            FavoriteManager.setIrNoticeDismissed(context, true)
-                            showIrNotice = false
-                        },
-                        onRemoteClick = { onFavoriteSelected(it.device.id, it.brand.id) },
-                        onRemoteOptions = { optionsFor = it },
-                        onAddClick = { addingRemote = true },
-                    )
-                device == null -> CategorySelectionGrid(onCategoryClick = { selectedDevice = it })
-                else -> BrandSelectionPanel(device = device, onBrandClick = { onDeviceSelected(device.id, it.id) })
+        val end = if (LocalLayoutDirection.current == LayoutDirection.Rtl) 0.08f else 0.92f
+        val origin = if (remotes.isEmpty()) TransformOrigin(0.5f, 0.5f) else TransformOrigin(end, 0.97f)
+        AnimatedContent(
+            targetState = addingRemote,
+            modifier = Modifier.fillMaxSize().padding(innerPadding),
+            transitionSpec = {
+                if (targetState) {
+                    (fadeIn(tween(200)) + scaleIn(
+                        animationSpec = tween(280, easing = FastOutSlowInEasing),
+                        initialScale = 0.76f,
+                        transformOrigin = origin,
+                    )) togetherWith fadeOut(tween(120))
+                } else {
+                    fadeIn(tween(200)) togetherWith (fadeOut(tween(180)) + scaleOut(
+                        animationSpec = tween(220, easing = FastOutSlowInEasing),
+                        targetScale = 0.84f,
+                        transformOrigin = origin,
+                    ))
+                }
+            },
+            label = "Add remote picker",
+        ) { showPicker ->
+            if (showPicker) {
+                val device = selectedDevice
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    if (device == null) CategorySelectionGrid(onCategoryClick = { selectedDevice = it })
+                    else BrandSelectionPanel(device = device, onBrandClick = { onDeviceSelected(device.id, it.id) })
+                }
+            } else {
+                RemotesHome(
+                    remotes = remotes,
+                    showIrNotice = showIrNotice,
+                    onDismissIrNotice = {
+                        FavoriteManager.setIrNoticeDismissed(context, true)
+                        showIrNotice = false
+                    },
+                    onRemoteClick = { onFavoriteSelected(it.device.id, it.brand.id) },
+                    onRemoteOptions = { optionsFor = it },
+                    onAddClick = { addingRemote = true },
+                )
             }
         }
     }
