@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="window_background">#F8FAFD</color>
+    <color name="launcher_background">#113E50</color>
 </resources>
