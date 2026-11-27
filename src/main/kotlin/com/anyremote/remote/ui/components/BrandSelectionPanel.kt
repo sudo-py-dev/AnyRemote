@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -28,6 +26,9 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 import com.anyremote.remote.R
 import com.anyremote.remote.data.searchBrands
 import com.anyremote.remote.data.RemoteDatabase.Brand
@@ -160,33 +161,48 @@ fun BrandSelectionPanel(
             }
 
             if (query.isEmpty() && groupedBrands.size > 1) {
-                Column(
-                    modifier = Modifier.width(48.dp).fillMaxHeight().verticalScroll(rememberScrollState()).padding(vertical = 8.dp),
+                val letters = groupedBrands.keys.toList()
+                val railState = rememberLazyListState()
+                LaunchedEffect(currentLetter) {
+                    val index = letters.indexOf(currentLetter)
+                    if (index >= 0 && railState.layoutInfo.visibleItemsInfo.none { it.index == index }) {
+                        railState.scrollToItem(index)
+                    }
+                }
+
+                LazyColumn(
+                    state = railState,
+                    modifier = Modifier.width(44.dp).fillMaxHeight().padding(end = 4.dp),
+                    contentPadding = PaddingValues(vertical = 8.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.SpaceEvenly,
+                    verticalArrangement = Arrangement.Center,
                 ) {
-                    groupedBrands.keys.forEach { letter ->
+                    items(letters, key = { it }) { letter ->
                         val isCurrent = letter == currentLetter
                         Box(
-                            modifier =
-                                Modifier.sizeIn(minWidth = 48.dp, minHeight = 48.dp)
-                                    .clip(CircleShape)
-                                    .background(if (isCurrent) MaterialTheme.colorScheme.primary else Color.Transparent)
-                                    .clickable {
-                                        haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
-                                        headerIndices[letter]?.let { index ->
-                                            coroutineScope.launch { listState.scrollToItem(index) }
-                                        }
-                                    },
+                            modifier = Modifier.fillMaxWidth().height(32.dp)
+                                .clip(CircleShape)
+                                .semantics { selected = isCurrent }
+                                .clickable(role = Role.Button) {
+                                    haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
+                                    coroutineScope.launch { listState.scrollToItem(headerIndices.getValue(letter)) }
+                                },
                             contentAlignment = Alignment.Center,
                         ) {
-                            Text(
-                                text = letter,
-                                style = MaterialTheme.typography.labelSmall,
-                                color =
-                                    if (isCurrent) MaterialTheme.colorScheme.onPrimary
-                                    else MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
+                            Box(
+                                modifier = Modifier.size(26.dp).background(
+                                    if (isCurrent) MaterialTheme.colorScheme.primaryContainer else Color.Transparent,
+                                    CircleShape,
+                                ),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                Text(
+                                    text = letter,
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = if (isCurrent) MaterialTheme.colorScheme.onPrimaryContainer
+                                        else MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+                            }
                         }
                     }
                 }
