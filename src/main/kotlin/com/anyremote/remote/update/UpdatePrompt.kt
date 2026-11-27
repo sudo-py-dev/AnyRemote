@@ -35,8 +35,8 @@ internal fun UpdatePrompt() {
 
     // Debug builds are signed with a different key, so only release builds check on launch.
     // A failed check stays silent here; Settings shows it and can retry.
-    LaunchedEffect(context) {
-        if (!BuildConfig.DEBUG) {
+    LaunchedEffect(Unit) {
+        if (!BuildConfig.DEBUG && UpdateState.status == UpdateState.Status.Idle) {
             UpdateState.check()
         }
     }
@@ -68,7 +68,7 @@ internal fun UpdatePrompt() {
             installIntent.setClassName(installer.packageName, installer.name)
             installIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             context.startActivity(installIntent)
-            UpdateState.promptVisible = false
+            UpdateState.hidePrompt()
         } catch (_: ActivityNotFoundException) {
             failed = true
         } catch (_: SecurityException) {
@@ -78,7 +78,7 @@ internal fun UpdatePrompt() {
 
     val update = UpdateState.release?.takeIf { UpdateState.promptVisible } ?: return
     val readyApk = verifiedApk?.takeIf { it.name == update.apkName && it.isFile }
-    val dismiss = { if (!downloading) UpdateState.promptVisible = false }
+    val dismiss = { if (!downloading) UpdateState.hidePrompt() }
     AlertDialog(
         onDismissRequest = dismiss,
         title = { Text(stringResource(R.string.update_available, update.version)) },

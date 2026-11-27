@@ -130,7 +130,7 @@ fun SettingsScreen(onBackClick: () -> Unit) {
 
     fun checkForUpdates() {
         if (UpdateState.status == UpdateState.Status.Available && update != null) {
-            UpdateState.promptVisible = true
+            UpdateState.showPrompt()
         } else {
             scope.launch { UpdateState.check() }
         }
