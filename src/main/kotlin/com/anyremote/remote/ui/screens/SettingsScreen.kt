@@ -17,6 +17,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.BrightnessAuto
 import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.DashboardCustomize
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material.icons.outlined.Palette
@@ -241,12 +242,21 @@ fun SettingsScreen(onBackClick: () -> Unit) {
                         if (enabled) haptic.performHapticFeedback(HapticFeedbackType.ToggleOn)
                     },
                 )
-                SettingsItem(
-                    icon = Icons.Outlined.SystemUpdate,
-                    title = stringResource(R.string.update_check),
-                    summary = updateSummary,
-                    onClick = ::checkForUpdates,
-                )
+                if (UpdateState.enabled) {
+                    SettingsItem(
+                        icon = Icons.Outlined.SystemUpdate,
+                        title = stringResource(R.string.update_check),
+                        summary = updateSummary,
+                        onClick = ::checkForUpdates,
+                    )
+                } else {
+                    SettingsItem(
+                        icon = Icons.Outlined.Info,
+                        title = stringResource(R.string.update_version, installedVersion),
+                        summary = stringResource(R.string.update_fdroid),
+                        onClick = {},
+                    )
+                }
             }
         }
     }

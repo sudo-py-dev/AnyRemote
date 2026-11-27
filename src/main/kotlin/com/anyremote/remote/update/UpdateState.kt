@@ -26,8 +26,11 @@ internal object UpdateState {
     var promptVisible by mutableStateOf(false)
         private set
 
+    /** False in the fdroid flavor, which has no internet access and leaves updates to F-Droid. */
+    val enabled: Boolean = BuildConfig.IN_APP_UPDATES
+
     /** Debug builds are signed with another key, so they can't install releases. */
-    val canInstall: Boolean = !BuildConfig.DEBUG
+    val canInstall: Boolean = enabled && !BuildConfig.DEBUG
 
     /** Opens the update dialog, in builds that can install the update. */
     fun showPrompt() {
@@ -42,7 +45,7 @@ internal object UpdateState {
 
     /** Checks GitHub for a newer release and opens the dialog when one exists. */
     suspend fun check() {
-        if (status == Status.Checking) return
+        if (!enabled || status == Status.Checking) return
         val previous = status
         status = Status.Checking
         try {

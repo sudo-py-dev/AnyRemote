@@ -187,6 +187,7 @@
     <string name="update_checking">Suche nach Updates…</string>
     <string name="update_latest">Version %1$s ist aktuell</string>
     <string name="update_check_failed">Suche nach Updates fehlgeschlagen. Tippe, um es erneut zu versuchen.</string>
+    <string name="update_fdroid">Updates kommen über F-Droid</string>
     <string name="crash_title">AnyRemote wurde unerwartet beendet</string>
     <string name="crash_message">Ein Fehler ist aufgetreten und die App musste geschlossen werden. Melde ihn auf GitHub, damit er behoben werden kann. Der Bericht enthält App-Version, Android-Version und Gerätemodell. Du kannst ihn vor dem Absenden prüfen.</string>
     <string name="crash_report">Absturzbericht</string>

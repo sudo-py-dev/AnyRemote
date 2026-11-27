@@ -187,6 +187,7 @@
     <string name="update_checking">正在检查更新…</string>
     <string name="update_latest">版本 %1$s 已是最新</string>
     <string name="update_check_failed">无法检查更新。点按重试。</string>
+    <string name="update_fdroid">更新通过 F-Droid 提供</string>
     <string name="crash_title">AnyRemote 意外停止</string>
     <string name="crash_message">出现问题，应用已关闭。请在 GitHub 上报告，以便修复。报告包含应用版本、Android 版本和设备型号，提交前你可以先检查。</string>
     <string name="crash_report">崩溃报告</string>

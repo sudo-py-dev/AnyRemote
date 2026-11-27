@@ -4,13 +4,22 @@ App, test, and screenshot preview code use Kotlin. The Gradle build uses Kotlin 
 
 ## Build and check
 
-Use JDK 27 and Android SDK platform 37.2. The project targets Java 17 bytecode for Android compatibility.
+Use JDK 25 and Android SDK platform 37.2. The project targets Java 17 bytecode for Android compatibility.
 
 ```bash
-./gradlew testDebugUnitTest lintDebug assembleDebug
+./gradlew testGithubDebugUnitTest lintGithubDebug assembleGithubDebug
 ```
 
-The APK is in `build/outputs/apk/debug/`. To install it on a connected device, run `./gradlew installDebug`.
+The APK is in `build/outputs/apk/github/debug/`. To install it on a connected device, run `./gradlew installGithubDebug`.
+
+### Flavors
+
+| Flavor | For | Updates | Internet |
+| --- | --- | --- | --- |
+| `github` (default) | GitHub releases | Checks GitHub and installs from the app | Yes |
+| `fdroid` | F-Droid | Handled by the F-Droid client | None: no `INTERNET` permission |
+
+Both share all code in `src/main/`. The `github` flavor adds the internet, install and file-provider entries from `src/github/AndroidManifest.xml`, and `BuildConfig.IN_APP_UPDATES` switches the update check, dialog and Settings item off in `fdroid`. Build the F-Droid variant with `./gradlew assembleFdroidRelease`. F-Droid builds and signs it from the release tag using [`metadata/com.anyremote.remote.yml`](fdroid/com.anyremote.remote.yml), and the store listing comes from `fastlane/metadata/android/`.
 
 Download the standalone jar for [ktfmt 0.64](https://kotlin.github.io/ktfmt/). Point `KTFMT_JAR` at it, or save it as `ktfmt.jar` in the repository root.
 
@@ -23,13 +32,15 @@ Download the standalone jar for [ktfmt 0.64](https://kotlin.github.io/ktfmt/). P
 
 - `src/main/kotlin/com/anyremote/remote/` contains the app entry point, screens, catalog, IR encoders, platform integrations, and updater.
 - `src/main/res/` contains Android resources and translations.
+- `src/github/` contains what only the GitHub-release flavor ships: the update permissions and file provider.
+- `fastlane/metadata/android/` contains the F-Droid store listing.
 - `src/main/assets/remote.json` contains the local remote catalog.
 - `src/test/kotlin/` contains unit tests. `src/screenshotTest/kotlin/` contains Compose previews for screenshot checks.
 - `gradle/libs.versions.toml` contains dependency versions.
 
 ### Release builds
 
-`./gradlew assembleRelease` produces a minified build. It is signed only when a password is available, either from the `ANYREMOTE_KEYSTORE_PASSWORD` environment variable or a `keystore.password` file in the project root, together with `release.keystore` (key alias `key0`). Without them you get an unsigned APK. Keystore and password files are git-ignored; never commit them.
+`./gradlew assembleGithubRelease` produces a minified build. It is signed only when a password is available, either from the `ANYREMOTE_KEYSTORE_PASSWORD` environment variable or a `keystore.password` file in the project root, together with `release.keystore` (key alias `key0`). Without them you get an unsigned APK. Keystore and password files are git-ignored; never commit them.
 
 ## Editing the remote catalog
 

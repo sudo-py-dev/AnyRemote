@@ -1,0 +1,4 @@
+First release on F-Droid.
+• No internet permission: updates come through F-Droid
+• Crash screen that lets you review a report before sending it
+• Language picker shows country flags

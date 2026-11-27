@@ -27,6 +27,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 internal fun UpdatePrompt() {
+    if (!UpdateState.enabled) return
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var verifiedApk by remember { mutableStateOf<File?>(null) }

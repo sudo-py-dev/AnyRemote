@@ -36,7 +36,7 @@ internal object CrashReport {
     fun format(thread: Thread, error: Throwable): String =
         format(
             appVersion =
-                "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})" +
+                "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE}) ${BuildConfig.FLAVOR}" +
                     if (BuildConfig.DEBUG) " debug" else "",
             android = "${Build.VERSION.RELEASE} (API ${Build.VERSION.SDK_INT})",
             device = "${Build.MANUFACTURER} ${Build.MODEL}",
