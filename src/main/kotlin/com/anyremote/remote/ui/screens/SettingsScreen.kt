@@ -129,7 +129,12 @@ fun SettingsScreen(onBackClick: () -> Unit) {
         }
 
     fun checkForUpdates() {
-        if (UpdateState.status == UpdateState.Status.Available && update != null) {
+        // Builds that can't install (debug) check again on every tap instead.
+        if (
+            UpdateState.canInstall &&
+                UpdateState.status == UpdateState.Status.Available &&
+                update != null
+        ) {
             UpdateState.showPrompt()
         } else {
             scope.launch { UpdateState.check() }

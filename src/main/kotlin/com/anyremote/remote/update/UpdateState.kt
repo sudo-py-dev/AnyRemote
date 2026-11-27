@@ -26,9 +26,12 @@ internal object UpdateState {
     var promptVisible by mutableStateOf(false)
         private set
 
-    /** Opens the update dialog. Debug builds are signed with another key and can't install releases. */
+    /** Debug builds are signed with another key, so they can't install releases. */
+    val canInstall: Boolean = !BuildConfig.DEBUG
+
+    /** Opens the update dialog, in builds that can install the update. */
     fun showPrompt() {
-        if (!BuildConfig.DEBUG) promptVisible = true
+        if (canInstall) promptVisible = true
     }
 
     fun hidePrompt() {
