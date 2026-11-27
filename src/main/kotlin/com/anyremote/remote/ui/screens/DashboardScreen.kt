@@ -1,6 +1,15 @@
 package com.anyremote.remote.ui.screens
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
@@ -141,18 +150,10 @@ fun DashboardScreen(
                 },
             )
         },
-        floatingActionButton = {
-            if (!addingRemote && remotes.isNotEmpty()) {
-                ExtendedFloatingActionButton(
-                    onClick = { addingRemote = true },
-                    icon = { Icon(Icons.Default.Add, contentDescription = null) },
-                    text = { Text(stringResource(R.string.add_remote)) },
-                )
-            }
-        },
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { innerPadding ->
-        Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
+        BoxWithConstraints(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
+            val addButtonLift = minOf(320.dp, maxHeight * 0.33f)
             val device = selectedDevice
             when {
                 !addingRemote ->
@@ -166,9 +167,18 @@ fun DashboardScreen(
                         onRemoteClick = { onFavoriteSelected(it.device.id, it.brand.id) },
                         onRemoteOptions = { optionsFor = it },
                         onAddClick = { addingRemote = true },
+                        bottomPadding = if (remotes.isEmpty()) 16.dp else addButtonLift + 80.dp,
                     )
                 device == null -> CategorySelectionGrid(onCategoryClick = { selectedDevice = it })
                 else -> BrandSelectionPanel(device = device, onBrandClick = { onDeviceSelected(device.id, it.id) })
+            }
+            AnimatedVisibility(
+                visible = !addingRemote && remotes.isNotEmpty(),
+                modifier = Modifier.align(Alignment.BottomEnd).padding(end = 16.dp, bottom = addButtonLift),
+                enter = fadeIn(tween(180)) + slideInVertically(tween(220)) { it / 3 },
+                exit = fadeOut(tween(100)),
+            ) {
+                AddRemoteButton(onClick = { addingRemote = true })
             }
         }
     }
@@ -215,6 +225,29 @@ fun DashboardScreen(
 }
 
 @Composable
+private fun AddRemoteButton(onClick: () -> Unit) {
+    val interaction = remember { MutableInteractionSource() }
+    val pressed by interaction.collectIsPressedAsState()
+    val scale by animateFloatAsState(
+        targetValue = if (pressed) 0.93f else 1f,
+        animationSpec = tween(if (pressed) 75 else 160),
+        label = "Add remote press",
+    )
+    ExtendedFloatingActionButton(
+        onClick = onClick,
+        icon = { Icon(Icons.Default.Add, contentDescription = null) },
+        text = { Text(stringResource(R.string.add_remote)) },
+        interactionSource = interaction,
+        containerColor = MaterialTheme.colorScheme.primary,
+        contentColor = MaterialTheme.colorScheme.onPrimary,
+        modifier = Modifier.graphicsLayer {
+            scaleX = scale
+            scaleY = scale
+        },
+    )
+}
+
+@Composable
 internal fun RemotesHome(
     remotes: List<SavedRemote>,
     showIrNotice: Boolean,
@@ -222,11 +255,12 @@ internal fun RemotesHome(
     onRemoteClick: (SavedRemote) -> Unit,
     onRemoteOptions: (SavedRemote) -> Unit,
     onAddClick: () -> Unit,
+    bottomPadding: androidx.compose.ui.unit.Dp = 96.dp,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 160.dp),
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 96.dp),
+        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = bottomPadding),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
@@ -370,8 +404,10 @@ private fun RemoteTile(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Surface(
                     shape = CircleShape,
-                    color = MaterialTheme.colorScheme.secondaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                    color = if (remote.device.id == 3) MaterialTheme.colorScheme.tertiaryContainer
+                        else MaterialTheme.colorScheme.secondaryContainer,
+                    contentColor = if (remote.device.id == 3) MaterialTheme.colorScheme.onTertiaryContainer
+                        else MaterialTheme.colorScheme.onSecondaryContainer,
                     modifier = Modifier.size(44.dp),
                 ) {
                     Box(contentAlignment = Alignment.Center) {
