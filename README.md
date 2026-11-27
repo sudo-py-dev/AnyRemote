@@ -26,4 +26,4 @@ Turn your Android phone into a remote for your TV, air conditioner, fan, project
 
 Compatibility depends on the exact model. If yours is missing, [open an issue](https://github.com/sudo-py-dev/AnyRemote/issues) with the brand and model number.
 
-[Developer guide](docs/development.md) · [Remote catalog notes](docs/missing-ir-brands.md) · [MIT License](LICENSE)
+[Developer guide](docs/development.md) · [Remote catalog notes](docs/missing-ir-brands.md) · [Security policy](SECURITY.md) · [MIT License](LICENSE)
