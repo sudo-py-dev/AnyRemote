@@ -10,7 +10,10 @@ import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.outlined.BrightnessAuto
 import androidx.compose.material.icons.outlined.DarkMode
+import androidx.compose.material.icons.outlined.LightMode
+import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Vibration
@@ -49,6 +52,15 @@ private val themeModes =
         "light" to R.string.theme_light,
         "dark" to R.string.theme_dark,
     )
+
+private fun themeIcon(mode: String): ImageVector = when (mode) {
+    "light" -> Icons.Outlined.LightMode
+    "dark" -> Icons.Outlined.DarkMode
+    else -> Icons.Outlined.BrightnessAuto
+}
+
+private fun languageIcon(code: String): ImageVector =
+    if (code == "system") Icons.Outlined.Language else Icons.Outlined.Translate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -89,7 +101,7 @@ fun SettingsScreen(onBackClick: () -> Unit) {
         ) {
             SettingsGroup(stringResource(R.string.appearance)) {
                 SettingsItem(
-                    icon = Icons.Outlined.DarkMode,
+                    icon = themeIcon(themeMode),
                     title = stringResource(R.string.dark_light_mode),
                     summary = themeLabel,
                     onClick = { showThemeDialog = true },
@@ -107,7 +119,7 @@ fun SettingsScreen(onBackClick: () -> Unit) {
 
             SettingsGroup(stringResource(R.string.general)) {
                 SettingsItem(
-                    icon = Icons.Outlined.Language,
+                    icon = languageIcon(langCode),
                     title = stringResource(R.string.language_selection),
                     summary = languageLabel,
                     onClick = { showLanguageDialog = true },
@@ -128,6 +140,7 @@ fun SettingsScreen(onBackClick: () -> Unit) {
             title = stringResource(R.string.select_theme),
             options = themeModes.map { it.first to stringResource(it.second) },
             selected = themeMode,
+            optionIcon = ::themeIcon,
             onSelect = {
                 FavoriteManager.setThemeMode(context, it)
                 showThemeDialog = false
@@ -141,6 +154,7 @@ fun SettingsScreen(onBackClick: () -> Unit) {
             title = stringResource(R.string.select_language),
             options = listOf("system" to systemLabel) + languages,
             selected = langCode,
+            optionIcon = ::languageIcon,
             onSelect = {
                 showLanguageDialog = false
                 if (it != langCode) LocaleManager.setLanguage(context, it)
@@ -214,6 +228,7 @@ private fun ChoiceDialog(
     title: String,
     options: List<Pair<String, String>>,
     selected: String,
+    optionIcon: (String) -> ImageVector,
     onSelect: (String) -> Unit,
     onDismiss: () -> Unit,
 ) {
@@ -237,6 +252,8 @@ private fun ChoiceDialog(
                     ) {
                         RadioButton(selected = value == selected, onClick = null)
                         Spacer(Modifier.width(16.dp))
+                        Icon(optionIcon(value), contentDescription = null)
+                        Spacer(Modifier.width(12.dp))
                         Text(label, style = MaterialTheme.typography.bodyLarge)
                     }
                 }
