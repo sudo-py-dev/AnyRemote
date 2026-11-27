@@ -39,7 +39,7 @@ jobs:
       - uses: gradle/actions/setup-gradle@v6
 
       - name: Render previews
-        run: ./gradlew updateScreenshotTestDefaultDebugTestSuite
+        run: ./gradlew updateDebugScreenshotTestDefaultTestSuite
 
       - name: Collect images
         if: always()

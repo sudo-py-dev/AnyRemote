@@ -39,6 +39,10 @@ annotation class PhonePreviews
 @Preview(name = "dark", device = TALL, showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 annotation class TallPreviews
 
+@Preview(name = "arabic", device = PHONE, showBackground = true, locale = "ar")
+@Preview(name = "hebrew", device = PHONE, showBackground = true, locale = "iw")
+annotation class RtlPhonePreviews
+
 private fun brands(vararg names: String) =
     names.mapIndexed { i, n -> Brand(id = i + 1, nameEn = n, category = if (i < 3) "popular" else "other") }
 
@@ -137,12 +141,12 @@ fun DashboardWithRemotes() =
         )
     }
 
-@PreviewTest @PhonePreviews @Composable fun DeviceTypePicker() = Themed { CategorySelectionGrid(onCategoryClick = {}) }
+@PreviewTest @PhonePreviews @RtlPhonePreviews @Composable fun DeviceTypePicker() = Themed { CategorySelectionGrid(onCategoryClick = {}) }
 
-@PreviewTest @PhonePreviews @Composable fun BrandPicker() = Themed { BrandSelectionPanel(device = sampleDevices[0], onBrandClick = {}) }
+@PreviewTest @PhonePreviews @RtlPhonePreviews @Composable fun BrandPicker() = Themed { BrandSelectionPanel(device = sampleDevices[0], onBrandClick = {}) }
 
 @PreviewTest
-@PhonePreviews
+@PhonePreviews @RtlPhonePreviews
 @Composable
 fun PairingWizard() =
     Themed {
@@ -150,15 +154,16 @@ fun PairingWizard() =
     }
 
 @PreviewTest
-@PhonePreviews
+@PhonePreviews @RtlPhonePreviews
 @Composable
 fun RenameRemote() =
     Themed { EditRemoteScreen(device = sampleDevices[0], brand = sampleDevices[0].brands[0], onDismiss = {}, onSave = {}) }
 
-@PreviewTest @PhonePreviews @Composable fun Settings() = Themed { SettingsScreen(onBackClick = {}) }
+@PreviewTest @PhonePreviews @RtlPhonePreviews @Composable fun Settings() = Themed { SettingsScreen(onBackClick = {}) }
 
 // Right-to-left check: Hebrew is one of the supported languages.
 @PreviewTest
+@Preview(name = "arabic", device = TALL, showBackground = true, locale = "ar")
 @Preview(name = "hebrew", device = TALL, showBackground = true, locale = "iw")
 @Composable
 fun TvRemoteRtl() = Remote(1)

@@ -24,6 +24,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -128,7 +130,9 @@ private fun NumberPad(onKeyPressed: (RemoteKey) -> Unit) {
     ) {
         numberPad.forEach { row ->
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                row.forEach { label ->
+                // Physical keypad order stays 1–2–3 from left to right in every locale.
+                val keys = if (LocalLayoutDirection.current == LayoutDirection.Rtl) row.reversed() else row
+                keys.forEach { label ->
                     val scheme = MaterialTheme.colorScheme
                     val special = label == "-" || label == "⌫"
                     RemoteButton(

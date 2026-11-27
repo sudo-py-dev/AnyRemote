@@ -13,8 +13,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.PowerSettingsNew
@@ -27,6 +27,7 @@ import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -392,8 +393,8 @@ fun DPad(
         listOf(
                 DPadArrow(RemoteKey.UP, Icons.Default.KeyboardArrowUp, Alignment.TopCenter, R.string.cd_up),
                 DPadArrow(RemoteKey.DOWN, Icons.Default.KeyboardArrowDown, Alignment.BottomCenter, R.string.cd_down),
-                DPadArrow(RemoteKey.LEFT, Icons.AutoMirrored.Filled.KeyboardArrowLeft, Alignment.CenterStart, R.string.cd_left),
-                DPadArrow(RemoteKey.RIGHT, Icons.AutoMirrored.Filled.KeyboardArrowRight, Alignment.CenterEnd, R.string.cd_right),
+                DPadArrow(RemoteKey.LEFT, Icons.Default.KeyboardArrowLeft, AbsoluteAlignment.CenterLeft, R.string.cd_left),
+                DPadArrow(RemoteKey.RIGHT, Icons.Default.KeyboardArrowRight, AbsoluteAlignment.CenterRight, R.string.cd_right),
             )
             .forEach { (key, icon, alignment, description) ->
                 RemoteButton(
