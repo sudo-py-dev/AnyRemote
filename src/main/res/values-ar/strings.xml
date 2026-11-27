@@ -187,6 +187,7 @@
     <string name="update_checking">جارٍ التحقق من التحديثات…</string>
     <string name="update_latest">الإصدار %1$s هو الأحدث</string>
     <string name="update_check_failed">تعذّر التحقق من التحديثات. انقر للمحاولة مجددًا.</string>
+    <string name="update_fdroid">تصل التحديثات عبر F-Droid</string>
     <string name="crash_title">توقّف AnyRemote بشكل غير متوقع</string>
     <string name="crash_message">حدث خطأ واضطر التطبيق إلى الإغلاق. أبلِغ عنه على GitHub ليتم إصلاحه. يتضمن التقرير إصدار التطبيق وإصدار Android وطراز الجهاز، ويمكنك مراجعته قبل الإرسال.</string>
     <string name="crash_report">تقرير العطل</string>

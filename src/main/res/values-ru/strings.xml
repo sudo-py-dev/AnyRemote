@@ -187,6 +187,7 @@
     <string name="update_checking">Проверка обновлений…</string>
     <string name="update_latest">Версия %1$s — последняя</string>
     <string name="update_check_failed">Не удалось проверить обновления. Нажмите, чтобы повторить.</string>
+    <string name="update_fdroid">Обновления приходят через F-Droid</string>
     <string name="crash_title">AnyRemote неожиданно остановлено</string>
     <string name="crash_message">Произошла ошибка, и приложение закрылось. Сообщите о ней на GitHub, чтобы её исправили. Отчёт содержит версию приложения, версию Android и модель устройства. Его можно проверить перед отправкой.</string>
     <string name="crash_report">Отчёт о сбое</string>

@@ -21,7 +21,7 @@ plugins {
 }
 
 kotlin {
-    jvmToolchain(27)
+    jvmToolchain(25)
 }
 
 android {
@@ -37,6 +37,21 @@ android {
         targetSdk = 37
         versionCode = 4
         versionName = "0.0.4"
+    }
+
+    flavorDimensions += "distribution"
+    productFlavors {
+        // GitHub releases: checks GitHub for new versions and installs them from the app.
+        create("github") {
+            dimension = "distribution"
+            isDefault = true
+            buildConfigField("boolean", "IN_APP_UPDATES", "true")
+        }
+        // F-Droid: no internet access at all. The F-Droid client handles updates.
+        create("fdroid") {
+            dimension = "distribution"
+            buildConfigField("boolean", "IN_APP_UPDATES", "false")
+        }
     }
 
     val keystorePassword =
@@ -74,7 +89,7 @@ android {
         testOptions {
             screenshotTests.create("screenshotTest") {
                 engineVersion = libs.versions.screenshot.get()
-                targetVariants.add("debug")
+                targetVariants.add("githubDebug")
 
                 dependencies {
                     implementation(libs.androidx.compose.ui.tooling)

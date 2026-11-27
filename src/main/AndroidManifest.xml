@@ -4,16 +4,7 @@
     <!-- Permission to transmit IR signals via physical blaster -->
     <uses-permission android:name="android.permission.TRANSMIT_IR" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-feature android:name="android.hardware.consumerir" android:required="false" />
-
-    <queries>
-        <intent>
-            <action android:name="android.intent.action.VIEW" />
-            <data android:scheme="content" android:mimeType="application/vnd.android.package-archive" />
-        </intent>
-    </queries>
 
     <application
         android:name=".AnyRemoteApp"
@@ -55,16 +46,6 @@
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
-
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.updates"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/update_paths" />
-        </provider>
 
         <!-- Custom Interactive Home Screen Widget -->
         <receiver

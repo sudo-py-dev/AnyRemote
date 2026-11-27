@@ -1,0 +1,17 @@
+<p>AnyRemote turns an Android phone with a built-in infrared (IR) blaster into a remote control for your TV, air conditioner, fan, projector and more.</p>
+
+<p><b>Features</b></p>
+<ul>
+<li>Many device types: TVs, set-top and streaming boxes, air conditioners, fans, A/V receivers, projectors, DVD players and cameras</li>
+<li>Pick a brand or model, tap the test button and step through code sets until your device responds</li>
+<li>Save, rename and favorite the remotes you use every day</li>
+<li>Home screen widgets and shortcuts, plus a Quick Settings tile</li>
+<li>Light and dark themes, and dynamic colors on Android 12 and later</li>
+<li>11 languages: English, Arabic, Chinese, French, German, Hebrew, Italian, Japanese, Portuguese, Russian and Spanish</li>
+</ul>
+
+<p><b>Privacy</b></p>
+<p>The F-Droid version has no internet permission. Everything runs on your phone, with no ads, trackers or account. If the app crashes, it shows you the report, and you choose whether to open a GitHub issue with it in your browser.</p>
+
+<p><b>Requirements</b></p>
+<p>Android 8.0 or later and a phone with a built-in IR blaster. Compatibility depends on the exact device model.</p>

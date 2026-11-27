@@ -23,7 +23,7 @@ jobs:
       - uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6
         with:
           distribution: temurin
-          java-version: 27
+          java-version: 25
 
       - uses: android-actions/setup-android@be39fa834029ff78f1a44aa3bb0819b8fc2bd8fd # v4
 
@@ -33,14 +33,15 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@8da46b539cd8fe6ab27ca75128919a18d757604c # v6
 
+      # Both flavors: github (in-app updates) and fdroid (no internet access).
       - name: Test, build and lint
-        run: ./gradlew testDebugUnitTest assembleDebug lintDebug
+        run: ./gradlew testGithubDebugUnitTest assembleGithubDebug assembleFdroidDebug lintGithubDebug lintFdroidDebug
 
       - name: Upload debug APK
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
-          name: anyremote-debug-apk
-          path: build/outputs/apk/debug/*.apk
+          name: anyremote-debug-apks
+          path: build/outputs/apk/*/debug/*.apk
           if-no-files-found: error
 
       - name: Upload lint report
@@ -48,5 +49,5 @@ jobs:
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: lint-report
-          path: build/reports/lint-results-debug.html
+          path: build/reports/lint-results-*Debug.html
           if-no-files-found: ignore
