@@ -46,6 +46,8 @@
     <string name="remove_remote">إزالة جهاز التحكم</string>
     <string name="cancel">إلغاء</string>
     <string name="save">حفظ</string>
+    <string name="remote_name_count">%1$d / %2$d</string>
+    <string name="remote_name_too_long">استخدم %1$d حرفًا كحد أقصى.</string>
     <string name="remote_name_label">اسم جهاز التحكم</string>
     <string name="search_placeholder">ابحث بالعلامة التجارية أو الطراز أو رقم جهاز التحكم</string>
     <string name="device_name_label">اسم الجهاز</string>

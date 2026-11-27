@@ -172,3 +172,22 @@ fun TvRemoteRtl() = Remote(1)
 @Preview(name = "hebrew", device = PHONE, showBackground = true, locale = "iw")
 @Composable
 fun DashboardRtl() = DashboardWithRemotes()
+
+@PreviewTest
+@Preview(name = "compact", device = "spec:width=320dp,height=640dp", fontScale = 1.3f)
+@Preview(name = "compact-hebrew", device = "spec:width=320dp,height=640dp", locale = "iw", fontScale = 1.3f)
+@Composable
+fun MaximumRemoteNames() = Themed {
+    val tv = sampleDevices.first()
+    RemotesHome(
+        remotes = listOf(
+            SavedRemote(tv, tv.brands[0], "W".repeat(40)),
+            SavedRemote(tv, tv.brands[1], "טלוויזיה בסלון ".repeat(3).take(40)),
+        ),
+        showIrNotice = false,
+        onDismissIrNotice = {},
+        onRemoteClick = {},
+        onRemoteOptions = {},
+        onAddClick = {},
+    )
+}

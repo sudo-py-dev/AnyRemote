@@ -22,6 +22,7 @@ import com.anyremote.remote.R
 import com.anyremote.remote.data.RemoteDatabase.Brand
 import com.anyremote.remote.data.RemoteDatabase.DeviceType
 import com.anyremote.remote.service.FavoriteManager
+import com.anyremote.remote.service.RemoteName
 import com.anyremote.remote.ui.helpers.defaultRemoteName
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
@@ -38,7 +39,9 @@ fun EditRemoteScreen(
             FavoriteManager.getCustomName(context, device.id, brand.id, defaultRemoteName(context, device, brand))
         }
     var nameInput by rememberSaveable(device.id, brand.id) { mutableStateOf(currentName) }
-    val canSave = nameInput.isNotBlank()
+    val length = RemoteName.length(nameInput)
+    val tooLong = length > RemoteName.MAX_LENGTH
+    val canSave = RemoteName.isValid(nameInput)
     fun save() {
         if (canSave) onSave(nameInput.trim())
     }
@@ -76,7 +79,13 @@ fun EditRemoteScreen(
                 onValueChange = { nameInput = it },
                 label = { Text(stringResource(R.string.remote_name_label)) },
                 singleLine = true,
-                isError = !canSave,
+                isError = tooLong,
+                supportingText = {
+                    Text(
+                        if (tooLong) stringResource(R.string.remote_name_too_long, RemoteName.MAX_LENGTH)
+                        else stringResource(R.string.remote_name_count, length, RemoteName.MAX_LENGTH),
+                    )
+                },
                 keyboardOptions =
                     KeyboardOptions(capitalization = KeyboardCapitalization.Words, imeAction = ImeAction.Done),
                 keyboardActions = KeyboardActions(onDone = { save() }),

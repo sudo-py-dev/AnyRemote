@@ -46,6 +46,8 @@
     <string name="remove_remote">הסר שלט</string>
     <string name="cancel">ביטול</string>
     <string name="save">שמור</string>
+    <string name="remote_name_count">%1$d / %2$d</string>
+    <string name="remote_name_too_long">יש להזין עד %1$d תווים.</string>
     <string name="remote_name_label">שם השלט</string>
     <string name="search_placeholder">חיפוש לפי מותג, דגם או מספר שלט</string>
     <string name="device_name_label">שם המכשיר</string>

@@ -107,8 +107,8 @@ object FavoriteManager {
         brandId: Int,
         customName: String,
     ) {
-        val prefs = prefs(context)
-        prefs.edit().putString("name_${deviceId}_$brandId", customName).apply()
+        if (!RemoteName.isValid(customName)) return
+        prefs(context).edit().putString("name_${deviceId}_$brandId", customName.trim()).apply()
     }
 
     /** Codeset the user confirmed in the match wizard for this device/brand (1 if never matched). */
