@@ -86,4 +86,13 @@
 
     </application>
 
+    <!-- Lets the crash screen find the installed browsers, so a report opens only in one. -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
+        </intent>
+    </queries>
+
 </manifest>

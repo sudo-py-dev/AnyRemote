@@ -1,6 +1,5 @@
 package com.anyremote.remote.crash
 
-import android.content.ActivityNotFoundException
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -144,11 +143,20 @@ class CrashActivity : ComponentActivity() {
     private fun report(report: String) {
         // Long traces are shortened to fit the link, so the full report goes on the clipboard.
         copy(report, announce = false)
-        try {
-            startActivity(Intent(Intent.ACTION_VIEW, CrashReport.issueUrl(report).toUri()))
-        } catch (_: ActivityNotFoundException) {
-            Toast.makeText(this, R.string.crash_no_browser, Toast.LENGTH_LONG).show()
-        }
+        // Only a browser fills in the report field; the GitHub app fills in just the title.
+        // Any failure here (no browser, a browser that refuses, a bad link) must not crash the
+        // crash screen, so it falls back to the message below.
+        val opened =
+            try {
+                val url = CrashReport.issueUrl(report).toUri()
+                val intent = Browsers.intentFor(this, url, getString(R.string.crash_report_github))
+                if (intent != null) startActivity(intent)
+                intent != null
+            } catch (_: RuntimeException) {
+                false
+            }
+        // No browser: the report is already on the clipboard to paste into a new issue.
+        if (!opened) Toast.makeText(this, R.string.crash_no_browser, Toast.LENGTH_LONG).show()
     }
 
     private fun restart() {

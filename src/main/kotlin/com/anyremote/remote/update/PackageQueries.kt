@@ -30,3 +30,17 @@ private fun PackageManager.legacyArchiveInfo(path: String): PackageInfo? =
 @Suppress("DEPRECATION")
 private fun PackageManager.legacyActivitiesFor(intent: Intent, flags: Int): List<ResolveInfo> =
     queryIntentActivities(intent, flags)
+
+internal fun PackageManager.defaultActivityFor(intent: Intent): ResolveInfo? =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        resolveActivity(
+            intent,
+            PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_DEFAULT_ONLY.toLong()),
+        )
+    } else {
+        legacyDefaultActivityFor(intent)
+    }
+
+@Suppress("DEPRECATION")
+private fun PackageManager.legacyDefaultActivityFor(intent: Intent): ResolveInfo? =
+    resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
