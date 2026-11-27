@@ -3,6 +3,7 @@ package com.anyremote.remote.ir
 import com.anyremote.remote.data.RemoteDatabase.DeviceType
 import com.anyremote.remote.data.RemoteDatabase.Brand
 import com.anyremote.remote.data.RemoteDatabase.RemoteProfile
+import com.anyremote.remote.data.BrandSearchIndex
 import com.anyremote.remote.data.searchBrands
 import org.junit.Assert.*
 import org.junit.Test
@@ -21,6 +22,22 @@ class RemoteProfileTest {
         }
         assertEquals(setOf(1, 4), devices.searchBrands("Gree").map { it.id }.toSet())
         assertTrue(devices.searchBrands("32S327").isEmpty())
+    }
+
+    @Test fun cachedSearchPreservesRankingAcrossQueries() {
+        val index = BrandSearchIndex(DeviceType(1, "TV", listOf(
+            Brand(1, "Vizio Alpha", "normal"),
+            Brand(2, "Vizio Beta", "popular"),
+            Brand(3, "Vizio", "normal"),
+            Brand(4, "Vízio V5", "normal", listOf("V-5"),
+                RemoteProfile.Nec(ModelCommands(0, 255, mapOf(RemoteKey.POWER to 1)), RemoteKey.POWER)),
+        )))
+
+        assertEquals(listOf(3, 1, 2, 4), index.search(" ").map { it.id })
+        assertEquals(listOf(4, 3, 2, 1), index.search("vizio").map { it.id })
+        assertEquals(listOf(4), index.search("V-5").map { it.id })
+        assertTrue(index.search("…").isEmpty())
+        assertEquals(listOf(4, 3, 2, 1), index.search("vizio").map { it.id })
     }
 
     private fun bytes(pulses: IntArray, count: Int, isOne: (Int) -> Boolean) =
