@@ -28,8 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.anyremote.remote.R
 import com.anyremote.remote.data.RemoteDatabase
-import com.anyremote.remote.data.RemoteProfile
-import com.anyremote.remote.ir.ModelCommands
+import com.anyremote.remote.data.RemoteDatabase.RemoteProfile
 import androidx.compose.material.icons.filled.Home
 import com.anyremote.remote.ir.AcProtocol
 import com.anyremote.remote.ir.AcState
@@ -64,8 +63,8 @@ fun MatchIRScreen(
     val category = remember(deviceId) { RemoteDatabase.deviceTypes.firstOrNull { it.id == deviceId } }
     val brand = remember(brandId, category) { category?.brands?.firstOrNull { it.id == brandId } }
 
-    val profile = RemoteProfile.find(deviceId, brandId)
-    val commands = ModelCommands.forProfile(profile)
+    val profile = brand?.profile
+    val commands = (profile as? RemoteProfile.Nec)?.commands
     val totalCodesets = if (profile != null || deviceId == 3) 1 else IrCodebook.CODESET_COUNT
     var codeset by rememberSaveable { mutableIntStateOf(1) }
     var showResponseSheet by rememberSaveable { mutableStateOf(false) }
@@ -81,14 +80,13 @@ fun MatchIRScreen(
 
     val (testLabelRes, testIcon) =
         when {
-            profile == RemoteProfile.ONN -> R.string.cd_home to Icons.Default.Home
+            (profile as? RemoteProfile.Nec)?.testKey == RemoteKey.HOME -> R.string.cd_home to Icons.Default.Home
             deviceId == 6 -> R.string.button_fan_speed to Icons.Default.Air
             deviceId == 8 -> R.string.button_mute to Icons.AutoMirrored.Filled.VolumeOff
             else -> R.string.button_power to Icons.Default.PowerSettingsNew
         }
-    val testKey =
+    val testKey = (profile as? RemoteProfile.Nec)?.testKey ?:
         when {
-            profile == RemoteProfile.ONN -> RemoteKey.HOME
             deviceId == 6 -> RemoteKey.SPEED_UP
             deviceId == 8 -> RemoteKey.MUTE
             else -> RemoteKey.POWER
@@ -99,7 +97,7 @@ fun MatchIRScreen(
 
     suspend fun transmitTestPulse(): Boolean {
         val pulses =
-            if (deviceId == 3) AcState(power = true, swing = false).toPulses(profile?.acProtocol ?: AcProtocol.GREE)
+            if (deviceId == 3) AcState(power = true, swing = false).toPulses((profile as? RemoteProfile.AirConditioner)?.protocol ?: AcProtocol.GREE)
             else commands?.pulses(testKey) ?: IrCodebook.pulses(deviceId, codeset, testKey)
         return IRTransmitter.send(context, pulses)
     }

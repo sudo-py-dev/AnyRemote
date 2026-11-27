@@ -21,8 +21,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.anyremote.remote.R
 import com.anyremote.remote.data.RemoteDatabase
-import com.anyremote.remote.data.RemoteProfile
-import com.anyremote.remote.ir.ModelCommands
+import com.anyremote.remote.data.RemoteDatabase.RemoteProfile
 import com.anyremote.remote.ir.AcProtocol
 import com.anyremote.remote.ir.AcState
 import com.anyremote.remote.ir.IRTransmitter
@@ -69,8 +68,8 @@ fun RemoteControllerScreen(
     fun send(pulses: IntArray) {
         scope.launch { IRTransmitter.send(context, pulses) }
     }
-    val profile = RemoteProfile.find(deviceId, brandId)
-    val commands = ModelCommands.forProfile(profile)
+    val profile = brand?.profile
+    val commands = (profile as? RemoteProfile.Nec)?.commands
     val onKey: (RemoteKey) -> Unit = { key -> send(commands?.pulses(key) ?: IrCodebook.pulses(deviceId, codeset, key)) }
 
     var ac by rememberSaveable(stateSaver = AcState.Saver) { mutableStateOf(AcState()) }
@@ -164,10 +163,10 @@ fun RemoteControllerScreen(
                     3 ->
                         AcLayout(
                             state = ac,
-                            protocol = profile?.acProtocol ?: AcProtocol.GREE,
+                            protocol = (profile as? RemoteProfile.AirConditioner)?.protocol ?: AcProtocol.GREE,
                             onChange = {
                                 ac = it
-                                send(it.toPulses(profile?.acProtocol ?: AcProtocol.GREE))
+                                send(it.toPulses((profile as? RemoteProfile.AirConditioner)?.protocol ?: AcProtocol.GREE))
                             },
                         )
                     1, 2, 4, 11, 12 -> TvLayout(onKeyPressed = onKey)

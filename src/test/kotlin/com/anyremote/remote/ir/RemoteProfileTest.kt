@@ -1,20 +1,25 @@
 package com.anyremote.remote.ir
 
 import com.anyremote.remote.data.RemoteDatabase.DeviceType
-import com.anyremote.remote.data.RemoteProfile
+import com.anyremote.remote.data.RemoteDatabase.Brand
+import com.anyremote.remote.data.RemoteDatabase.RemoteProfile
 import com.anyremote.remote.data.searchBrands
 import org.junit.Assert.*
 import org.junit.Test
 
 class RemoteProfileTest {
     @Test fun modelAndHebrewQueriesFindTheRightProfiles() {
-        val devices = RemoteProfile.addTo(DeviceType(3, "AC", emptyList()))
-        for ((query, profile) in mapOf("תַּדִירָאן" to RemoteProfile.TADIRAN, "אלקטרה 17" to RemoteProfile.ELECTRA,
-            "003e ykr" to RemoteProfile.ELECTRA, "tac 495" to RemoteProfile.AMCOR, "גרי" to RemoteProfile.GREE)) {
-            assertTrue(query, devices.searchBrands(query).any { it.id == profile.brandId })
+        val devices = DeviceType(3, "AC", listOf(
+            Brand(1, "Tadiran · Gree", "popular", listOf("תדיראן"), RemoteProfile.AirConditioner(AcProtocol.GREE)),
+            Brand(2, "Electra Classic INV 17", "popular", listOf("אלקטרה", "YKR-M/003E"),
+                RemoteProfile.AirConditioner(AcProtocol.ELECTRA)),
+            Brand(3, "Amcor ADR-853H", "popular", listOf("TAC-495"), RemoteProfile.AirConditioner(AcProtocol.AMCOR)),
+            Brand(4, "Gree", "popular", listOf("גרי"), RemoteProfile.AirConditioner(AcProtocol.GREE)),
+        ))
+        for ((query, id) in mapOf("תַּדִירָאן" to 1, "אלקטרה 17" to 2, "003e ykr" to 2, "tac 495" to 3, "גרי" to 4)) {
+            assertTrue(query, devices.searchBrands(query).any { it.id == id })
         }
-        assertEquals(setOf(RemoteProfile.GREE.brandId, RemoteProfile.TADIRAN.brandId),
-            devices.searchBrands("Gree").map { it.id }.toSet())
+        assertEquals(setOf(1, 4), devices.searchBrands("Gree").map { it.id }.toSet())
         assertTrue(devices.searchBrands("32S327").isEmpty())
     }
 
@@ -33,7 +38,7 @@ class RemoteProfileTest {
     }
 
     @Test fun tclPowerUsesCapturedExtendedAddress() {
-        val commands = ModelCommands.forProfile(RemoteProfile.TCL)!!
+        val commands = ModelCommands(0xea, 0xc7, mapOf(RemoteKey.POWER to 0x17))
         val power = commands.pulses(RemoteKey.POWER)
         assertEquals(listOf(0xea, 0xc7, 0x17, 0xe8), bytes(power, 4) { power[it + 1] == 1690 })
         assertTrue(commands.pulses(RemoteKey.DIGIT_0).isEmpty())

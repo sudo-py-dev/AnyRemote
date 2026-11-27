@@ -31,7 +31,7 @@ AnyRemote is in early development (version 0.0.1).
 
 See the [missing IR brands inventory](docs/missing-ir-brands.md) for candidates and example captures.
 
-Edit `src/main/assets/remote.json` to add devices or brands. Each brand has a numeric `id`, a display name (`nameEn`), and a `category` used for search ranking. Keep existing device and brand IDs stable because favorites and launcher shortcuts use them. Model-specific IR commands live in the Kotlin codebook.
+Edit `src/main/assets/remote.json` to add devices or brands. Each brand has a numeric `id`, a display name (`nameEn`), and a `category` used for search ranking. Keep existing device and brand IDs stable because favorites and launcher shortcuts use them. Add alternate names in `aliases` and model-specific signals in `ir`. For NEC, supply `address` and `secondAddress` as decimal bytes and map logical button names such as `POWER` to command bytes in `keys`. Pairing uses `POWER` by default. Set `testKey` when the remote uses a different button for pairing. For AC profiles, use `GREE`, `ELECTRA`, or `AMCOR` as the protocol. Kotlin handles signal encoding.
 
 ## TV converters and receivers
 

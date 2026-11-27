@@ -256,13 +256,339 @@
         {"id": 245, "nameEn": "Uniden", "category": "normal"},
         {"id": 1762, "nameEn": "Yuhang", "category": "normal"},
         {"id": 2077, "nameEn": "Aerospace", "category": "normal"},
-        {"id": 664, "nameEn": "Zinwell", "category": "normal"}
+        {"id": 664, "nameEn": "Zinwell", "category": "normal"},
+        {
+          "id": 100004,
+          "nameEn": "TCL 32S327",
+          "category": "popular",
+          "aliases": [
+            "Roku TV",
+            "טי סי אל",
+            "רוקו"
+          ],
+          "ir": {
+            "protocol": "NEC",
+            "address": 234,
+            "secondAddress": 199,
+            "keys": {
+              "POWER": 23,
+              "VOLUME_UP": 15,
+              "VOLUME_DOWN": 16,
+              "OK": 42,
+              "UP": 25,
+              "DOWN": 51,
+              "RIGHT": 45,
+              "LEFT": 30,
+              "HOME": 3,
+              "BACK": 102
+            }
+          }
+        },
+        {
+          "id": 100005,
+          "nameEn": "LG TV · NEC",
+          "category": "popular",
+          "aliases": [
+            "אל ג׳י",
+            "LG infrared"
+          ],
+          "ir": {
+            "protocol": "NEC",
+            "address": 4,
+            "secondAddress": 251,
+            "keys": {
+              "POWER": 8,
+              "MUTE": 9,
+              "VOLUME_UP": 2,
+              "VOLUME_DOWN": 3,
+              "CHANNEL_UP": 0,
+              "CHANNEL_DOWN": 1
+            }
+          }
+        }
       ]
     },
     {
       "id": 2,
       "nameEn": "Set-top box",
-      "brands": []
+      "brands": [
+        {
+          "id": 100011,
+          "nameEn": "Apex Digital DT250",
+          "category": "popular",
+          "aliases": [
+            "DT-250",
+            "TV converter",
+            "ATSC",
+            "אייפקס"
+          ],
+          "ir": {
+            "protocol": "NEC",
+            "address": 12,
+            "secondAddress": 251,
+            "keys": {
+              "POWER": 21,
+              "MENU": 112,
+              "BACK": 15,
+              "UP": 2,
+              "DOWN": 3,
+              "OK": 24,
+              "DIGIT_0": 4,
+              "DIGIT_1": 5,
+              "DIGIT_2": 6,
+              "DIGIT_3": 7,
+              "DIGIT_4": 8,
+              "DIGIT_5": 9,
+              "DIGIT_6": 10,
+              "DIGIT_7": 11,
+              "DIGIT_8": 12,
+              "DIGIT_9": 13,
+              "DASH": 54
+            }
+          }
+        },
+        {
+          "id": 100012,
+          "nameEn": "Tilview DVB-T2",
+          "category": "popular",
+          "aliases": [
+            "TV converter",
+            "digital terrestrial"
+          ],
+          "ir": {
+            "protocol": "NEC",
+            "address": 53,
+            "secondAddress": 202,
+            "keys": {
+              "POWER": 1,
+              "MENU": 91,
+              "BACK": 22,
+              "MUTE": 18,
+              "VOLUME_DOWN": 0,
+              "VOLUME_UP": 7,
+              "CHANNEL_DOWN": 4,
+              "CHANNEL_UP": 11,
+              "OK": 21,
+              "UP": 23,
+              "RIGHT": 65,
+              "DOWN": 26,
+              "LEFT": 66
+            }
+          }
+        },
+        {
+          "id": 100013,
+          "nameEn": "Tesla TE-300",
+          "category": "popular",
+          "aliases": [
+            "TV converter",
+            "DVB-T2"
+          ],
+          "ir": {
+            "protocol": "NEC",
+            "address": 1,
+            "secondAddress": 253,
+            "keys": {
+              "POWER": 220,
+              "VOLUME_UP": 193,
+              "VOLUME_DOWN": 153,
+              "MUTE": 156
+            }
+          }
+        },
+        {
+          "id": 100014,
+          "nameEn": "Storex MediaZapper HD",
+          "category": "popular",
+          "aliases": [
+            "TV converter",
+            "terrestrial receiver"
+          ],
+          "ir": {
+            "protocol": "NEC",
+            "address": 4,
+            "secondAddress": 251,
+            "keys": {
+              "POWER": 26,
+              "VOLUME_UP": 69,
+              "VOLUME_DOWN": 25,
+              "MUTE": 14,
+              "OK": 92,
+              "CHANNEL_UP": 68,
+              "CHANNEL_DOWN": 29,
+              "BACK": 31,
+              "HOME": 10,
+              "LEFT": 28,
+              "RIGHT": 72,
+              "DIGIT_0": 71,
+              "DIGIT_1": 19,
+              "DIGIT_2": 16,
+              "DIGIT_3": 17,
+              "DIGIT_4": 15,
+              "DIGIT_5": 12,
+              "DIGIT_6": 13,
+              "DIGIT_7": 11,
+              "DIGIT_8": 8,
+              "DIGIT_9": 9
+            }
+          }
+        },
+        {
+          "id": 100015,
+          "nameEn": "Diprogress DVB-T",
+          "category": "popular",
+          "aliases": [
+            "TV converter",
+            "terrestrial receiver"
+          ],
+          "ir": {
+            "protocol": "NEC",
+            "address": 1,
+            "secondAddress": 254,
+            "keys": {
+              "POWER": 25,
+              "CHANNEL_UP": 30,
+              "CHANNEL_DOWN": 29,
+              "VOLUME_UP": 24,
+              "VOLUME_DOWN": 9,
+              "UP": 6,
+              "DOWN": 22,
+              "LEFT": 90,
+              "RIGHT": 27,
+              "OK": 26,
+              "MENU": 85,
+              "BACK": 11,
+              "MUTE": 18,
+              "DIGIT_0": 15,
+              "DIGIT_1": 82,
+              "DIGIT_2": 80,
+              "DIGIT_3": 16,
+              "DIGIT_4": 86,
+              "DIGIT_5": 84,
+              "DIGIT_6": 20,
+              "DIGIT_7": 78,
+              "DIGIT_8": 76,
+              "DIGIT_9": 12
+            }
+          }
+        },
+        {
+          "id": 100016,
+          "nameEn": "Octagon SF8008",
+          "category": "popular",
+          "aliases": [
+            "TV converter",
+            "terrestrial receiver"
+          ],
+          "ir": {
+            "protocol": "NEC",
+            "address": 7,
+            "secondAddress": 248,
+            "keys": {
+              "POWER": 89,
+              "MUTE": 25,
+              "UP": 6,
+              "DOWN": 22,
+              "LEFT": 90,
+              "RIGHT": 27,
+              "OK": 26,
+              "MENU": 69,
+              "BACK": 5,
+              "VOLUME_UP": 102,
+              "VOLUME_DOWN": 103,
+              "CHANNEL_UP": 19,
+              "CHANNEL_DOWN": 23,
+              "DIGIT_0": 15,
+              "DIGIT_1": 82,
+              "DIGIT_2": 80,
+              "DIGIT_3": 16,
+              "DIGIT_4": 86,
+              "DIGIT_5": 84,
+              "DIGIT_6": 20,
+              "DIGIT_7": 78,
+              "DIGIT_8": 76,
+              "DIGIT_9": 12
+            }
+          }
+        },
+        {
+          "id": 100017,
+          "nameEn": "Thomson THT501",
+          "category": "popular",
+          "aliases": [
+            "TV converter",
+            "terrestrial receiver"
+          ],
+          "ir": {
+            "protocol": "NEC",
+            "address": 0,
+            "secondAddress": 191,
+            "keys": {
+              "POWER": 89,
+              "MENU": 69,
+              "BACK": 5,
+              "UP": 6,
+              "DOWN": 22,
+              "LEFT": 90,
+              "RIGHT": 27,
+              "OK": 26,
+              "VOLUME_DOWN": 17,
+              "VOLUME_UP": 13,
+              "MUTE": 25,
+              "CHANNEL_DOWN": 22,
+              "CHANNEL_UP": 6,
+              "DIGIT_0": 15,
+              "DIGIT_1": 82,
+              "DIGIT_2": 80,
+              "DIGIT_3": 16,
+              "DIGIT_4": 86,
+              "DIGIT_5": 84,
+              "DIGIT_6": 20,
+              "DIGIT_7": 78,
+              "DIGIT_8": 76,
+              "DIGIT_9": 12
+            }
+          }
+        },
+        {
+          "id": 100009,
+          "nameEn": "Humax",
+          "category": "popular",
+          "aliases": [
+            "יומקס",
+            "הומקס"
+          ],
+          "ir": {
+            "protocol": "NEC",
+            "address": 0,
+            "secondAddress": 16,
+            "keys": {
+              "POWER": 0,
+              "VOLUME_UP": 31,
+              "VOLUME_DOWN": 64,
+              "CHANNEL_UP": 16,
+              "CHANNEL_DOWN": 15
+            }
+          }
+        },
+        {
+          "id": 100010,
+          "nameEn": "Octagon",
+          "category": "popular",
+          "aliases": [
+            "אוקטגון"
+          ],
+          "ir": {
+            "protocol": "NEC",
+            "address": 1,
+            "secondAddress": 4,
+            "keys": {
+              "POWER": 10,
+              "MUTE": 12
+            }
+          }
+        }
+      ]
     },
     {
       "id": 3,
@@ -439,7 +765,74 @@
         {"id": 560, "nameEn": "York", "category": "normal"},
         {"id": 171, "nameEn": "Chigo", "category": "popular"},
         {"id": 1929, "nameEn": "Zhongyi", "category": "normal"},
-        {"id": 1930, "nameEn": "Zuodan", "category": "normal"}
+        {"id": 1930, "nameEn": "Zuodan", "category": "normal"},
+        {
+          "id": 100001,
+          "nameEn": "Tadiran · Gree (wall-mounted)",
+          "category": "popular",
+          "aliases": [
+            "תדיראן",
+            "תדיראן עילי",
+            "מזגן עילי",
+            "wall mounted",
+            "גרי"
+          ],
+          "ir": {
+            "protocol": "GREE"
+          }
+        },
+        {
+          "id": 100002,
+          "nameEn": "Electra Classic INV 17",
+          "category": "popular",
+          "aliases": [
+            "אלקטרה",
+            "אלקטרה קלאסיק",
+            "AXW12DCS",
+            "YKR-M/003E"
+          ],
+          "ir": {
+            "protocol": "ELECTRA"
+          }
+        },
+        {
+          "id": 100003,
+          "nameEn": "AUX KFR-35GW/BpNFW=3",
+          "category": "popular",
+          "aliases": [
+            "YKR-T/011",
+            "אוקס"
+          ],
+          "ir": {
+            "protocol": "ELECTRA"
+          }
+        },
+        {
+          "id": 100007,
+          "nameEn": "Amcor ADR-853H",
+          "category": "popular",
+          "aliases": [
+            "אמקור",
+            "TAC-444",
+            "TAC-495"
+          ],
+          "ir": {
+            "protocol": "AMCOR"
+          }
+        },
+        {
+          "id": 100008,
+          "nameEn": "Gree",
+          "category": "popular",
+          "aliases": [
+            "גרי",
+            "גריי",
+            "Gree Electric"
+          ],
+          "ir": {
+            "protocol": "GREE"
+          }
+        }
       ]
     },
     {
@@ -555,7 +948,33 @@
         {"id": 537, "nameEn": "YSTen", "category": "normal"},
         {"id": 2247, "nameEn": "Yishiteng", "category": "normal"},
         {"id": 532, "nameEn": "Inphic", "category": "normal"},
-        {"id": 2240, "nameEn": "Youku", "category": "popular"}
+        {"id": 2240, "nameEn": "Youku", "category": "popular"},
+        {
+          "id": 100006,
+          "nameEn": "onn. 4K Pro",
+          "category": "popular",
+          "aliases": [
+            "Google TV",
+            "גוגל טיוי"
+          ],
+          "ir": {
+            "protocol": "NEC",
+            "address": 136,
+            "secondAddress": 119,
+            "keys": {
+              "HOME": 71,
+              "BACK": 72,
+              "OK": 25,
+              "UP": 21,
+              "DOWN": 22,
+              "LEFT": 23,
+              "RIGHT": 24,
+              "CHANNEL_UP": 51,
+              "CHANNEL_DOWN": 52
+            },
+            "testKey": "HOME"
+          }
+        }
       ]
     },
     {
