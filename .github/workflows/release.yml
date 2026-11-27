@@ -1,6 +1,8 @@
 name: Release
 
-# Push a tag like v0.0.1 to build a signed release APK and publish it as a GitHub release.
+# Push a tag like v0.0.1 to build signed release APKs and publish them as a GitHub release:
+# AnyRemote-<version>.apk (github flavor, in-app updates) and AnyRemote-<version>-fdroid.apk
+# (the F-Droid build, signed with the same key for reproducible-build verification).
 # The tag must match versionName in build.gradle.kts.
 #
 # Needs two repository secrets (Settings → Secrets and variables → Actions):
@@ -62,41 +64,49 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@8da46b539cd8fe6ab27ca75128919a18d757604c # v6
 
-      # GitHub releases ship the github flavor; F-Droid builds the fdroid flavor itself.
-      - name: Test and build release APK
+      # The github flavor is what the in-app updater installs. The fdroid flavor is published too,
+      # signed with the same key: F-Droid rebuilds it from source, checks that its build matches
+      # this APK byte for byte (reproducible build), and then ships this signed copy.
+      - name: Test and build release APKs
         env:
           ANYREMOTE_KEYSTORE_PASSWORD: ${{ secrets.ANYREMOTE_KEYSTORE_PASSWORD }}
-        run: ./gradlew testGithubDebugUnitTest assembleGithubRelease
+        run: ./gradlew testGithubDebugUnitTest assembleGithubRelease assembleFdroidRelease
 
-      # The APK is named after the project and flavor (AnyRemote-github-release.apk); Gradle adds -unsigned
-      # when no signing config applied. apksigner is the real check.
-      - name: Verify signature
+      # APKs are named after the project and flavor (AnyRemote-github-release.apk); Gradle adds
+      # -unsigned when no signing config applied. apksigner is the real check.
+      - name: Verify signatures
         id: apk
         run: |
           shopt -s nullglob
-          dir=build/outputs/apk/github/release
-          unsigned=("$dir"/*-unsigned.apk)
-          if [ ${#unsigned[@]} -gt 0 ]; then
-            echo "::error::Release APK is unsigned: ${unsigned[*]}"
-            exit 1
-          fi
-          apks=("$dir"/*.apk)
-          if [ ${#apks[@]} -ne 1 ]; then
-            echo "::error::Expected one release APK, found ${#apks[@]}:"; ls "$dir"; exit 1
-          fi
-          "$ANDROID_HOME/build-tools/37.0.0/apksigner" verify --verbose --print-certs "${apks[0]}"
-          echo "path=${apks[0]}" >> "$GITHUB_OUTPUT"
+          for flavor in github fdroid; do
+            dir=build/outputs/apk/$flavor/release
+            unsigned=("$dir"/*-unsigned.apk)
+            if [ ${#unsigned[@]} -gt 0 ]; then
+              echo "::error::Release APK is unsigned: ${unsigned[*]}"
+              exit 1
+            fi
+            apks=("$dir"/*.apk)
+            if [ ${#apks[@]} -ne 1 ]; then
+              echo "::error::Expected one $flavor release APK, found ${#apks[@]}:"; ls "$dir"; exit 1
+            fi
+            "$ANDROID_HOME/build-tools/37.0.0/apksigner" verify --verbose --print-certs "${apks[0]}"
+            echo "$flavor=${apks[0]}" >> "$GITHUB_OUTPUT"
+          done
 
       - name: Package signed release
         env:
           VERSION: ${{ steps.version.outputs.version }}
-          APK: ${{ steps.apk.outputs.path }}
+          GITHUB_APK: ${{ steps.apk.outputs.github }}
+          FDROID_APK: ${{ steps.apk.outputs.fdroid }}
         run: |
           mkdir release-artifact
           cd release-artifact
           out="AnyRemote-$VERSION.apk"
-          cp "../$APK" "$out"
+          cp "../$GITHUB_APK" "$out"
           sha256sum "$out" > "$out.sha256"
+          fdroid="AnyRemote-$VERSION-fdroid.apk"
+          cp "../$FDROID_APK" "$fdroid"
+          sha256sum "$fdroid" > "$fdroid.sha256"
 
       - name: Remove keystore
         if: always()
@@ -126,8 +136,9 @@ jobs:
           VERSION: ${{ needs.build.outputs.version }}
         run: |
           out="AnyRemote-$VERSION.apk"
-          sha256sum --check -- "$out.sha256"
-          gh release create "$GITHUB_REF_NAME" "$out" "$out.sha256" \
+          fdroid="AnyRemote-$VERSION-fdroid.apk"
+          sha256sum --check -- "$out.sha256" "$fdroid.sha256"
+          gh release create "$GITHUB_REF_NAME" "$out" "$out.sha256" "$fdroid" "$fdroid.sha256" \
             --repo "$GITHUB_REPOSITORY" \
             --verify-tag \
             --title "AnyRemote $VERSION" \
