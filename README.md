@@ -29,6 +29,8 @@ AnyRemote is in early development (version 0.0.1).
 
 ## Editing the remote catalog
 
+See the [missing IR brands inventory](docs/missing-ir-brands.md) for candidates and example captures.
+
 Edit `src/main/assets/remote.json` to add devices or brands. Each brand has a numeric `id`, a display name (`nameEn`), and a `category` used for search ranking. Keep existing device and brand IDs stable because favorites and launcher shortcuts use them. Model-specific IR commands live in the Kotlin codebook.
 
 ## TV converters and receivers
