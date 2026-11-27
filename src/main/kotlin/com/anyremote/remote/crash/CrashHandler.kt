@@ -31,11 +31,15 @@ private constructor(
             CrashReport.save(context, CrashReport.format(thread, error))
             context.startActivity(CrashActivity.intent(context).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
         } catch (_: Throwable) {
-            // Reporting failed too: let Android show its own crash dialog instead.
-            systemHandler?.uncaughtException(thread, error)
-            return
+            // Reporting failed too; Android's handler below still records the crash.
         }
-        Process.killProcess(Process.myPid())
-        exitProcess(10)
+        // Android's handler records the crash and ends this process. The crash screen runs in
+        // its own process and task, so it stays open.
+        if (systemHandler != null) {
+            systemHandler.uncaughtException(thread, error)
+        } else {
+            Process.killProcess(Process.myPid())
+            exitProcess(10)
+        }
     }
 }

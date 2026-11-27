@@ -24,6 +24,19 @@ internal object UpdateState {
 
     /** Whether the update dialog is on screen. */
     var promptVisible by mutableStateOf(false)
+        private set
+
+    /** Debug builds are signed with another key, so they can't install releases. */
+    val canInstall: Boolean = !BuildConfig.DEBUG
+
+    /** Opens the update dialog, in builds that can install the update. */
+    fun showPrompt() {
+        if (canInstall) promptVisible = true
+    }
+
+    fun hidePrompt() {
+        promptVisible = false
+    }
 
     val installedVersion: String = BuildConfig.VERSION_NAME
 
@@ -36,7 +49,7 @@ internal object UpdateState {
             val latest = GitHubUpdates.latest(installedVersion)
             release = latest
             status = if (latest != null) Status.Available else Status.UpToDate
-            if (latest != null) promptVisible = true
+            if (latest != null) showPrompt()
         } catch (error: CancellationException) {
             status = previous
             throw error
