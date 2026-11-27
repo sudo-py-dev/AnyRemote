@@ -47,7 +47,7 @@
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="remote_name_label">Remote Name</string>
-    <string name="search_placeholder">Search brands</string>
+    <string name="search_placeholder">Search by brand, model or remote number</string>
     <string name="device_name_label">Device Name</string>
     <string name="swing">Swing</string>
     <string name="oscillate">Oscillate</string>

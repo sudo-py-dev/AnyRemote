@@ -32,7 +32,11 @@ data class AcState(
             tempDisplay = tempDisplay,
         )
 
-    fun toPulses(): IntArray = IREncodingEngine.encodeGree(toBytes())
+    fun toPulses(protocol: AcProtocol = AcProtocol.GREE): IntArray = when (protocol) {
+        AcProtocol.GREE -> IREncodingEngine.encodeGree(toBytes())
+        AcProtocol.ELECTRA -> electraPulses()
+        AcProtocol.AMCOR -> amcorPulses()
+    }
 
     companion object {
         val Saver =

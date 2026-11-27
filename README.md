@@ -24,8 +24,8 @@ Built with Kotlin and Jetpack Compose (Material 3).
 
 AnyRemote is in early development (version 0.0.1).
 
-- **Air conditioners** use the Gree protocol. The frame layout follows the [IRremoteESP8266](https://github.com/crankyoldgit/IRremoteESP8266) reference and is covered by unit tests, but it hasn't been checked against every model.
-- **Other devices** send NEC frames. The bundled database (`src/main/assets/remote.pb`) lists device types and brands, but **not real per-brand IR codes yet**. Each key has its own command, and the code set you match shifts the NEC address, so many devices won't respond until real code data is added. Contributions of verified codes are very welcome.
+- **Air conditioners.** Search for Tadiran or תדיראן for the Gree wall-mounted profile. Tadiran documents a different setup for mini-central units in its [Smart IR guide](https://www.tadiran-group.co.il/wp-content/uploads/2020/12/Tadiran-IOT-and-Smart-IR-instructions-V01.pdf). Electra Classic INV 17 / AXW12DCS, AUX YKR-T/011, and Amcor ADR-853H / TAC-444 / TAC-495 have dedicated encoders based on the [IRremoteESP8266 protocol reference](https://github.com/crankyoldgit/IRremoteESP8266/blob/master/SupportedProtocols.md). Other legacy AC entries use Gree. Confirm compatibility on the appliance during setup.
+- **Model-specific TV and streaming controls.** The [TCL 32S327](https://github.com/Lucaslhm/Flipper-IRDB/blob/main/TVs/TCL/TCL_32S327.ir), [LG TV NEC](https://github.com/Lucaslhm/Flipper-IRDB/blob/main/TVs/LG/LG.ir), and [onn. 4K Pro](https://github.com/Lucaslhm/Flipper-IRDB/blob/main/Streaming_Devices/onn/onn_4K_Pro.ir) entries send captured commands. Select the named profile to use them. Other non-AC catalog entries retain the generic NEC matching flow.
 
 ## Building
 

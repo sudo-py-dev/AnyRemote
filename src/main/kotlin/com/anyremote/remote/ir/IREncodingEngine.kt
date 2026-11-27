@@ -95,11 +95,12 @@ object IREncodingEngine {
     fun compileGenericNec(
         address: Int,
         command: Int,
+        secondAddress: Int = address.inv(),
     ): IntArray {
         val pulses = mutableListOf(9000, 4500)
         val data =
             (address and 0xFF) or
-                ((address.inv() and 0xFF) shl 8) or
+                ((secondAddress and 0xFF) shl 8) or
                 ((command and 0xFF) shl 16) or
                 ((command.inv() and 0xFF) shl 24)
         for (i in 0..31) {

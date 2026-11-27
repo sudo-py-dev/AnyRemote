@@ -47,7 +47,7 @@
     <string name="cancel">إلغاء</string>
     <string name="save">حفظ</string>
     <string name="remote_name_label">اسم جهاز التحكم</string>
-    <string name="search_placeholder">ابحث عن الماركة (مثال: Gree, Sony)</string>
+    <string name="search_placeholder">ابحث بالعلامة التجارية أو الطراز أو رقم جهاز التحكم</string>
     <string name="device_name_label">اسم الجهاز</string>
     <string name="swing">تأرجح</string>
     <string name="oscillate">تأرجح</string>

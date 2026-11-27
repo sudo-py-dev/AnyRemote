@@ -29,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.anyremote.remote.R
+import com.anyremote.remote.data.searchBrands
 import com.anyremote.remote.data.RemoteDatabase.Brand
 import com.anyremote.remote.data.RemoteDatabase.DeviceType
 import com.anyremote.remote.ui.helpers.rememberVibratingHapticFeedback
@@ -43,19 +44,7 @@ fun BrandSelectionPanel(
     var searchQuery by rememberSaveable(device.id) { mutableStateOf("") }
     val query = searchQuery.trim()
 
-    val filteredBrands =
-        remember(query, device.brands) {
-            if (query.isEmpty()) {
-                device.brands.sortedBy { it.nameEn.lowercase() }
-            } else {
-                device.brands
-                    .filter { it.nameEn.contains(query, ignoreCase = true) }
-                    .sortedWith(
-                        compareBy<Brand> { if (it.nameEn.startsWith(query, ignoreCase = true)) 0 else 1 }
-                            .thenBy { if (it.category == "popular") 0 else 1 }
-                            .thenBy { it.nameEn.lowercase() })
-            }
-        }
+    val filteredBrands = remember(query, device) { device.searchBrands(query) }
 
     // Group by initial only when browsing; search results are ranked, not alphabetical.
     val groupedBrands =

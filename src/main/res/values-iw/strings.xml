@@ -47,7 +47,7 @@
     <string name="cancel">ביטול</string>
     <string name="save">שמור</string>
     <string name="remote_name_label">שם השלט</string>
-    <string name="search_placeholder">חפש מותג (למשל Gree, Sony)</string>
+    <string name="search_placeholder">חיפוש לפי מותג, דגם או מספר שלט</string>
     <string name="device_name_label">שם המכשיר</string>
     <string name="swing">סוויג</string>
     <string name="oscillate">תנועה</string>

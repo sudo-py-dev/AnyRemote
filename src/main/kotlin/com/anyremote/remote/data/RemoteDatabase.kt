@@ -60,7 +60,7 @@ object RemoteDatabase {
         try {
             val bytes = context.assets.open("remote.pb").use { it.readBytes() }
             val container = ProtoBuf.decodeFromByteArray(DatabaseContainer.serializer(), bytes)
-            deviceTypes = container.devices
+            deviceTypes = container.devices.map(RemoteProfile::addTo)
             acOptions = container.acOptions
             loadFailed = false
         } catch (e: Exception) {

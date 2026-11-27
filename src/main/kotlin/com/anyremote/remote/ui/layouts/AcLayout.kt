@@ -24,6 +24,7 @@ import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.unit.dp
 import com.anyremote.remote.R
 import com.anyremote.remote.data.RemoteDatabase
+import com.anyremote.remote.ir.AcProtocol
 import com.anyremote.remote.ir.AcState
 import com.anyremote.remote.ui.components.*
 import kotlin.math.cos
@@ -45,8 +46,6 @@ private enum class AcToggle(
         { it.tempDisplay }, { it.copy(tempDisplay = !it.tempDisplay) }),
 }
 
-private const val MIN_TEMP = 16
-private const val MAX_TEMP = 30
 
 private val modes = listOf("MC", "MH", "MD", "MV", "MA")
 private val speeds = listOf("SA", "SL", "SM", "SH")
@@ -81,13 +80,17 @@ private fun speedLabel(speed: String): Int =
 fun AcLayout(
     state: AcState,
     onChange: (AcState) -> Unit,
+    protocol: AcProtocol = AcProtocol.GREE,
 ) {
     val power = state.power
-    val options = AcToggle.entries.filter { RemoteDatabase.hasAcOption(it.key) }
-    val hasSweep = RemoteDatabase.hasAcOption("wind_model") || RemoteDatabase.hasAcOption("swing")
+    val maxTemp = protocol.maxTemp
+    val minTemp = protocol.minTemp
+    val electra = protocol == AcProtocol.ELECTRA
+    val options = if (electra) listOf(AcToggle.TURBO, AcToggle.SWING_H) else AcToggle.entries.filter { RemoteDatabase.hasAcOption(it.key) }
+    val hasSweep = electra || RemoteDatabase.hasAcOption("wind_model") || RemoteDatabase.hasAcOption("swing")
 
     fun setTemp(t: Int) {
-        val clamped = t.coerceIn(MIN_TEMP, MAX_TEMP)
+        val clamped = t.coerceIn(minTemp, maxTemp)
         if (clamped != state.temp) onChange(state.copy(temp = clamped))
     }
 
@@ -96,7 +99,7 @@ fun AcLayout(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        ThermostatDial(state)
+        ThermostatDial(state, minTemp, maxTemp)
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -108,7 +111,7 @@ fun AcLayout(
                 stringResource(R.string.cd_temp_down),
                 { setTemp(state.temp - 1) },
                 size = 64.dp,
-                enabled = power && state.temp > MIN_TEMP,
+                enabled = power && state.temp > minTemp,
                 repeatOnHold = true,
             )
             PowerKey(
@@ -121,7 +124,7 @@ fun AcLayout(
                 stringResource(R.string.cd_temp_up),
                 { setTemp(state.temp + 1) },
                 size = 64.dp,
-                enabled = power && state.temp < MAX_TEMP,
+                enabled = power && state.temp < maxTemp,
                 repeatOnHold = true,
             )
         }
@@ -150,7 +153,7 @@ fun AcLayout(
             )
         }
 
-        RemoteSection(title = stringResource(R.string.airflow)) {
+        if (protocol != AcProtocol.AMCOR) RemoteSection(title = stringResource(R.string.airflow)) {
             @OptIn(ExperimentalLayoutApi::class)
             FlowRow(
                 modifier = Modifier.fillMaxWidth(),
@@ -168,7 +171,7 @@ fun AcLayout(
                     )
                 }
                 val fixedVane = !state.swing && state.swingPosition > 0
-                OptionKey(
+                if (!electra) OptionKey(
                     icon = Icons.Default.SyncAlt,
                     label =
                         stringResource(R.string.ac_label_direction) +
@@ -194,12 +197,12 @@ fun AcLayout(
 
 /** Google Home–style dial: a 270° track whose arc fills with the set temperature. */
 @Composable
-private fun ThermostatDial(state: AcState) {
+private fun ThermostatDial(state: AcState, minTemp: Int, maxTemp: Int) {
     val scheme = MaterialTheme.colorScheme
     val power = state.power
     val fraction by
         animateFloatAsState(
-            (state.temp - MIN_TEMP).toFloat() / (MAX_TEMP - MIN_TEMP),
+            (state.temp - minTemp).toFloat() / (maxTemp - minTemp),
             label = "dialFraction",
         )
     val trackColor = scheme.surfaceContainerHighest

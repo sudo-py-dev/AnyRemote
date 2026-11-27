@@ -28,6 +28,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.anyremote.remote.R
 import com.anyremote.remote.data.RemoteDatabase
+import com.anyremote.remote.data.RemoteProfile
+import com.anyremote.remote.ir.ModelCommands
+import androidx.compose.material.icons.filled.Home
+import com.anyremote.remote.ir.AcProtocol
 import com.anyremote.remote.ir.AcState
 import com.anyremote.remote.ir.IRTransmitter
 import com.anyremote.remote.ir.IrCodebook
@@ -60,7 +64,9 @@ fun MatchIRScreen(
     val category = remember(deviceId) { RemoteDatabase.deviceTypes.firstOrNull { it.id == deviceId } }
     val brand = remember(brandId, category) { category?.brands?.firstOrNull { it.id == brandId } }
 
-    val totalCodesets = IrCodebook.CODESET_COUNT
+    val profile = RemoteProfile.find(deviceId, brandId)
+    val commands = ModelCommands.forProfile(profile)
+    val totalCodesets = if (profile != null || deviceId == 3) 1 else IrCodebook.CODESET_COUNT
     var codeset by rememberSaveable { mutableIntStateOf(1) }
     var showResponseSheet by rememberSaveable { mutableStateOf(false) }
     var showSuccessDialog by rememberSaveable { mutableStateOf(false) }
@@ -74,23 +80,25 @@ fun MatchIRScreen(
     }
 
     val (testLabelRes, testIcon) =
-        when (deviceId) {
-            6 -> R.string.button_fan_speed to Icons.Default.Air
-            8 -> R.string.button_mute to Icons.AutoMirrored.Filled.VolumeOff
+        when {
+            profile == RemoteProfile.ONN -> R.string.cd_home to Icons.Default.Home
+            deviceId == 6 -> R.string.button_fan_speed to Icons.Default.Air
+            deviceId == 8 -> R.string.button_mute to Icons.AutoMirrored.Filled.VolumeOff
             else -> R.string.button_power to Icons.Default.PowerSettingsNew
         }
     val testKey =
-        when (deviceId) {
-            6 -> RemoteKey.SPEED_UP
-            8 -> RemoteKey.MUTE
+        when {
+            profile == RemoteProfile.ONN -> RemoteKey.HOME
+            deviceId == 6 -> RemoteKey.SPEED_UP
+            deviceId == 8 -> RemoteKey.MUTE
             else -> RemoteKey.POWER
         }
 
     // Same codebook as RemoteControllerScreen, so the code set that works here is the one the remote uses.
     fun transmitTestPulse() {
         val pulses =
-            if (deviceId == 3) AcState(power = true, swing = false).toPulses()
-            else IrCodebook.pulses(deviceId, codeset, testKey)
+            if (deviceId == 3) AcState(power = true, swing = false).toPulses(profile?.acProtocol ?: AcProtocol.GREE)
+            else commands?.pulses(testKey) ?: IrCodebook.pulses(deviceId, codeset, testKey)
         scope.launch { IRTransmitter.send(context, pulses) }
     }
 
@@ -182,8 +190,8 @@ fun MatchIRScreen(
                     }
                 }
 
-                // Code set stepper.
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                // Only offer cycling when another distinct signal is available.
+                if (totalCodesets > 1) Row(verticalAlignment = Alignment.CenterVertically) {
                     FilledTonalIconButton(
                         onClick = {
                             haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
@@ -217,7 +225,7 @@ fun MatchIRScreen(
                     }
                 }
 
-                Surface(
+                if (totalCodesets > 1) Surface(
                     shape = MaterialTheme.shapes.large,
                     color = MaterialTheme.colorScheme.surfaceContainer,
                     modifier = Modifier.fillMaxWidth(),
@@ -277,7 +285,7 @@ fun MatchIRScreen(
                         },
                         modifier = Modifier.weight(1f).heightIn(min = 48.dp),
                     ) {
-                        Text(stringResource(R.string.no_try_next), textAlign = TextAlign.Center)
+                        Text(stringResource(if (totalCodesets == 1) R.string.back else R.string.no_try_next), textAlign = TextAlign.Center)
                     }
                     Button(
                         onClick = {
