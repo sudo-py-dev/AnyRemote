@@ -204,4 +204,8 @@
     <string name="media_stop">עצור</string>
     <string name="media_previous">הקודם</string>
     <string name="media_next">הבא</string>
+    <string name="quick_settings_add">הוספה להגדרות המהירות</string>
+    <string name="quick_settings_summary">פתיחת האפליקציה מלוח ההתראות.</string>
+    <string name="quick_settings_manual">מחליקים מטה לפתיחת ההגדרות המהירות, מקישים על עריכה וגוררים את %1$s אל האריחים הפעילים.</string>
+    <string name="quick_settings_added">האריח כבר נמצא בהגדרות המהירות.</string>
 </resources>

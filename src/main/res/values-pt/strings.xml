@@ -204,4 +204,8 @@
     <string name="media_stop">Parar</string>
     <string name="media_previous">Anterior</string>
     <string name="media_next">Seguinte</string>
+    <string name="quick_settings_add">Adicionar às configurações rápidas</string>
+    <string name="quick_settings_summary">Abra o app pelo painel de notificações.</string>
+    <string name="quick_settings_manual">Deslize para baixo para abrir as configurações rápidas, toque em Editar e arraste %1$s para os blocos ativos.</string>
+    <string name="quick_settings_added">O bloco já está nas configurações rápidas.</string>
 </resources>

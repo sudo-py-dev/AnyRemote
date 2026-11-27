@@ -1,6 +1,10 @@
 package com.anyremote.remote.ui.screens
 
+import android.app.StatusBarManager
+import android.content.ComponentName
+import android.graphics.drawable.Icon as AndroidIcon
 import android.os.Build
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -11,6 +15,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.BrightnessAuto
+import androidx.compose.material.icons.outlined.DashboardCustomize
 import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material.icons.outlined.Translate
@@ -29,6 +34,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.anyremote.remote.R
+import com.anyremote.remote.quicksettings.RemoteTileService
 import com.anyremote.remote.service.FavoriteManager
 import com.anyremote.remote.service.LocaleManager
 import com.anyremote.remote.ui.helpers.rememberVibratingHapticFeedback
@@ -69,6 +75,7 @@ private fun languageIcon(code: String): ImageVector =
 fun SettingsScreen(onBackClick: () -> Unit) {
     val context = LocalContext.current
     val haptic = rememberVibratingHapticFeedback()
+    val appName = stringResource(R.string.app_name)
 
     val themeMode by FavoriteManager.currentThemeState
     val dynamicColor by FavoriteManager.currentDynamicColorState
@@ -77,6 +84,31 @@ fun SettingsScreen(onBackClick: () -> Unit) {
 
     var showThemeDialog by remember { mutableStateOf(false) }
     var showLanguageDialog by remember { mutableStateOf(false) }
+    var showQuickSettingsInstructions by remember { mutableStateOf(false) }
+
+    fun addQuickSettingsTile() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val statusBar = context.getSystemService(StatusBarManager::class.java)
+            if (statusBar != null) {
+                statusBar.requestAddTileService(
+                    ComponentName(context, RemoteTileService::class.java),
+                    appName,
+                    AndroidIcon.createWithResource(context, R.drawable.ic_quick_settings_remote),
+                    context.mainExecutor,
+                ) { result ->
+                    when (result) {
+                        StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ADDED,
+                        StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_NOT_ADDED -> Unit
+                        StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ALREADY_ADDED ->
+                            Toast.makeText(context, R.string.quick_settings_added, Toast.LENGTH_SHORT).show()
+                        else -> showQuickSettingsInstructions = true
+                    }
+                }
+                return
+            }
+        }
+        showQuickSettingsInstructions = true
+    }
 
     val systemLabel = stringResource(R.string.theme_system)
     val themeLabel = stringResource(themeModes.firstOrNull { it.first == themeMode }?.second ?: R.string.theme_system)
@@ -122,6 +154,12 @@ fun SettingsScreen(onBackClick: () -> Unit) {
 
             SettingsGroup(stringResource(R.string.general)) {
                 SettingsItem(
+                    icon = Icons.Outlined.DashboardCustomize,
+                    title = stringResource(R.string.quick_settings_add),
+                    summary = stringResource(R.string.quick_settings_summary),
+                    onClick = ::addQuickSettingsTile,
+                )
+                SettingsItem(
                     icon = languageIcon(langCode),
                     title = stringResource(R.string.language_selection),
                     summary = languageLabel,
@@ -139,6 +177,19 @@ fun SettingsScreen(onBackClick: () -> Unit) {
                 )
             }
         }
+    }
+
+    if (showQuickSettingsInstructions) {
+        AlertDialog(
+            onDismissRequest = { showQuickSettingsInstructions = false },
+            title = { Text(stringResource(R.string.quick_settings_add)) },
+            text = { Text(stringResource(R.string.quick_settings_manual, appName)) },
+            confirmButton = {
+                TextButton(onClick = { showQuickSettingsInstructions = false }) {
+                    Text(stringResource(R.string.ok))
+                }
+            },
+        )
     }
 
     if (showThemeDialog) {

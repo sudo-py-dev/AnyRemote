@@ -204,4 +204,8 @@
     <string name="media_stop">إيقاف</string>
     <string name="media_previous">السابق</string>
     <string name="media_next">التالي</string>
+    <string name="quick_settings_add">إضافة إلى الإعدادات السريعة</string>
+    <string name="quick_settings_summary">افتح التطبيق من لوحة الإشعارات.</string>
+    <string name="quick_settings_manual">اسحب لأسفل لفتح الإعدادات السريعة، واضغط على تعديل، ثم اسحب %1$s إلى المربعات النشطة.</string>
+    <string name="quick_settings_added">المربع موجود بالفعل في الإعدادات السريعة.</string>
 </resources>

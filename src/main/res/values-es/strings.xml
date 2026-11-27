@@ -204,4 +204,8 @@
     <string name="media_stop">Detener</string>
     <string name="media_previous">Anterior</string>
     <string name="media_next">Siguiente</string>
+    <string name="quick_settings_add">Añadir a los ajustes rápidos</string>
+    <string name="quick_settings_summary">Abre la app desde el panel de notificaciones.</string>
+    <string name="quick_settings_manual">Desliza hacia abajo para abrir los ajustes rápidos, toca Editar y arrastra %1$s a los botones activos.</string>
+    <string name="quick_settings_added">El botón ya está en los ajustes rápidos.</string>
 </resources>

@@ -204,4 +204,8 @@
     <string name="media_stop">Arrêter</string>
     <string name="media_previous">Précédent</string>
     <string name="media_next">Suivant</string>
+    <string name="quick_settings_add">Ajouter aux réglages rapides</string>
+    <string name="quick_settings_summary">Ouvrez l’appli depuis le volet de notifications.</string>
+    <string name="quick_settings_manual">Balayez vers le bas pour ouvrir les réglages rapides, touchez Modifier, puis faites glisser %1$s parmi les tuiles actives.</string>
+    <string name="quick_settings_added">La tuile est déjà dans les réglages rapides.</string>
 </resources>

@@ -204,4 +204,8 @@
     <string name="media_stop">停止</string>
     <string name="media_previous">前へ</string>
     <string name="media_next">次へ</string>
+    <string name="quick_settings_add">クイック設定に追加</string>
+    <string name="quick_settings_summary">通知パネルからアプリを開きます。</string>
+    <string name="quick_settings_manual">下にスワイプしてクイック設定を開き、編集をタップして、%1$s を使用中のタイルにドラッグします。</string>
+    <string name="quick_settings_added">タイルはすでにクイック設定にあります。</string>
 </resources>

@@ -204,4 +204,8 @@
     <string name="media_stop">Стоп</string>
     <string name="media_previous">Предыдущий</string>
     <string name="media_next">Следующий</string>
+    <string name="quick_settings_add">Добавить в быстрые настройки</string>
+    <string name="quick_settings_summary">Открывайте приложение из панели уведомлений.</string>
+    <string name="quick_settings_manual">Смахните вниз, чтобы открыть быстрые настройки, нажмите «Изменить» и перетащите %1$s в область активных плиток.</string>
+    <string name="quick_settings_added">Плитка уже есть в быстрых настройках.</string>
 </resources>

@@ -204,4 +204,8 @@
     <string name="media_stop">Interrompi</string>
     <string name="media_previous">Precedente</string>
     <string name="media_next">Successivo</string>
+    <string name="quick_settings_add">Aggiungi alle impostazioni rapide</string>
+    <string name="quick_settings_summary">Apri l’app dal pannello delle notifiche.</string>
+    <string name="quick_settings_manual">Scorri verso il basso per aprire le impostazioni rapide, tocca Modifica e trascina %1$s tra i riquadri attivi.</string>
+    <string name="quick_settings_added">Il riquadro è già nelle impostazioni rapide.</string>
 </resources>

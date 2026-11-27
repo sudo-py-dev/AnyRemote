@@ -204,4 +204,8 @@
     <string name="media_stop">停止</string>
     <string name="media_previous">上一个</string>
     <string name="media_next">下一个</string>
+    <string name="quick_settings_add">添加到快捷设置</string>
+    <string name="quick_settings_summary">从通知面板打开应用。</string>
+    <string name="quick_settings_manual">向下滑动打开快捷设置，点按编辑，然后将 %1$s 拖到已启用的磁贴区域。</string>
+    <string name="quick_settings_added">该磁贴已添加到快捷设置。</string>
 </resources>

@@ -204,4 +204,8 @@
     <string name="media_stop">Stopp</string>
     <string name="media_previous">Zurück</string>
     <string name="media_next">Weiter</string>
+    <string name="quick_settings_add">Zu den Schnelleinstellungen hinzufügen</string>
+    <string name="quick_settings_summary">Öffne die App über die Benachrichtigungsleiste.</string>
+    <string name="quick_settings_manual">Wische nach unten, öffne die Schnelleinstellungen und tippe auf „Bearbeiten“. Ziehe %1$s zu den aktiven Kacheln.</string>
+    <string name="quick_settings_added">Die Kachel ist bereits in den Schnelleinstellungen.</string>
 </resources>

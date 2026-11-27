@@ -205,4 +205,8 @@
     <string name="media_stop">Stop</string>
     <string name="media_previous">Previous</string>
     <string name="media_next">Next</string>
+    <string name="quick_settings_add">Add to Quick Settings</string>
+    <string name="quick_settings_summary">Open the app from the notification shade.</string>
+    <string name="quick_settings_manual">Swipe down to open Quick Settings, tap Edit, then drag %1$s into your active tiles.</string>
+    <string name="quick_settings_added">The tile is already in Quick Settings.</string>
 </resources>
