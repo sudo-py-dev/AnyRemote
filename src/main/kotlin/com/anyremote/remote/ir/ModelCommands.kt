@@ -34,6 +34,40 @@ internal data class ModelCommands(val address: Int, val secondAddress: Int, val 
         private val tesla = ModelCommands(0x01, 0xfd, mapOf(
             POWER to 0xdc, VOLUME_UP to 0xc1, VOLUME_DOWN to 0x99, MUTE to 0x9c,
         ))
+        // Published converter captures are linked in README.
+        private val storex = ModelCommands(0x04, 0xfb, mapOf(
+            POWER to 0x1a, VOLUME_UP to 0x45, VOLUME_DOWN to 0x19, MUTE to 0x0e,
+            OK to 0x5c, CHANNEL_UP to 0x44, CHANNEL_DOWN to 0x1d, BACK to 0x1f,
+            HOME to 0x0a, LEFT to 0x1c, RIGHT to 0x48, DIGIT_0 to 0x47,
+            DIGIT_1 to 0x13, DIGIT_2 to 0x10, DIGIT_3 to 0x11, DIGIT_4 to 0x0f,
+            DIGIT_5 to 0x0c, DIGIT_6 to 0x0d, DIGIT_7 to 0x0b, DIGIT_8 to 0x08,
+            DIGIT_9 to 0x09,
+        ))
+        private val diprogress = ModelCommands(0x01, 0xfe, mapOf(
+            POWER to 0x19, CHANNEL_UP to 0x1e, CHANNEL_DOWN to 0x1d, VOLUME_UP to 0x18,
+            VOLUME_DOWN to 0x09, UP to 0x06, DOWN to 0x16, LEFT to 0x5a,
+            RIGHT to 0x1b, OK to 0x1a, MENU to 0x55, BACK to 0x0b,
+            MUTE to 0x12, DIGIT_0 to 0x0f, DIGIT_1 to 0x52, DIGIT_2 to 0x50,
+            DIGIT_3 to 0x10, DIGIT_4 to 0x56, DIGIT_5 to 0x54, DIGIT_6 to 0x14,
+            DIGIT_7 to 0x4e, DIGIT_8 to 0x4c, DIGIT_9 to 0x0c,
+        ))
+        private val octagonSf8008 = ModelCommands(0x07, 0xf8, mapOf(
+            POWER to 0x59, MUTE to 0x19, UP to 0x06, DOWN to 0x16,
+            LEFT to 0x5a, RIGHT to 0x1b, OK to 0x1a, MENU to 0x45,
+            BACK to 0x05, VOLUME_UP to 0x66, VOLUME_DOWN to 0x67, CHANNEL_UP to 0x13,
+            CHANNEL_DOWN to 0x17, DIGIT_0 to 0x0f, DIGIT_1 to 0x52, DIGIT_2 to 0x50,
+            DIGIT_3 to 0x10, DIGIT_4 to 0x56, DIGIT_5 to 0x54, DIGIT_6 to 0x14,
+            DIGIT_7 to 0x4e, DIGIT_8 to 0x4c, DIGIT_9 to 0x0c,
+        ))
+        private val thomson = ModelCommands(0x00, 0xbf, mapOf(
+            POWER to 0x59, MENU to 0x45, BACK to 0x05, UP to 0x06,
+            DOWN to 0x16, LEFT to 0x5a, RIGHT to 0x1b, OK to 0x1a,
+            VOLUME_DOWN to 0x11, VOLUME_UP to 0x0d, MUTE to 0x19, CHANNEL_DOWN to 0x16,
+            CHANNEL_UP to 0x06, DIGIT_0 to 0x0f, DIGIT_1 to 0x52, DIGIT_2 to 0x50,
+            DIGIT_3 to 0x10, DIGIT_4 to 0x56, DIGIT_5 to 0x54, DIGIT_6 to 0x14,
+            DIGIT_7 to 0x4e, DIGIT_8 to 0x4c, DIGIT_9 to 0x0c,
+        ))
+
         fun forProfile(profile: RemoteProfile?) = when (profile) {
             RemoteProfile.TCL -> tcl
             RemoteProfile.LG -> lg
@@ -41,6 +75,10 @@ internal data class ModelCommands(val address: Int, val secondAddress: Int, val 
             RemoteProfile.APEX_DT250 -> apex
             RemoteProfile.TILVIEW -> tilview
             RemoteProfile.TESLA_TE300 -> tesla
+            RemoteProfile.STOREX -> storex
+            RemoteProfile.DIPROGRESS -> diprogress
+            RemoteProfile.OCTAGON_SF8008 -> octagonSf8008
+            RemoteProfile.THOMSON_THT501 -> thomson
             RemoteProfile.HUMAX -> humax
             RemoteProfile.OCTAGON -> octagon
             else -> null

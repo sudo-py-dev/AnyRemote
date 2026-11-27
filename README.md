@@ -27,6 +27,20 @@ AnyRemote is in early development (version 0.0.1).
 - **Air conditioners.** Search for Tadiran or תדיראן for the Gree wall-mounted profile. Tadiran documents a different setup for mini-central units in its [Smart IR guide](https://www.tadiran-group.co.il/wp-content/uploads/2020/12/Tadiran-IOT-and-Smart-IR-instructions-V01.pdf). Electra Classic INV 17 / AXW12DCS, AUX YKR-T/011, and Amcor ADR-853H / TAC-444 / TAC-495 have dedicated encoders based on the [IRremoteESP8266 protocol reference](https://github.com/crankyoldgit/IRremoteESP8266/blob/master/SupportedProtocols.md). Other legacy AC entries use Gree. Confirm compatibility on the appliance during setup.
 - **Model-specific TV and streaming controls.** The [TCL 32S327](https://github.com/Lucaslhm/Flipper-IRDB/blob/main/TVs/TCL/TCL_32S327.ir), [LG TV NEC](https://github.com/Lucaslhm/Flipper-IRDB/blob/main/TVs/LG/LG.ir), and [onn. 4K Pro](https://github.com/Lucaslhm/Flipper-IRDB/blob/main/Streaming_Devices/onn/onn_4K_Pro.ir) entries send captured commands. Select the named profile to use them. Other non-AC catalog entries retain the generic NEC matching flow.
 
+## TV converters and receivers
+
+Find these profiles under **Set-top box**. Pairing sends a model-specific power signal. Confirm that your receiver responds before saving the remote.
+
+| Profile | IR capture |
+| --- | --- |
+| Apex Digital DT250 | [LIRC DT250](https://github.com/probonopd/lirc-remotes/blob/master/remotes/apex/DT250.lircd.conf) |
+| Diprogress DVB-T | [Diprogress capture](https://github.com/Lucaslhm/Flipper-IRDB/blob/main/DVB-T/Diprogress/Diprogress_dvb_t.ir) |
+| Octagon SF8008 | [SF8008 capture](https://github.com/Lucaslhm/Flipper-IRDB/blob/main/DVB-T/Octagon/Octagon_SF8008.ir) |
+| Storex MediaZapper HD | [MediaZapper HD capture](https://github.com/Lucaslhm/Flipper-IRDB/blob/main/DVB-T/Storex/MediaZapperHD.ir) |
+| Tesla TE-300 | [TE-300 capture](https://github.com/Lucaslhm/Flipper-IRDB/blob/main/DVB-T/Tesla/Tesla_TE-300.ir) |
+| Thomson THT501 | [THT501 capture](https://github.com/Lucaslhm/Flipper-IRDB/blob/main/Cable_Boxes/Thomson/Thomson_THT501.ir) |
+| Tilview DVB-T2 | [Tilview capture](https://github.com/Lucaslhm/Flipper-IRDB/blob/main/DVB-T/Tilview/TILVIEW_DVB-T_2.ir) |
+
 ## Building
 
 You need JDK 17 and the Android SDK with platform 37.2 installed.
