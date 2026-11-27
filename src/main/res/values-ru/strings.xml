@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">AnyRemote</string>
+    <string name="app_name">AnyRemote – ИК-пульт</string>
     <string name="settings">Настройки</string>
     <string name="add_new">Добавить</string>
     <string name="brands">Бренды</string>

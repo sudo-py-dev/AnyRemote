@@ -137,6 +137,8 @@ fun DashboardScreen(
                         selectedDevice?.localizedName()
                             ?: if (addingRemote) stringResource(R.string.select_device_type)
                             else stringResource(R.string.app_name),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                     )
                 },
                 navigationIcon = {

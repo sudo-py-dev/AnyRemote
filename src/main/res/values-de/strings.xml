@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">AnyRemote</string>
+    <string name="app_name">AnyRemote – IR-Fernbedienung</string>
     <string name="settings">Einstellungen</string>
     <string name="add_new">Neu hinzufügen</string>
     <string name="brands">Marken</string>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">AnyRemote</string>
+    <string name="app_name">AnyRemote – 赤外線リモコン</string>
     <string name="settings">設定</string>
     <string name="add_new">新規追加</string>
     <string name="brands">ブランド</string>

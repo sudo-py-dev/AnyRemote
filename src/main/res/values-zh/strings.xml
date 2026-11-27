@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">AnyRemote</string>
+    <string name="app_name">AnyRemote – 红外遥控器</string>
     <string name="settings">设置</string>
     <string name="add_new">添加新设备</string>
     <string name="brands">品牌</string>

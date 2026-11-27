@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">AnyRemote</string>
+    <string name="app_name">AnyRemote – Mando infrarrojo</string>
     <string name="settings">Configuración</string>
     <string name="add_new">Añadir nuevo</string>
     <string name="brands">Marcas</string>
