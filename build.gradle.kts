@@ -35,8 +35,8 @@ android {
         applicationId = "com.anyremote.remote"
         minSdk = 26
         targetSdk = 37
-        versionCode = 6
-        versionName = "0.0.6"
+        versionCode = 7
+        versionName = "0.0.7"
     }
 
     flavorDimensions += "distribution"
@@ -83,6 +83,13 @@ android {
         language {
             enableSplit = false
         }
+    }
+
+    // AGP otherwise adds an encrypted "Dependency metadata" block, readable only by Google Play,
+    // to the APK signing block. F-Droid rejects APKs that carry it, and it isn't needed elsewhere.
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = false
     }
 
     if (providers.gradleProperty("android.experimental.enableScreenshotTest").orNull == "true") {
