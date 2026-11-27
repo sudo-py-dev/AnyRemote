@@ -3,7 +3,7 @@ package com.anyremote.remote.ir
 /**
  * Single place that turns (device, codeset, key) into an IR frame.
  *
- * remote.pb does not carry real per-brand IR codes yet, so the NEC address is derived from the
+ * remote.json does not carry real per-brand IR codes yet, so the NEC address is derived from the
  * device type and the codeset the user confirmed in the match wizard. The test pulse in the
  * wizard and the live remote both go through here, so whatever the user matched is what gets sent.
  */

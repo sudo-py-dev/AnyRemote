@@ -2,29 +2,20 @@ package com.anyremote.remote.data
 
 import android.content.Context
 import android.util.Log
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.protobuf.ProtoBuf
+import org.json.JSONArray
+import org.json.JSONObject
 
 object RemoteDatabase {
-    @Serializable
     data class Brand(
         val id: Int,
         val nameEn: String,
         val category: String,
     )
 
-    @Serializable
     data class DeviceType(
         val id: Int,
         val nameEn: String,
         val brands: List<Brand>,
-    )
-
-    @Serializable
-    data class DatabaseContainer(
-        val devices: List<DeviceType>,
-        val acOptions: Map<String, List<String>> = emptyMap(),
     )
 
     var deviceTypes: List<DeviceType> = emptyList()
@@ -39,13 +30,13 @@ object RemoteDatabase {
         return acOptions.keys.any { it.lowercase().replace("_", "") == normalized }
     }
 
-    /** True when remote.pb couldn't be read; the dashboard shows an error instead of an empty list. */
+    /** True when remote.json couldn't be read; the dashboard shows an error instead of an empty list. */
     var loadFailed: Boolean = false
         private set
 
     private var loaded = false
 
-    /** Screenshot previews only: use [devices] instead of reading remote.pb from assets. */
+    /** Screenshot previews only: use [devices] instead of reading remote.json from assets. */
     internal fun loadForPreview(devices: List<DeviceType>) {
         deviceTypes = devices
         acOptions = emptyMap()
@@ -53,19 +44,31 @@ object RemoteDatabase {
         loaded = true
     }
 
-    @OptIn(ExperimentalSerializationApi::class)
     fun init(context: Context) {
         if (loaded) return
         loaded = true
         try {
-            val bytes = context.assets.open("remote.pb").use { it.readBytes() }
-            val container = ProtoBuf.decodeFromByteArray(DatabaseContainer.serializer(), bytes)
-            deviceTypes = container.devices.map(RemoteProfile::addTo)
-            acOptions = container.acOptions
+            val json = JSONObject(context.assets.open("remote.json").bufferedReader().use { it.readText() })
+            val devices = json.getJSONArray("devices").readList { index ->
+                val device = getJSONObject(index)
+                val brands = device.getJSONArray("brands").readList { brandIndex ->
+                    val brand = getJSONObject(brandIndex)
+                    Brand(brand.getInt("id"), brand.getString("nameEn"), brand.getString("category"))
+                }
+                RemoteProfile.addTo(DeviceType(device.getInt("id"), device.getString("nameEn"), brands))
+            }
+            val options = json.optJSONObject("acOptions")
+            acOptions = options?.keys()?.asSequence()?.associateWith { key ->
+                options.getJSONArray(key).readList { getString(it) }
+            }.orEmpty()
+            deviceTypes = devices
             loadFailed = false
         } catch (e: Exception) {
-            Log.e("RemoteDatabase", "Failed to load remote.pb", e)
+            Log.e("RemoteDatabase", "Failed to load remote.json", e)
             loadFailed = true
         }
     }
 }
+
+private fun <T> JSONArray.readList(read: JSONArray.(Int) -> T): List<T> =
+    List(length()) { read(it) }

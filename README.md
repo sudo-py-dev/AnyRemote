@@ -27,6 +27,10 @@ AnyRemote is in early development (version 0.0.1).
 - **Air conditioners.** Search for Tadiran or תדיראן for the Gree wall-mounted profile. Tadiran documents a different setup for mini-central units in its [Smart IR guide](https://www.tadiran-group.co.il/wp-content/uploads/2020/12/Tadiran-IOT-and-Smart-IR-instructions-V01.pdf). Electra Classic INV 17 / AXW12DCS, AUX YKR-T/011, and Amcor ADR-853H / TAC-444 / TAC-495 have dedicated encoders based on the [IRremoteESP8266 protocol reference](https://github.com/crankyoldgit/IRremoteESP8266/blob/master/SupportedProtocols.md). Other legacy AC entries use Gree. Confirm compatibility on the appliance during setup.
 - **Model-specific TV and streaming controls.** The [TCL 32S327](https://github.com/Lucaslhm/Flipper-IRDB/blob/main/TVs/TCL/TCL_32S327.ir), [LG TV NEC](https://github.com/Lucaslhm/Flipper-IRDB/blob/main/TVs/LG/LG.ir), and [onn. 4K Pro](https://github.com/Lucaslhm/Flipper-IRDB/blob/main/Streaming_Devices/onn/onn_4K_Pro.ir) entries send captured commands. Select the named profile to use them. Other non-AC catalog entries retain the generic NEC matching flow.
 
+## Editing the remote catalog
+
+Edit `src/main/assets/remote.json` to add devices or brands. Each brand has a numeric `id`, a display name (`nameEn`), and a `category` used for search ranking. Keep existing device and brand IDs stable because favorites and launcher shortcuts use them. Model-specific IR commands live in the Kotlin codebook.
+
 ## TV converters and receivers
 
 Find these profiles under **Set-top box**. Pairing sends a model-specific power signal. Confirm that your receiver responds before saving the remote.
@@ -72,7 +76,7 @@ Run the unit tests:
 ```
 src/main/kotlin/com/anyremote/remote/
 ├── MainActivity.kt        Entry point, splash screen, type-safe navigation
-├── data/                  Loads the device and brand database (remote.pb, protobuf)
+├── data/                  Loads the device and brand database (remote.json)
 ├── ir/                    IR encoding and transmission
 │   ├── RemoteKey.kt       Logical buttons, each with a unique command
 │   ├── IrCodebook.kt      Device + code set + key → NEC frame

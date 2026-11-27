@@ -31,7 +31,7 @@ import com.anyremote.remote.ui.components.*
 import kotlin.math.cos
 import kotlin.math.sin
 
-/** On/off AC features. [key] matches the option names in remote.pb's acOptions. */
+/** On/off AC features. [key] matches the option names in remote.json's acOptions. */
 private enum class AcToggle(
     val key: String,
     val icon: ImageVector,
