@@ -1,0 +1,35 @@
+name: Crash report
+description: AnyRemote closed unexpectedly. Use "Report on GitHub" on the crash screen to fill this in.
+title: "Crash: "
+labels: ["bug", "crash"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for sending this. The crash screen fills in the report below. If the trace was shortened, paste the full report from your clipboard instead.
+  - type: textarea
+    id: steps
+    attributes:
+      label: What were you doing when the app closed?
+      description: For example, which remote you opened and which button you pressed.
+      placeholder: Opened my Samsung TV remote from the home screen widget and pressed Volume up.
+    validations:
+      required: true
+  - type: textarea
+    id: report
+    attributes:
+      label: Crash report
+      description: App version, Android version, device model and the error trace.
+      render: text
+    validations:
+      required: true
+  - type: dropdown
+    id: repeats
+    attributes:
+      label: Does it happen again?
+      options:
+        - Every time
+        - Sometimes
+        - Only once so far
+    validations:
+      required: false

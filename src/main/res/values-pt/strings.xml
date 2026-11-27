@@ -182,4 +182,18 @@
     <string name="update_failed">Não foi possível concluir a atualização. Tente novamente.</string>
     <string name="update_download">Baixar</string>
     <string name="update_install">Instalar</string>
+    <string name="update_check">Verificar atualizações</string>
+    <string name="update_version">Versão %1$s</string>
+    <string name="update_checking">Verificando atualizações…</string>
+    <string name="update_latest">A versão %1$s é a mais recente</string>
+    <string name="update_check_failed">Não foi possível verificar atualizações. Toque para tentar novamente.</string>
+    <string name="crash_title">O AnyRemote parou inesperadamente</string>
+    <string name="crash_message">Algo deu errado e o app precisou ser fechado. Relate no GitHub para que possa ser corrigido. O relatório inclui a versão do app, a versão do Android e o modelo do aparelho, e você pode revisá-lo antes de enviar.</string>
+    <string name="crash_report">Relatório de falha</string>
+    <string name="crash_report_github">Relatar no GitHub</string>
+    <string name="crash_copy">Copiar relatório</string>
+    <string name="crash_copied">Relatório copiado</string>
+    <string name="crash_no_browser">Nenhum navegador encontrado. O relatório foi copiado para você colar em um novo issue no GitHub.</string>
+    <string name="crash_restart">Reiniciar app</string>
+    <string name="crash_close">Fechar</string>
 </resources>

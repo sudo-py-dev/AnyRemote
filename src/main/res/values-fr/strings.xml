@@ -182,4 +182,18 @@
     <string name="update_failed">La mise à jour a échoué. Réessayez.</string>
     <string name="update_download">Télécharger</string>
     <string name="update_install">Installer</string>
+    <string name="update_check">Rechercher des mises à jour</string>
+    <string name="update_version">Version %1$s</string>
+    <string name="update_checking">Recherche de mises à jour…</string>
+    <string name="update_latest">La version %1$s est la plus récente</string>
+    <string name="update_check_failed">Impossible de rechercher les mises à jour. Touchez pour réessayer.</string>
+    <string name="crash_title">AnyRemote s’est arrêtée de façon inattendue</string>
+    <string name="crash_message">Une erreur est survenue et l’application a dû se fermer. Signalez-la sur GitHub pour qu’elle soit corrigée. Le rapport contient la version de l’application, la version d’Android et le modèle de l’appareil. Vous pouvez le relire avant de l’envoyer.</string>
+    <string name="crash_report">Rapport de plantage</string>
+    <string name="crash_report_github">Signaler sur GitHub</string>
+    <string name="crash_copy">Copier le rapport</string>
+    <string name="crash_copied">Rapport copié</string>
+    <string name="crash_no_browser">Aucun navigateur trouvé. Le rapport est copié : collez-le dans un nouveau ticket GitHub.</string>
+    <string name="crash_restart">Redémarrer l’application</string>
+    <string name="crash_close">Fermer</string>
 </resources>

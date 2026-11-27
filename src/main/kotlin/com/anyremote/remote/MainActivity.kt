@@ -33,6 +33,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.anyremote.remote.crash.CrashActivity
+import com.anyremote.remote.crash.CrashReport
 import com.anyremote.remote.data.RemoteDatabase
 import com.anyremote.remote.service.FavoriteManager
 import com.anyremote.remote.service.LocaleManager
@@ -68,6 +70,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         RemoteDatabase.init(applicationContext)
         FavoriteManager.init(applicationContext)
+
+        // A crash in the background (a widget, for example) couldn't show its report then.
+        if (savedInstanceState == null && CrashReport.pending(this) != null) {
+            startActivity(CrashActivity.intent(this))
+        }
 
         // Only honor a shortcut launch on a fresh start, not after rotation or process restore.
         val startRemote = if (savedInstanceState == null) intent.remoteRoute(this) else null

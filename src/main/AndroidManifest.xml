@@ -16,6 +16,7 @@
     </queries>
 
     <application
+        android:name=".AnyRemoteApp"
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_rules"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -34,6 +35,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Crash report screen; its own process keeps it working when the app's state is broken. -->
+        <activity
+            android:name=".crash.CrashActivity"
+            android:exported="false"
+            android:process=":crash"
+            android:launchMode="singleTask"
+            android:taskAffinity="${applicationId}.crash"
+            android:excludeFromRecents="true" />
 
         <service
             android:name=".quicksettings.RemoteTileService"

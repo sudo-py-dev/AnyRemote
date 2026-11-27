@@ -2,7 +2,6 @@ package com.anyremote.remote.update
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
@@ -20,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.content.FileProvider
+import com.anyremote.remote.BuildConfig
 import com.anyremote.remote.R
 import java.io.File
 import kotlinx.coroutines.CancellationException
@@ -28,23 +28,16 @@ import kotlinx.coroutines.launch
 @Composable
 internal fun UpdatePrompt() {
     val context = LocalContext.current
-    if (context.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0) return
-
     val scope = rememberCoroutineScope()
-    var release by remember { mutableStateOf<GitHubUpdates.Release?>(null) }
     var verifiedApk by remember { mutableStateOf<File?>(null) }
     var downloading by remember { mutableStateOf(false) }
     var failed by remember { mutableStateOf(false) }
 
+    // Debug builds are signed with a different key, so only release builds check on launch.
+    // A failed check stays silent here; Settings shows it and can retry.
     LaunchedEffect(context) {
-        try {
-            @Suppress("DEPRECATION")
-            val version = context.packageManager.getPackageInfo(context.packageName, 0).versionName
-            if (version != null) release = GitHubUpdates.latest(version)
-        } catch (error: CancellationException) {
-            throw error
-        } catch (_: Exception) {
-            // An offline or failed check should never interrupt remote controls.
+        if (!BuildConfig.DEBUG) {
+            UpdateState.check()
         }
     }
 
@@ -63,10 +56,9 @@ internal fun UpdatePrompt() {
             val installIntent =
                 Intent(Intent.ACTION_VIEW)
                     .setDataAndType(uri, "application/vnd.android.package-archive")
-            @Suppress("DEPRECATION")
             val installer =
                 context.packageManager
-                    .queryIntentActivities(
+                    .activitiesFor(
                         installIntent,
                         PackageManager.MATCH_DEFAULT_ONLY or PackageManager.MATCH_SYSTEM_ONLY,
                     )
@@ -76,7 +68,7 @@ internal fun UpdatePrompt() {
             installIntent.setClassName(installer.packageName, installer.name)
             installIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             context.startActivity(installIntent)
-            release = null
+            UpdateState.promptVisible = false
         } catch (_: ActivityNotFoundException) {
             failed = true
         } catch (_: SecurityException) {
@@ -84,8 +76,9 @@ internal fun UpdatePrompt() {
         }
     }
 
-    val update = release ?: return
-    val dismiss = { if (!downloading) release = null }
+    val update = UpdateState.release?.takeIf { UpdateState.promptVisible } ?: return
+    val readyApk = verifiedApk?.takeIf { it.name == update.apkName && it.isFile }
+    val dismiss = { if (!downloading) UpdateState.promptVisible = false }
     AlertDialog(
         onDismissRequest = dismiss,
         title = { Text(stringResource(R.string.update_available, update.version)) },
@@ -93,7 +86,7 @@ internal fun UpdatePrompt() {
             when {
                 downloading -> LinearProgressIndicator()
                 failed -> Text(stringResource(R.string.update_failed))
-                verifiedApk != null -> Text(stringResource(R.string.update_ready))
+                readyApk != null -> Text(stringResource(R.string.update_ready))
                 else -> Text(stringResource(R.string.update_available_detail))
             }
         },
@@ -102,8 +95,8 @@ internal fun UpdatePrompt() {
                 enabled = !downloading,
                 onClick = {
                     failed = false
-                    val apk = verifiedApk
-                    if (apk != null && apk.isFile) {
+                    val apk = readyApk
+                    if (apk != null) {
                         install(apk)
                     } else {
                         downloading = true
@@ -124,7 +117,7 @@ internal fun UpdatePrompt() {
             ) {
                 Text(
                     stringResource(
-                        if (verifiedApk != null) R.string.update_install
+                        if (readyApk != null) R.string.update_install
                         else R.string.update_download
                     )
                 )

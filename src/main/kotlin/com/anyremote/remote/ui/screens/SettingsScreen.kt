@@ -20,7 +20,7 @@ import androidx.compose.material.icons.outlined.DashboardCustomize
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material.icons.outlined.Palette
-import androidx.compose.material.icons.outlined.Translate
+import androidx.compose.material.icons.outlined.SystemUpdate
 import androidx.compose.material.icons.outlined.Vibration
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -33,11 +33,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.anyremote.remote.R
 import com.anyremote.remote.quicksettings.RemoteTileService
 import com.anyremote.remote.service.FavoriteManager
 import com.anyremote.remote.service.LocaleManager
 import com.anyremote.remote.ui.helpers.rememberVibratingHapticFeedback
+import com.anyremote.remote.update.UpdateState
+import kotlinx.coroutines.launch
 
 private val languages =
     listOf(
@@ -68,8 +71,34 @@ private fun themeIcon(mode: String): ImageVector =
         else -> Icons.Outlined.BrightnessAuto
     }
 
-private fun languageIcon(code: String): ImageVector =
-    if (code == "system") Icons.Outlined.Language else Icons.Outlined.Translate
+// Country flag emoji for each language. Android draws them as color flags.
+private val languageFlags =
+    mapOf(
+        "en" to "🇺🇸",
+        "iw" to "🇮🇱",
+        "ar" to "🇸🇦",
+        "es" to "🇪🇸",
+        "fr" to "🇫🇷",
+        "de" to "🇩🇪",
+        "it" to "🇮🇹",
+        "pt" to "🇧🇷",
+        "ru" to "🇷🇺",
+        "zh" to "🇨🇳",
+        "ja" to "🇯🇵",
+    )
+
+/** The language's flag, or the globe icon for the system language. */
+@Composable
+private fun LanguageIcon(code: String) {
+    val flag = languageFlags[code]
+    if (flag == null) {
+        Icon(Icons.Outlined.Language, contentDescription = null)
+    } else {
+        Box(Modifier.size(24.dp), contentAlignment = Alignment.Center) {
+            Text(flag, fontSize = 20.sp, lineHeight = 24.sp)
+        }
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -86,6 +115,26 @@ fun SettingsScreen(onBackClick: () -> Unit) {
     var showThemeDialog by remember { mutableStateOf(false) }
     var showLanguageDialog by remember { mutableStateOf(false) }
     var showQuickSettingsInstructions by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+    val installedVersion = UpdateState.installedVersion
+    val update = UpdateState.release
+    val updateSummary =
+        when (UpdateState.status) {
+            UpdateState.Status.Checking -> stringResource(R.string.update_checking)
+            UpdateState.Status.Available ->
+                stringResource(R.string.update_available, update?.version.orEmpty())
+            UpdateState.Status.UpToDate -> stringResource(R.string.update_latest, installedVersion)
+            UpdateState.Status.Failed -> stringResource(R.string.update_check_failed)
+            UpdateState.Status.Idle -> stringResource(R.string.update_version, installedVersion)
+        }
+
+    fun checkForUpdates() {
+        if (UpdateState.status == UpdateState.Status.Available && update != null) {
+            UpdateState.promptVisible = true
+        } else {
+            scope.launch { UpdateState.check() }
+        }
+    }
 
     fun addQuickSettingsTile() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -172,7 +221,7 @@ fun SettingsScreen(onBackClick: () -> Unit) {
                     onClick = ::addQuickSettingsTile,
                 )
                 SettingsItem(
-                    icon = languageIcon(langCode),
+                    leading = { LanguageIcon(langCode) },
                     title = stringResource(R.string.language_selection),
                     summary = languageLabel,
                     onClick = { showLanguageDialog = true },
@@ -186,6 +235,12 @@ fun SettingsScreen(onBackClick: () -> Unit) {
                         FavoriteManager.setVibrationEnabled(context, enabled)
                         if (enabled) haptic.performHapticFeedback(HapticFeedbackType.ToggleOn)
                     },
+                )
+                SettingsItem(
+                    icon = Icons.Outlined.SystemUpdate,
+                    title = stringResource(R.string.update_check),
+                    summary = updateSummary,
+                    onClick = ::checkForUpdates,
                 )
             }
         }
@@ -209,7 +264,7 @@ fun SettingsScreen(onBackClick: () -> Unit) {
             title = stringResource(R.string.select_theme),
             options = themeModes.map { it.first to stringResource(it.second) },
             selected = themeMode,
-            optionIcon = ::themeIcon,
+            optionIcon = { Icon(themeIcon(it), contentDescription = null) },
             onSelect = {
                 FavoriteManager.setThemeMode(context, it)
                 showThemeDialog = false
@@ -223,7 +278,7 @@ fun SettingsScreen(onBackClick: () -> Unit) {
             title = stringResource(R.string.select_language),
             options = listOf("system" to systemLabel) + languages,
             selected = langCode,
-            optionIcon = ::languageIcon,
+            optionIcon = { LanguageIcon(it) },
             onSelect = {
                 showLanguageDialog = false
                 if (it != langCode) LocaleManager.setLanguage(context, it)
@@ -260,11 +315,19 @@ private fun SettingsItem(
     title: String,
     summary: String,
     onClick: () -> Unit,
+) = SettingsItem({ Icon(icon, contentDescription = null) }, title, summary, onClick)
+
+@Composable
+private fun SettingsItem(
+    leading: @Composable () -> Unit,
+    title: String,
+    summary: String,
+    onClick: () -> Unit,
 ) {
     ListItem(
         onClick = onClick,
         supportingContent = { Text(summary) },
-        leadingContent = { Icon(icon, contentDescription = null) },
+        leadingContent = leading,
         colors = ListItemDefaults.colors(containerColor = Color.Transparent),
     ) {
         Text(title)
@@ -297,7 +360,7 @@ private fun ChoiceDialog(
     title: String,
     options: List<Pair<String, String>>,
     selected: String,
-    optionIcon: (String) -> ImageVector,
+    optionIcon: @Composable (String) -> Unit,
     onSelect: (String) -> Unit,
     onDismiss: () -> Unit,
 ) {
@@ -321,7 +384,7 @@ private fun ChoiceDialog(
                     ) {
                         RadioButton(selected = value == selected, onClick = null)
                         Spacer(Modifier.width(16.dp))
-                        Icon(optionIcon(value), contentDescription = null)
+                        optionIcon(value)
                         Spacer(Modifier.width(12.dp))
                         Text(label, style = MaterialTheme.typography.bodyLarge)
                     }

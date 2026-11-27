@@ -182,4 +182,18 @@
     <string name="update_failed">Не удалось обновить приложение. Попробуйте ещё раз.</string>
     <string name="update_download">Скачать</string>
     <string name="update_install">Установить</string>
+    <string name="update_check">Проверить обновления</string>
+    <string name="update_version">Версия %1$s</string>
+    <string name="update_checking">Проверка обновлений…</string>
+    <string name="update_latest">Версия %1$s — последняя</string>
+    <string name="update_check_failed">Не удалось проверить обновления. Нажмите, чтобы повторить.</string>
+    <string name="crash_title">AnyRemote неожиданно остановлено</string>
+    <string name="crash_message">Произошла ошибка, и приложение закрылось. Сообщите о ней на GitHub, чтобы её исправили. Отчёт содержит версию приложения, версию Android и модель устройства. Его можно проверить перед отправкой.</string>
+    <string name="crash_report">Отчёт о сбое</string>
+    <string name="crash_report_github">Сообщить на GitHub</string>
+    <string name="crash_copy">Копировать отчёт</string>
+    <string name="crash_copied">Отчёт скопирован</string>
+    <string name="crash_no_browser">Браузер не найден. Отчёт скопирован — вставьте его в новую задачу на GitHub.</string>
+    <string name="crash_restart">Перезапустить</string>
+    <string name="crash_close">Закрыть</string>
 </resources>

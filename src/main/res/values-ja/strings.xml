@@ -182,4 +182,18 @@
     <string name="update_failed">アップデートを完了できませんでした。もう一度お試しください。</string>
     <string name="update_download">ダウンロード</string>
     <string name="update_install">インストール</string>
+    <string name="update_check">アップデートを確認</string>
+    <string name="update_version">バージョン %1$s</string>
+    <string name="update_checking">アップデートを確認しています…</string>
+    <string name="update_latest">バージョン %1$s は最新です</string>
+    <string name="update_check_failed">アップデートを確認できませんでした。タップして再試行してください。</string>
+    <string name="crash_title">AnyRemote が予期せず停止しました</string>
+    <string name="crash_message">問題が発生したため、アプリを終了しました。修正のために GitHub で報告してください。レポートにはアプリのバージョン、Android のバージョン、端末のモデルが含まれます。送信前に内容を確認できます。</string>
+    <string name="crash_report">クラッシュレポート</string>
+    <string name="crash_report_github">GitHub で報告</string>
+    <string name="crash_copy">レポートをコピー</string>
+    <string name="crash_copied">レポートをコピーしました</string>
+    <string name="crash_no_browser">ブラウザが見つかりません。レポートはコピー済みなので、GitHub の新しい Issue に貼り付けてください。</string>
+    <string name="crash_restart">アプリを再起動</string>
+    <string name="crash_close">閉じる</string>
 </resources>

@@ -182,4 +182,18 @@
     <string name="update_failed">העדכון לא הושלם. אפשר לנסות שוב.</string>
     <string name="update_download">הורדה</string>
     <string name="update_install">התקנה</string>
+    <string name="update_check">בדיקת עדכונים</string>
+    <string name="update_version">גרסה %1$s</string>
+    <string name="update_checking">מתבצעת בדיקת עדכונים…</string>
+    <string name="update_latest">גרסה %1$s היא העדכנית ביותר</string>
+    <string name="update_check_failed">לא ניתן לבדוק עדכונים. אפשר להקיש כדי לנסות שוב.</string>
+    <string name="crash_title">AnyRemote נסגרה באופן לא צפוי</string>
+    <string name="crash_message">משהו השתבש והאפליקציה נסגרה. אפשר לדווח על כך ב־GitHub כדי שהבעיה תתוקן. הדוח כולל את גרסת האפליקציה, גרסת Android ודגם המכשיר, ואפשר לעבור עליו לפני השליחה.</string>
+    <string name="crash_report">דוח קריסה</string>
+    <string name="crash_report_github">דיווח ב־GitHub</string>
+    <string name="crash_copy">העתקת הדוח</string>
+    <string name="crash_copied">הדוח הועתק</string>
+    <string name="crash_no_browser">לא נמצא דפדפן. הדוח הועתק, ואפשר להדביק אותו בדיווח חדש ב־GitHub.</string>
+    <string name="crash_restart">הפעלה מחדש</string>
+    <string name="crash_close">סגירה</string>
 </resources>

@@ -1,0 +1,51 @@
+name: Remote request
+description: Ask for a brand or model that AnyRemote doesn't support yet, or that doesn't respond.
+title: "Remote: "
+labels: ["enhancement", "remote"]
+body:
+  - type: dropdown
+    id: device
+    attributes:
+      label: Device type
+      options:
+        - TV
+        - Set-top box
+        - Cable / Satellite box
+        - Box (streaming or media box)
+        - AC
+        - Fan
+        - A/V receiver
+        - DVD Player
+        - Projector
+        - Camera
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: brand
+    attributes:
+      label: Brand
+    validations:
+      required: true
+  - type: input
+    id: model
+    attributes:
+      label: Model
+      description: Usually on a label on the back of the device or on the original remote.
+    validations:
+      required: true
+  - type: dropdown
+    id: status
+    attributes:
+      label: Current status
+      options:
+        - The brand isn't listed
+        - The brand is listed but no code set works
+        - Some buttons work, others don't
+    validations:
+      required: true
+  - type: textarea
+    id: codes
+    attributes:
+      label: IR codes or links
+      description: Optional. Links to published IR captures (for example LIRC, Flipper or IRDB files) for this model.

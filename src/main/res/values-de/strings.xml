@@ -182,4 +182,18 @@
     <string name="update_failed">Das Update konnte nicht abgeschlossen werden. Versuche es erneut.</string>
     <string name="update_download">Herunterladen</string>
     <string name="update_install">Installieren</string>
+    <string name="update_check">Nach Updates suchen</string>
+    <string name="update_version">Version %1$s</string>
+    <string name="update_checking">Suche nach Updates…</string>
+    <string name="update_latest">Version %1$s ist aktuell</string>
+    <string name="update_check_failed">Suche nach Updates fehlgeschlagen. Tippe, um es erneut zu versuchen.</string>
+    <string name="crash_title">AnyRemote wurde unerwartet beendet</string>
+    <string name="crash_message">Ein Fehler ist aufgetreten und die App musste geschlossen werden. Melde ihn auf GitHub, damit er behoben werden kann. Der Bericht enthält App-Version, Android-Version und Gerätemodell. Du kannst ihn vor dem Absenden prüfen.</string>
+    <string name="crash_report">Absturzbericht</string>
+    <string name="crash_report_github">Auf GitHub melden</string>
+    <string name="crash_copy">Bericht kopieren</string>
+    <string name="crash_copied">Bericht kopiert</string>
+    <string name="crash_no_browser">Kein Browser gefunden. Der Bericht ist kopiert und kann in ein neues GitHub-Issue eingefügt werden.</string>
+    <string name="crash_restart">App neu starten</string>
+    <string name="crash_close">Schließen</string>
 </resources>

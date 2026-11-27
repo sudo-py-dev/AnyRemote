@@ -1,0 +1,46 @@
+name: Bug report
+description: Something works incorrectly, but the app doesn't close.
+labels: ["bug"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What went wrong?
+      description: What you expected to happen and what happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open Settings
+        2. Tap Language
+        3. …
+    validations:
+      required: true
+  - type: input
+    id: remote
+    attributes:
+      label: Remote
+      description: If the problem is with a remote, its device type, brand and model.
+      placeholder: TV · LG · 55UK6300
+  - type: input
+    id: version
+    attributes:
+      label: AnyRemote version
+      description: Shown under Settings → Check for updates.
+      placeholder: "0.0.4"
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Phone and Android version
+      placeholder: Xiaomi Redmi Note 13, Android 14
+    validations:
+      required: true
+  - type: textarea
+    id: extra
+    attributes:
+      label: Screenshots or anything else

@@ -2,14 +2,15 @@ package com.anyremote.remote.update
 
 import android.content.Context
 import androidx.core.content.pm.PackageInfoCompat
+import com.anyremote.remote.BuildConfig
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
 import java.net.URL
 import java.security.MessageDigest
 import javax.net.ssl.HttpsURLConnection
-import kotlin.coroutines.coroutineContext
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
@@ -68,7 +69,7 @@ internal object GitHubUpdates {
             if (!directory.isDirectory && !directory.mkdirs())
                 throw IOException("Cannot create update cache")
             val temporary = File.createTempFile("update-", ".apk", directory)
-            val jobContext = coroutineContext
+            val jobContext = currentCoroutineContext()
             try {
                 val digest = MessageDigest.getInstance("SHA-256")
                 response(release.url) { input ->
@@ -91,15 +92,11 @@ internal object GitHubUpdates {
                 if (actual != expected) throw IOException("APK checksum mismatch")
                 val packages = context.packageManager
                 val archive =
-                    packages.getPackageArchiveInfo(temporary.path, 0)
-                        ?: throw IOException("Invalid APK")
-                @Suppress("DEPRECATION")
-                val installed = packages.getPackageInfo(context.packageName, 0)
+                    packages.archiveInfo(temporary.path) ?: throw IOException("Invalid APK")
                 if (
                     archive.packageName != context.packageName ||
                         archive.versionName != release.version ||
-                        PackageInfoCompat.getLongVersionCode(archive) <=
-                            PackageInfoCompat.getLongVersionCode(installed)
+                        PackageInfoCompat.getLongVersionCode(archive) <= BuildConfig.VERSION_CODE
                 )
                     throw IOException("APK does not update this installation")
 

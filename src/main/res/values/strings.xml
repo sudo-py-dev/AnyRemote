@@ -183,4 +183,18 @@
     <string name="update_failed">Could not complete the update. Try again.</string>
     <string name="update_download">Download</string>
     <string name="update_install">Install</string>
+    <string name="update_check">Check for updates</string>
+    <string name="update_version">Version %1$s</string>
+    <string name="update_checking">Checking for updates…</string>
+    <string name="update_latest">Version %1$s is the latest</string>
+    <string name="update_check_failed">Could not check for updates. Tap to try again.</string>
+    <string name="crash_title">AnyRemote stopped unexpectedly</string>
+    <string name="crash_message">Something went wrong and the app had to close. Report it on GitHub so it can be fixed. The report includes your app version, Android version and device model, and you can review it before you submit.</string>
+    <string name="crash_report">Crash report</string>
+    <string name="crash_report_github">Report on GitHub</string>
+    <string name="crash_copy">Copy report</string>
+    <string name="crash_copied">Report copied</string>
+    <string name="crash_no_browser">No browser found. The report is copied, so you can paste it into a new GitHub issue.</string>
+    <string name="crash_restart">Restart app</string>
+    <string name="crash_close">Close</string>
 </resources>
