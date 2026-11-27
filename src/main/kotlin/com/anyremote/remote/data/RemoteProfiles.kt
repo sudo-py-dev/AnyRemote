@@ -4,6 +4,7 @@ import com.anyremote.remote.data.RemoteDatabase.Brand
 import com.anyremote.remote.data.RemoteDatabase.DeviceType
 import com.anyremote.remote.ir.AcProtocol
 import java.text.Normalizer
+import com.anyremote.remote.util.limitCodePoints
 
 /** IDs are persisted in favorites, shortcuts and saved code sets. */
 internal enum class RemoteProfile(
@@ -49,19 +50,23 @@ private val separators = Regex("[^\\p{L}\\p{N}]+")
 private fun normalized(text: String) =
     Normalizer.normalize(text.lowercase(), Normalizer.Form.NFD).replace(accents, "").replace(separators, "")
 
+internal const val MAX_BRAND_QUERY_LENGTH = 80
+
 internal fun DeviceType.searchBrands(input: String): List<Brand> {
-    val terms = input.trim().split(Regex("\\s+")).map(::normalized).filter { it.isNotEmpty() }
-    if (input.isBlank()) return brands.sortedBy { it.nameEn.lowercase() }
+    val query = input.limitCodePoints(MAX_BRAND_QUERY_LENGTH).trim()
+    val terms = query.split(Regex("\\s+")).map(::normalized).filter { it.isNotEmpty() }
+    if (query.isEmpty()) return brands.sortedBy { it.nameEn.lowercase() }
     if (terms.isEmpty()) return emptyList()
+    val exactName = terms.joinToString("")
     return brands.mapNotNull { brand ->
         val name = normalized(brand.nameEn)
         val profile = RemoteProfile.find(id, brand.id)
         val aliases = profile?.aliases.orEmpty().map(::normalized)
         if (!terms.all { term -> name.contains(term) || aliases.any { it.contains(term) } }) return@mapNotNull null
         val rank = when {
-            profile != null && name == terms.joinToString("") -> 0
+            profile != null && name == exactName -> 0
             profile != null -> 1
-            name == terms.joinToString("") -> 2
+            name == exactName -> 2
             name.startsWith(terms.first()) -> 3
             else -> 4
         }

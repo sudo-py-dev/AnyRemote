@@ -31,6 +31,8 @@ import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import com.anyremote.remote.R
 import com.anyremote.remote.data.searchBrands
+import com.anyremote.remote.data.MAX_BRAND_QUERY_LENGTH
+import com.anyremote.remote.util.limitCodePoints
 import com.anyremote.remote.data.RemoteDatabase.Brand
 import com.anyremote.remote.data.RemoteDatabase.DeviceType
 import com.anyremote.remote.ui.helpers.rememberVibratingHapticFeedback
@@ -85,7 +87,7 @@ fun BrandSelectionPanel(
     Column(modifier = Modifier.fillMaxSize().imePadding()) {
         TextField(
             value = searchQuery,
-            onValueChange = { searchQuery = it },
+            onValueChange = { searchQuery = it.limitCodePoints(MAX_BRAND_QUERY_LENGTH) },
             placeholder = { Text(stringResource(R.string.search_placeholder)) },
             leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
             trailingIcon = {

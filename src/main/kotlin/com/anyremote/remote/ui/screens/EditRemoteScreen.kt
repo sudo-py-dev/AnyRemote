@@ -22,6 +22,7 @@ import com.anyremote.remote.R
 import com.anyremote.remote.data.RemoteDatabase.Brand
 import com.anyremote.remote.data.RemoteDatabase.DeviceType
 import com.anyremote.remote.service.FavoriteManager
+import com.anyremote.remote.util.limitCodePoints
 import com.anyremote.remote.service.RemoteName
 import com.anyremote.remote.ui.helpers.defaultRemoteName
 
@@ -38,9 +39,8 @@ fun EditRemoteScreen(
         remember(device, brand) {
             FavoriteManager.getCustomName(context, device.id, brand.id, defaultRemoteName(context, device, brand))
         }
-    var nameInput by rememberSaveable(device.id, brand.id) { mutableStateOf(currentName) }
-    val length = RemoteName.length(nameInput)
-    val tooLong = length > RemoteName.MAX_LENGTH
+    var nameInput by rememberSaveable(device.id, brand.id) { mutableStateOf(currentName.limitCodePoints(RemoteName.MAX_LENGTH)) }
+    val length = nameInput.codePointCount(0, nameInput.length)
     val canSave = RemoteName.isValid(nameInput)
     fun save() {
         if (canSave) onSave(nameInput.trim())
@@ -76,14 +76,12 @@ fun EditRemoteScreen(
         ) {
             OutlinedTextField(
                 value = nameInput,
-                onValueChange = { nameInput = it },
+                onValueChange = { nameInput = it.limitCodePoints(RemoteName.MAX_LENGTH) },
                 label = { Text(stringResource(R.string.remote_name_label)) },
                 singleLine = true,
-                isError = tooLong,
                 supportingText = {
                     Text(
-                        if (tooLong) stringResource(R.string.remote_name_too_long, RemoteName.MAX_LENGTH)
-                        else stringResource(R.string.remote_name_count, length, RemoteName.MAX_LENGTH),
+                        stringResource(R.string.remote_name_count, length, RemoteName.MAX_LENGTH),
                     )
                 },
                 keyboardOptions =
@@ -111,7 +109,7 @@ fun EditRemoteScreen(
                     // "Default" goes back to the brand + device name rather than a literal "Default".
                     FilterChip(
                         selected = nameInput == defaultName,
-                        onClick = { nameInput = defaultName },
+                        onClick = { nameInput = defaultName.limitCodePoints(RemoteName.MAX_LENGTH) },
                         label = { Text(stringResource(R.string.location_default)) },
                         leadingIcon =
                             if (nameInput == defaultName) {
@@ -122,7 +120,7 @@ fun EditRemoteScreen(
                         val selected = nameInput == location
                         FilterChip(
                             selected = selected,
-                            onClick = { nameInput = location },
+                            onClick = { nameInput = location.limitCodePoints(RemoteName.MAX_LENGTH) },
                             label = { Text(location) },
                             leadingIcon =
                                 if (selected) {

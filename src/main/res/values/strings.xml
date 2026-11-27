@@ -47,7 +47,6 @@
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="remote_name_count">%1$d / %2$d</string>
-    <string name="remote_name_too_long">Use %1$d characters or fewer.</string>
     <string name="remote_name_label">Remote Name</string>
     <string name="search_placeholder">Search by brand, model or remote number</string>
     <string name="device_name_label">Device Name</string>

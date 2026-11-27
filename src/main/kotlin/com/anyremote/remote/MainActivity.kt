@@ -106,7 +106,9 @@ class MainActivity : ComponentActivity() {
 private fun Intent?.remoteRoute(): RemoteRoute? {
     val deviceId = this?.getIntExtra("deviceId", -1) ?: -1
     val brandId = this?.getIntExtra("brandId", -1) ?: -1
-    return if (deviceId != -1 && brandId != -1) RemoteRoute(deviceId, brandId) else null
+    val device = RemoteDatabase.deviceTypes.firstOrNull { it.id == deviceId } ?: return null
+    if (device.brands.none { it.id == brandId }) return null
+    return RemoteRoute(deviceId, brandId)
 }
 
 private fun NavHostController.openRemote(route: RemoteRoute) =
