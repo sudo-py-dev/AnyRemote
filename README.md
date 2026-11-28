@@ -33,7 +33,7 @@
 | ⚡ **Quick access** | Home screen widgets and shortcuts, plus a Quick Settings tile. |
 | 🎨 **Looks like your phone** | Light and dark themes, and Material You dynamic colors on Android 12 and later. |
 | 🌍 **11 languages** | English, Arabic, Chinese, French, German, Hebrew, Italian, Japanese, Portuguese, Russian and Spanish. |
-| 🔄 **Built-in updates** | Checks GitHub for new versions and verifies each download's checksum before installing. |
+| 🔄 **Built-in updates (GitHub flavor)** | Checks GitHub for new versions and verifies each download's checksum before installing. |
 | 🐞 **Crash reports you control** | If the app crashes, you see exactly what the report contains and choose whether to send it. |
 
 ## 📋 Requirements
@@ -48,8 +48,6 @@
 3. In AnyRemote, tap **Add remote** and pick your device type and brand.
 4. Point your phone at the device and tap the test button. If the device responds, save the remote. If not, try the next code.
 
-After that, the app tells you when a new version is out, and you can install it right from the app.
-
 > [!TIP]
 > Add your favorite remote to your home screen, or go to **Settings → Add to Quick Settings**, to open it in one tap.
 
@@ -58,7 +56,7 @@ After that, the app tells you when a new version is out, and you can install it 
 AnyRemote doesn't collect any data, and it has no ads, trackers or account.
 
 - Remote controls run entirely on your phone and work without an internet connection.
-- The internet is only used to check GitHub for app updates and to download them.
+- Only the GitHub flavor has Android's internet permission. It uses it to check for and download app updates.
 - Crash reports stay on your phone unless you choose to send one. A report has your app version, Android version, phone model and the error trace. Personal details such as links, file paths and names are removed from error messages.
 
 ## 🤝 Help and feedback
@@ -72,7 +70,13 @@ Compatibility depends on the exact model. Choose the form that fits:
 
 ## 🛠️ For developers
 
-AnyRemote is written in Kotlin with Jetpack Compose. To build it, contribute or add remotes, see:
+AnyRemote is written in Kotlin with Jetpack Compose and has three Android build flavors. All three can control remotes offline.
+
+| Distribution | Gradle flavor | Release build command | Internet permission | In-app updates | Update source |
+|---|---|---|---|---|---|
+| GitHub Releases | `github` | `./gradlew assembleGithubRelease` | Yes | Yes | AnyRemote checks GitHub Releases and installs updates from the app. |
+| F-Droid | `fdroid` | `./gradlew assembleFdroidRelease` | No | No | F-Droid client |
+| Google Play | `play` | `./gradlew bundlePlayRelease` | No | No | Google Play Store |
 
 - [Developer guide](docs/development.md)
 - [Remote catalog notes](docs/missing-ir-brands.md)
