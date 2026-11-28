@@ -188,6 +188,7 @@
     <string name="update_latest">バージョン %1$s は最新です</string>
     <string name="update_check_failed">アップデートを確認できませんでした。タップして再試行してください。</string>
     <string name="update_fdroid">アップデートは F-Droid から配信されます</string>
+    <string name="update_play">アップデートは Google Play から配信されます</string>
     <string name="crash_title">AnyRemote が予期せず停止しました</string>
     <string name="crash_message">問題が発生したため、アプリを終了しました。修正のために GitHub で報告してください。レポートにはアプリのバージョン、Android のバージョン、端末のモデルが含まれます。送信前に内容を確認できます。</string>
     <string name="crash_report">クラッシュレポート</string>

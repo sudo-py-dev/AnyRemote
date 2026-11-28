@@ -188,6 +188,7 @@
     <string name="update_latest">La versione %1$s è la più recente</string>
     <string name="update_check_failed">Impossibile controllare gli aggiornamenti. Tocca per riprovare.</string>
     <string name="update_fdroid">Gli aggiornamenti arrivano tramite F-Droid</string>
+    <string name="update_play">Gli aggiornamenti arrivano tramite Google Play</string>
     <string name="crash_title">AnyRemote si è chiusa inaspettatamente</string>
     <string name="crash_message">Si è verificato un errore e l’app è stata chiusa. Segnalalo su GitHub per farlo correggere. Il report include versione dell’app, versione di Android e modello del dispositivo, e puoi controllarlo prima dell’invio.</string>
     <string name="crash_report">Report di arresto anomalo</string>
