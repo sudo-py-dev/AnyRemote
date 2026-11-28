@@ -52,6 +52,10 @@ android {
             dimension = "distribution"
             buildConfigField("boolean", "IN_APP_UPDATES", "false")
         }
+        create("play") {
+            dimension = "distribution"
+            buildConfigField("boolean", "IN_APP_UPDATES", "false")
+        }
     }
 
     val keystorePassword =

@@ -35,6 +35,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.anyremote.remote.BuildConfig
 import com.anyremote.remote.R
 import com.anyremote.remote.quicksettings.RemoteTileService
 import com.anyremote.remote.service.FavoriteManager
@@ -253,7 +254,9 @@ fun SettingsScreen(onBackClick: () -> Unit) {
                     SettingsItem(
                         icon = Icons.Outlined.Info,
                         title = stringResource(R.string.update_version, installedVersion),
-                        summary = stringResource(R.string.update_fdroid),
+                        summary = stringResource(
+                            if (BuildConfig.FLAVOR == "play") R.string.update_play else R.string.update_fdroid,
+                        ),
                         onClick = {},
                     )
                 }

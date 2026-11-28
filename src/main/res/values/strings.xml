@@ -189,6 +189,7 @@
     <string name="update_latest">Version %1$s is the latest</string>
     <string name="update_check_failed">Could not check for updates. Tap to try again.</string>
     <string name="update_fdroid">Updates come through F-Droid</string>
+    <string name="update_play">Updates come through Google Play</string>
     <string name="crash_title">AnyRemote stopped unexpectedly</string>
     <string name="crash_message">Something went wrong and the app had to close. Report it on GitHub so it can be fixed. The report includes your app version, Android version and device model, and you can review it before you submit.</string>
     <string name="crash_report">Crash report</string>
