@@ -23,8 +23,6 @@ Builds:
       - update-java-alternatives -a
     gradle:
       - fdroid
-    binary: 
-      https://github.com/sudo-py-dev/AnyRemote/releases/download/v%v/AnyRemote-%v-fdroid.apk
 
 AllowedAPKSigningKeys: 55bc0e3b9672d3f609caf5574cefbc4a71a01c1fc818d388d625b8e0c895914e
 
